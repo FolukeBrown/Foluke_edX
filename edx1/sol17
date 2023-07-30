@@ -14,7 +14,8 @@ In this example, you need 295.8 pounds of cement. Since the store only sells cem
 Note
 You may submit as many solutions as you wish. Only your highest score will be kept.
 
-solution.
+solution:
+
 #include<stdio.h>
 int main(void){
     double cementneed;

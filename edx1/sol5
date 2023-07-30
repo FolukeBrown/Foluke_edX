@@ -8,7 +8,8 @@
 
 Warning: You cannot simply perform these calculations yourself and print the values - your program must calculate them and print them using the %d format specifier.
 
-solution.
+solution:
+
 #include<stdio.h>
 int main(void){
   printf("Dear Procrastinator,\n");

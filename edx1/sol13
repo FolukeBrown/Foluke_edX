@@ -10,7 +10,8 @@ Output:
 Note
 You may submit as many solutions as you wish. Only your highest score will be kept.
 
-solution
+solution:
+
 #include<stdio.h>
 int main(void){
     

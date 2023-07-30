@@ -8,7 +8,7 @@ Your program must use the following format to print the multiples of 8 table (be
 10x8 = 80
 Warning: Your program will not be reusable in the near future if you don't use a loop. You must use a loop to print the multiplication table.
 
-solution.
+solution:
 
 #include<stdio.h>
 int main(void){

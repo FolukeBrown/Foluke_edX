@@ -18,7 +18,8 @@ Warning: You will be graded on your output, so do not include any print statemen
 Note
 You may submit as many solutions as you wish. Only your highest score will be kept.
 
-solution.
+solution:
+
 #include<stdio.h>
 int main(void){
     double money;

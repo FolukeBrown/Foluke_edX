@@ -18,7 +18,8 @@ Output
 +ooooooo+
 ooooooooo
 
-solution.
+solution:
+
 #include <stdio.h>
 int main(void){
 char input;

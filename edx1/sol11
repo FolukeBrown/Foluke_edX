@@ -8,7 +8,8 @@ Input:
 Output: 
 2.982581
 
-solution.
+solution:
+
 #include <stdio.h>
 int main (void){
     double distanceKg;

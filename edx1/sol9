@@ -6,7 +6,8 @@ using this printf statement:
 printf ("Programming %c%c %c\n", letter1, letter2, letter3);
 Warning: do not use a scanf statement in this exercise!
 
-solution.
+solution:
+
 #include <stdio.h>
 int main (void){
  

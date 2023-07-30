@@ -14,7 +14,8 @@ You may submit as many solutions as you wish. Only your highest score will be ke
 
 Remember to declare the variable used in the loop outside the loop in this quiz. So if using variable i, declare that it is an integer before starting the loop. This is only so that the grader grades you correctly for this quiz. As you move on with the quizzes in this course you will be able to compress the code by declaring int within the loop itself.
 
-solution.
+solution:
+
 #include<stdio.h>
 int main(void){
     int i = 0;
