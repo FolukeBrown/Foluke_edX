@@ -1,0 +1,37 @@
+You are helping a teacher average grades. You get bored computing averages by hand, so you decide to write a computer program to do the work for you.
+
+Your program must first read an integer indicating the number of grades to be averaged. Next, your program will read the grades one by one, all of which are integers as well. Finally, your program will calculate and print the average of the grades to two decimal places.
+
+Example
+Input:
+4
+10
+8
+16
+9
+Output:
+10.75
+Warning: You will be graded on your output, so do not include any print statements that prompt a user for input.
+
+Note
+You may submit as many solutions as you wish. Only your highest score will be kept.
+
+solution
+#include<stdio.h>
+int main(void){
+  int numgrade = 0;
+  int grade =0;
+  int sum =0;
+  double average;
+  int i;
+  scanf("%d\n", &numgrade);
+    for (i=0; i <numgrade; i++){
+        scanf("%d\n", &grade);
+        
+        sum += grade;
+    }
+    average =(double)sum / numgrade;
+    printf("%.2lf\n", average);
+    
+    return 0;
+}
