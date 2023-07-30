@@ -17,22 +17,3 @@ Warning: You will be graded on your output, so do not include any print statemen
 
 Note
 You may submit as many solutions as you wish. Only your highest score will be kept.
-
-solution:
-
-#include<stdio.h>
-int main(void){
-    double money;
-    double pricePer;
-    double books;
-    int manyBooks;
-    scanf("%lf\n", &money);
-    scanf("%lf\n", &pricePer);
-    books = money / pricePer;
-    
-    manyBooks = (int)books;
-    
-    printf("%d\n", manyBooks);
-    
-    return 0;
-}

@@ -1,25 +1,3 @@
-Write a C-program that reads an input character (using scanf) and displays the following pyramid pattern using the character read: 
-
-Examples
-Input
-#
-Output
-++++#++++
-+++###+++
-++#####++
-+#######+
-#########
-Input
-o
-Output
-++++o++++
-+++ooo+++
-++ooooo++
-+ooooooo+
-ooooooooo
-
-solution:
-
 #include <stdio.h>
 int main(void){
 char input;

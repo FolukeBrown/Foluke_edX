@@ -9,25 +9,3 @@ Output:
 3
 Note
 You may submit as many solutions as you wish. Only your highest score will be kept.
-
-solution:
-
-#include<stdio.h>
-int main(void){
-    
-  int loosedmatch = 0;
-  int boxes = 0;
- 
-  scanf("%d\n", &loosedmatch);
-  scanf("%d\n", &boxes);
-  
-  int fullbox = loosedmatch / boxes;
-  int rest = loosedmatch % boxes;
-  
-  printf("%d\n", fullbox);
-  printf("%d\n", rest);
-  
-  
-    
-    return 0;
-}

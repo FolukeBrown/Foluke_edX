@@ -10,24 +10,3 @@ Output:
 131
 Note
 You may submit as many solutions as you wish. Only your highest score will be kept.
-
-solution:
-
-#include<stdio.h>
-int main(void){
-    int currentpop;
-    double projectedpop;
-    double total;
-    int totalint;
-    scanf("%d\n", &currentpop);
-    scanf("%lf\n", &projectedpop);
-    
-    
-    total = currentpop * (1 + (projectedpop/100));
-    
-    totalint = (int)total;
-    printf("%d\n", totalint);
-    
-    
-    return 0;
-}

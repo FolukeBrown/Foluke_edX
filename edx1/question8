@@ -17,29 +17,3 @@ Here the output in this example is the calculation
 You must use a loop to read each of the lines!
 
 Warning: Your program must allow David to evaluate any army he gives as an input, not just the one given as an example.
-
-solution:
-
-#include <stdio.h>
-int main (void){
-    int howMany = 0;
-  int enginePower = 0;
-  int resistance = 0;
-  int weight = 0;
-  int height = 0;
-  int sum = 0;
-  int i=0;
-  scanf("%d\n",&howMany);
-  
-  for(i=0; i<howMany; i++){
-      scanf("%d %d %d %d", &height, &weight, &enginePower, &resistance);
-  
-      sum = sum +((enginePower + resistance)*(weight - height));
-  }
-      printf("%d\n", sum);
-  
-    
-    
-    
-    return 0;
-}

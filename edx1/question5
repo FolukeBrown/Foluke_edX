@@ -7,12 +7,3 @@
  Here, X is the remaining number of days (25-23), Y is the number of minutes (60 * 24 * X) and Z is the number of seconds (60 * Y). The sentence has to be exactly the one displayed above, replacing X, Y and Z with the computed values. The format has to be followed precisely.
 
 Warning: You cannot simply perform these calculations yourself and print the values - your program must calculate them and print them using the %d format specifier.
-
-solution:
-
-#include<stdio.h>
-int main(void){
-  printf("Dear Procrastinator,\n");
-  printf("You still have to wait for %d days (%d minutes or %d seconds) before you can procrastinate!\n",25-23, 60*24*2, (60*24*2)*60);
-return 0;    
-}
