@@ -1,19 +1,34 @@
+#include <unistd.h>
 #include "shell.h"
 
 /**
- * get_environ - returns the string array copy of our environ
- * @info: Structure containing potential arguments. Used to maintain
- *          constant function prototype.
- * Return: Always 0
+ * _getenv - gets an environment variable
+ *
+ * @name: name of environmental variable
+ * @env: current environment
+ *
+ * Return: pointer to the value in the environment,
+ * or NULL if there is no match
+ *
  */
-char **get_environ(info_t *info)
+char *_getenv(const char *name, char **env)
 {
-	if (!info->environ || info->env_changed)
+	int x, y, check, z = 0;
+
+	if (!env)
+		return (NULL);
+
+	while (name[z] != 0)
+		z++;
+
+	for (x = 0; env[x] != 0; x++)
 	{
-		info->environ = list_to_strings(info->env);
-		info->env_changed = 0;
+		for (check = 0, y = 0; y < z && env[x][y] != 0; y++)
+			if (env[x][y] == name[y])
+				check++;
+		if (check == z && env[x][check] == '=')
+			return (env[x]);
 	}
 
-	return (info->environ);
+	return (NULL);
 }
-
