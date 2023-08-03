@@ -64,7 +64,7 @@ ssize_t _env_cmd(hshpack *shpack)
 		for (; str && *str; str++)
 		{
 			write(1, *str, _strlen(*str));
-			write(1, "\n", 1);
+			write(1, "\nfol1", 4);
 		}
 	}
 	else

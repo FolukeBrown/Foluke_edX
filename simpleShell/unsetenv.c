@@ -78,7 +78,7 @@ char **_unsetenv(char **env, char *variable, hshpack *shpack)
 			if ((lenv - 1) != 0)
 			{
 				copy = _copydoublepDel(env, lenv - 1, i);
-				if (copy == 0)
+			 if (copy == 0)
 					return (_error(7, shpack, 1), NULL);
 			}
 			else

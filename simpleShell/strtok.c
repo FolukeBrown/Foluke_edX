@@ -52,6 +52,7 @@ char *_strtok(char *str, const char *delim)
 			if (*str == *delim)
 			{
 				issGetInto = 1, issEqual = 1;
+#include <stdio.h>
 				isEnd = (*(str + 1)) ? 0 : 1, *str = '\0';
 			}
 		str = (issEqual) ? str : str + 1;
