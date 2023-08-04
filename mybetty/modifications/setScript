@@ -23,7 +23,7 @@ echo -e "[b] or [B] or [2] - to setup push command"
 echo -e "[c] or [C] or [3] - to setup pull command"
 echo -e "[d] or [D] or [4] - to setup create repo command"
 echo -e "[e] or [E] or [5] - to setup clone repo command"
-echo -e "[f] or [F] or [6] - to setup compile command (including for al)"
+echo -e "[f] or [F] or [6] - to setup compile command (including alx's common compile command with it's flags)"
 echo -e "[g] or [G] or [7] - to create a default C source file"
 echo ""
 
@@ -147,7 +147,7 @@ else
 	elif [[ $OPTION =~ "f" || $OPTION =~ "F" || $OPTION =~ "6" ]]; then
 		echo -e "Now, you can compile your files effortlessly. Simply run($ANYWHERE): $DFILENAME <filename>\n"
 	elif [[ $OPTION =~ "g" || $OPTION =~ "G" || $OPTION =~ "7" ]]; then
-		echo -e "Now, you can create default C source files effortlessly. S    imply run($ANYWHERE): $DFILENAME <filename>\n"
+		echo -e "Now, you can create default C source files effortlessly. Simply run($ANYWHERE): $DFILENAME <filename>\n"
 	fi
 
 
