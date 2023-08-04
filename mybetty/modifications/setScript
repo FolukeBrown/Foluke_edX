@@ -13,19 +13,27 @@ SHOW="dafCom"
 echo -e "\n.....Creating $SHOW....."
 mkdir -p $SDIR
 
-echo ""
 
+
+#...options display.................. #
+
+echo ""
 echo -e "[a] or [A] or [1] - to setup file checker(betty) command"
 echo -e "[b] or [B] or [2] - to setup push command"
 echo -e "[c] or [C] or [3] - to setup pull command"
 echo -e "[d] or [D] or [4] - to setup create repo command"
 echo -e "[e] or [E] or [5] - to setup clone repo command"
-echo -e "[f] or [F] or [6] - to setup compile command (including for alx)"
+echo -e "[f] or [F] or [6] - to setup compile command (including for al)"
+echo -e "[g] or [G] or [7] - to create a default C source file"
 echo ""
 
 echo -n "What do you want to do? [q] - quit >>> "
 read OPTION
 
+
+
+
+#...assigning command name.................. #
 
 if [[ -z "$OPTION" || $OPTION =~ "q" ]]; then
 	if [[ $OPTION =~ "q" ]]; then
@@ -49,11 +57,17 @@ else
 		DFILENAME="cloneRepo"
 	elif [[ $OPTION =~ "f" || $OPTION =~ "F" || $OPTION =~ "6" ]]; then
 		DFILENAME="mycompile"
+	elif [[ $OPTION =~ "g" || $OPTION =~ "G" || $OPTION =~ "7" ]]; then
+		DFILENAME="defaultCTemplate"
 	else
 		echo -e "You can only choose from the options provided"
 		exit 1
 	fi
 
+
+
+
+#...creating file, env var, and profile.................. #
 
 	echo -e "\n.....Creating $DFILENAME and setting permission script....."
 
@@ -76,6 +90,10 @@ else
 		echo -e ".....profile exists!.....\n"
 	fi
 
+
+
+
+#...creating the command script.................. #
 
 	if [[ $OPTION =~ "a" || $OPTION =~ "A" || $OPTION =~ "1" ]]; then
 		echo -n "Is your device a phone? [y/N] ([n] - pc)>>> "
@@ -103,7 +121,16 @@ else
 		cp "scpts/cloneRepoGeneral" "$SDIR/$DFILENAME"
 	elif [[ $OPTION =~ "f" || $OPTION =~ "F" || $OPTION =~ "6" ]]; then
 		cp "scpts/mycompile" "$SDIR/$DFILENAME"
+	elif [[ $OPTION =~ "g" || $OPTION =~ "G" || $OPTION =~ "7" ]]; then
+		echo -e "PASTE THE Source content YOU COPIED HERE" >  $SDIR/C_template.c
+		cp "scpts/C_template.c" "$SDIR/C_template.c"
+		cp "scpts/defaultCTemplate" "$SDIR/$DFILENAME"
 	fi
+
+
+
+
+#...instructions(how to use).................. #
 
 	echo ""
 	echo -e "Now, RESTART YOUR TERMINAL or START A NEW SESSION."
@@ -119,7 +146,14 @@ else
 		echo -e "Now, you can clone from github. Simply run($ANYWHERE): $DFILENAME\n"
 	elif [[ $OPTION =~ "f" || $OPTION =~ "F" || $OPTION =~ "6" ]]; then
 		echo -e "Now, you can compile your files effortlessly. Simply run($ANYWHERE): $DFILENAME <filename>\n"
+	elif [[ $OPTION =~ "g" || $OPTION =~ "G" || $OPTION =~ "7" ]]; then
+		echo -e "Now, you can create default C source files effortlessly. S    imply run($ANYWHERE): $DFILENAME <filename>\n"
 	fi
+
+
+
+
+#...more instructions(how to configure).................. #
 
 	if [[ $OPTION =~ "d" || $OPTION =~ "D" || $OPTION =~ "4" || $OPTION =~ "e" || $OPTION =~ "E" || $OPTION =~ "5" ]]; then
 		echo "ONE more step. RUN: vi $TILDE$SHOW/$DFILENAME"
