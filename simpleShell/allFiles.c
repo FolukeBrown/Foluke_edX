@@ -37,35 +37,24 @@ void string_reverseSub(char *s, char tempVar, int x, int y)
 }
 /* ................................NUM 1 END................................*/
 
-/* ................................NUM 2 START..............................*/
+/* ................................NUM 3 START..............................*/
+/* ................................NUM 3 BTW................................*/
+/* ................................NUM 3 END................................*/
 /**
- * empty_dif_list - frees
- * @head: head
-
- */
-
-void freeCharFoluke(char *temp)
-{
-        free(temp);
-}
-/* ................................NUM 2 END................................*/
-
-
-/**
- * lenBTen - obtains length of number in base
+ * blen - obtains length of number in base
  *
  * @n: number
  * @base: base of number
  *
  * Return: length of number
  */
-int lenBTen(unsigned long int n, unsigned long int base)
+int blen(unsigned long int n, unsigned long int base)
 {
-        unsigned long int x, negNum = 0, ret;
+        unsigned long int x, neg = 0, ret;
 
         for (x = 0; n > 0; x++)
                 n = n / base;
-        ret = x + negNum;
+        ret = x + neg;
         return (ret);
 }
 /**
@@ -81,7 +70,7 @@ char *_itoa(int n)
         char *str;
 
         if (n != 0)
-                str = malloc(lenBTen(n, base) + 1);
+                str = malloc(blen(n, base) + 1);
         else
                 str = malloc(2), str[x] = '0', x++;
 
@@ -98,7 +87,7 @@ char *_itoa(int n)
         return (str);
 }
 
-
+char *_error2(int errn, char *conc2, char *option);
 /**
  * _error - creates a string with error line
  * @errn: number corresponding to type of error
@@ -111,153 +100,153 @@ int _error(int errn, hshpack *shpack, int exnum)
 {
         /**
          * 0 - file or cmd not found , 1 - permission denied, 2 - illegal exit number
-         * 3 - setenv error,         , 4 - can´t cd         , 5 - invalid optn cd
+         * 3 - setenv error,         , 4 - can´t cd         , 5 - invalid option cd
          * 6 - help _error           , 7 - memory allocation, 8 - Alias Error
          **/
-        int cnt = shpack->errnum[0], z = 0;
-        char *cmd = shpack->cmd, **optn = shpack->options;
-        char *hshname = shpack->hshname;
-        char *nustr, *concA, *concB, *coluspc = ": ";
+        int count = shpack->errnum[0], z = 0;
+        char *cmd = shpack->cmd, **option = shpack->options;
+        char *shelln = shpack->hshname;
+        char *nstring, *conc1, *conc2, *colspace = ": ";
         char *err[] = {
-                "not found", "Permission denied", "Invalid number",
-                "name is NULL, points to string of length 0, or has an '=' chararacter",
-                "can't cd(change dir) to ", "Invalid optn ", "Help command error",
+                "not found", "Permission denied", "Illegal number",
+                "name is NULL, points to string of len 0, or has an '=' char.",
+                "can't cd to ", "Illegal option ", "Help command error",
                 "Error allocating memory", "Wrong Alias",
                 NULL
         };
 
-        concA = str_concat(hshname, coluspc);
-        if (!concA) /*hsh: */
+        conc1 = str_concat(shelln, colspace);
+        if (!conc1) /*hsh: */
                 return (write(2, "Memory Error", 22), -1);
 
         if (errn == 7) /* Alloc Error */
         {
-                concB = str_concat(concA, err[errn]); /*hsh: cnt: error*/
-                if (!concB)
-                        return (freeCharFoluke(concA), write(2, "Memory Error", 22), -1);
-                freeCharFoluke(concA);
-                while (concB[z] != 0)
+                conc2 = str_concat(conc1, err[errn]); /*hsh: count: error*/
+                if (!conc2)
+                        return (free(conc1), write(2, "Memory Error", 22), -1);
+                free(conc1);
+                while (conc2[z] != 0)
                         z++;
-                write(2, concB, z), write(2, "\n", 1);
-                freeCharFoluke(concB);
+                write(2, conc2, z), write(2, "\n", 1);
+                free(conc2);
                 return (0);
 
         }
 
-        nustr = _itoa(cnt);
-        if (!nustr)  /* number to string */
-                return (freeCharFoluke(concA), write(2, "Memory Error", 22), -1);
+        nstring = _itoa(count);
+        if (!nstring)  /* number to string */
+                return (free(conc1), write(2, "Memory Error", 22), -1);
 
-        concB = str_concat(concA, nustr);
-        if (!concB) /*hsh: cnt*/
+        conc2 = str_concat(conc1, nstring);
+        if (!conc2) /*hsh: count*/
         {
                 write(2, "Memory Error", 22);
-                return (freeCharFoluke(concA), freeCharFoluke(nustr),  -1);
+                return (free(conc1), free(nstring),  -1);
         }
-        freeCharFoluke(concA), freeCharFoluke(nustr);
+        free(conc1), free(nstring);
 
-        concA = str_concat(concB, coluspc);
-        if (!concA) /*hsh: cnt: */
-                return (freeCharFoluke(concB), write(2, "Memory Error", 22), -1);
+        conc1 = str_concat(conc2, colspace);
+        if (!conc1) /*hsh: count: */
+                return (free(conc2), write(2, "Memory Error", 22), -1);
 
-        freeCharFoluke(concB);
-        concB = str_concat(concA, cmd);
-        if (!concB) /*hsh: cnt: cmd*/
-                return (freeCharFoluke(concA), write(2, "Memory Error", 22), -1);
-        freeCharFoluke(concA);
+        free(conc2);
+        conc2 = str_concat(conc1, cmd);
+        if (!conc2) /*hsh: count: cmd*/
+                return (free(conc1), write(2, "Memory Error", 22), -1);
+        free(conc1);
 
-        concA = str_concat(concB, coluspc);
-        if (!concA) /*hsh: cnt: cmd: */
-                return (freeCharFoluke(concB), write(2, "Memory Error", 22), -1);
-        freeCharFoluke(concB);
+        conc1 = str_concat(conc2, colspace);
+        if (!conc1) /*hsh: count: cmd: */
+                return (free(conc2), write(2, "Memory Error", 22), -1);
+        free(conc2);
 
-        concB = str_concat(concA, err[errn]);
-        if (!concB) /*hsh: cnt: cmd: error*/
-                return (freeCharFoluke(concA), write(2, "Memory Error", 22), -1);
-        freeCharFoluke(concA);
+        conc2 = str_concat(conc1, err[errn]);
+        if (!conc2) /*hsh: count: cmd: error*/
+                return (free(conc1), write(2, "Memory Error", 22), -1);
+        free(conc1);
 
         if (errn > 1 && errn < 6 && errn != 3)
-                concB = errorSub(errn, concB, optn[1]);
-        if (concB == NULL)
+                conc2 = _error2(errn, conc2, option[1]);
+        if (conc2 == NULL)
         {
                 write(2, "Memory Error", 22);
                 return (-1);
         }
 
-        while (concB[z] != 0)
+        while (conc2[z] != 0)
                 z++;
-        write(2, concB, z), write(2, "\n", 1);
-        freeCharFoluke(concB);
+        write(2, conc2, z), write(2, "\n", 1);
+        free(conc2);
         shpack->exitnum[0] = exnum;
         return (0);
 
 }
 /**
- * errorSub - extra modes for error generation
+ * _error2 - extra modes for error generation
  * @errn: number corresponding to type of error
- * @concB: error part from _error
- * @optn: cmd optn thaat
+ * @conc2: error part from _error
+ * @option: cmd option thaat
  *
  * Return: pointer to string
  */
-char *errorSub(int errn, char *concB, char *optn)
+char *_error2(int errn, char *conc2, char *option)
 {
         /**
          * 0 - file or cmd not found , 1 - permission denied, 2 - illegal exit number
-         * 3 - setenv error,         , 4 - can´t cd         , 5 - invalid optn cd
+         * 3 - setenv error,         , 4 - can´t cd         , 5 - invalid option cd
          * 6 - help _error           , 7 - memory allocation, 8 - Alias Error
          **/
-        char *concA, *coluspc = ": ";
+        char *conc1, *colspace = ": ";
 
         if (errn == 2) /* exit error */
         {
 
-                concA = str_concat(concB, coluspc);
-                if (!concA) /*hsh: cnt: cmd: error: */
+                conc1 = str_concat(conc2, colspace);
+                if (!conc1) /*hsh: count: cmd: error: */
                 {
                         write(2, "Memory Error", 22);
-                        return (freeCharFoluke(concB), NULL);
+                        return (free(conc2), NULL);
                 }
-                freeCharFoluke(concB);
+                free(conc2);
 
-                concB = str_concat(concA, optn);
+                conc2 = str_concat(conc1, option);
 
-                if (!concB) /*hsh: cnt: cmd: error: optn*/
+                if (!conc2) /*hsh: count: cmd: error: option*/
                 {
                         write(2, "Memory Error", 22);
-                        return (freeCharFoluke(concA), NULL);
+                        return (free(conc1), NULL);
                 }
-                freeCharFoluke(concA);
+                free(conc1);
         }
         if (errn > 3) /* Errors with options at end */
         {
-                concA = str_concat(concB, optn);
-                if (!concA) /*hsh: cnt: cmd: error optn*/
+                conc1 = str_concat(conc2, option);
+                if (!conc1) /*hsh: count: cmd: error option*/
                 {
                         write(2, "Memory Error", 22);
-                        return (freeCharFoluke(concB), NULL);
+                        return (free(conc2), NULL);
                 }
-                freeCharFoluke(concB);
-                return (concA);
+                free(conc2);
+                return (conc1);
         }
-        return (concB);
+        return (conc2);
 
 }
 
 
 /**
- * exitCmd - built in command exit
+ * _exit_cmd - built in command exit
  * @shpack: struct containing shell info
  *
  * Return: -1 if error
  */
-ssize_t exitCmd(hshpack *shpack)
+ssize_t _exit_cmd(hshpack *shpack)
 {
         long valueToExit;
 
-        if (shpack->options[1] == NULL || is_numb(shpack->options[1]))
+        if (shpack->options[1] == NULL || _isnumber(shpack->options[1]))
         {
-                valueToExit = atoiFol(shpack->options[1]);
+                valueToExit = _atoi(shpack->options[1]);
 
                 if (valueToExit >= 0 && valueToExit < INT_MAX)
                 {
@@ -278,12 +267,6 @@ ssize_t exitCmd(hshpack *shpack)
         free(shpack->options);
         return (-1);
 }
-
-/* ................................NUM 3 START..............................*/
-/* ................................NUM 3 BTW................................*/
-/* ................................NUM 3 END................................*/
-
-
 /**
  * _env_cmd - built in command env
  * @shpack: struct containing shell info
@@ -310,7 +293,7 @@ ssize_t _env_cmd(hshpack *shpack)
                 for (; str && *str; str++)
                 {
                         write(1, *str, _strlen(*str));
-                        write(1, "\n", 0);
+                        write(1, "\nfol1", 4);
                 }
         }
         else
@@ -417,7 +400,7 @@ ssize_t _unsetenv_cmd(hshpack *shpack)
 ssize_t built_ints(hshpack *shpack)
 {
         b_ins ops[] = {
-                {"exit", exitCmd},
+                {"exit", _exit_cmd},
                 {"env", _env_cmd},
                 {"setenv", _setenv_cmd},
                 {"unsetenv", _unsetenv_cmd},
@@ -565,7 +548,7 @@ long _pow(long base, long pot)
 }
 
 /**
- * atoiFol - convert a char input to int
+ * _atoi - convert a char input to int
  * @s: char input
  *
  *
@@ -573,7 +556,7 @@ long _pow(long base, long pot)
  * On error: -1 inapropiate entry
  */
 
-long atoiFol(char *s)
+long _atoi(char *s)
 {
         long x = 0;
         long k = 0;
@@ -635,12 +618,12 @@ int _isdigit(int c)
         return ((c >= 48 && c <= 57) ? 1 : 0);
 }
 /**
- * is_numb - checks if a string is composed of numbers
+ * _isnumber - checks if a string is composed of numbers
  * @s: string
  *
  * Return: 1 if string has only numbers, 0 if not
  */
-int is_numb(char *s)
+int _isnumber(char *s)
 {
         for (; *s; s++)
                 if (!_isdigit(*s))
@@ -651,7 +634,7 @@ int is_numb(char *s)
 
 /**
  * checkInput - checks for input in after shell prompt
- * @ac: cnt of main arguments
+ * @ac: count of main arguments
  * @av: main arguments
  * @bufsize: size of buffer in prompt
  * @buffer: buffer in prompt
@@ -670,7 +653,7 @@ char **checkInput(int ac, char **av, size_t *bufsize,
         if (ac == 1)
         {
                 if (isatty(STDIN_FILENO))
-                        write(1, "prompt_by_foluke $ ", 19);
+                        write(1, "$ ", 2);
                 characters = getline(buffer, bufsize, stdin);
 
                 if (characters == -1)
@@ -1003,21 +986,21 @@ char **getParameters(char *raw_buffer, hshpack *shpack)
 char *_pathcheck(char *path)
 {
         char *npath;
-        int x, y, nsize, cnt = 0;
+        int x, y, nsize, count = 0;
 
         for (x = 0; path[x]; x++)
         {
 
                 if (path[x] == '=' && path[x + 1] == ':')
-                        cnt++;
+                        count++;
                 if (path[x] == ':' && path[x + 1] == ':')
-                        cnt++;
+                        count++;
                 if (path[x] == ':' && path[x + 1] == '\0')
-                        cnt++;
+                        count++;
         }
-        if (cnt == 0)
+        if (count == 0)
                 return (0);
-        nsize = _strlen(path) + 1 + cnt;
+        nsize = _strlen(path) + 1 + count;
         npath = malloc(sizeof(char) * nsize);
 
         for (x = 0, y = 0; x < nsize; x++, y++)
@@ -1246,7 +1229,7 @@ void help_help(void)
         _puts("      BUILTIN   Builtin specifying a help topic\n\n");
         _puts("    Exit Status:\n");
         _puts("    Returns success unless PATTERN is not found or an invalid ");
-        _puts("    optn is given.\n");
+        _puts("    option is given.\n");
 }
 /**
  * help_alias - prints help of alias built in

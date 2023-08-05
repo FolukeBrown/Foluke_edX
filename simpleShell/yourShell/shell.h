@@ -100,16 +100,16 @@ int _error(int errn, hshpack *shpack, int exnum);
 void addCmd(hshpack *shpack, char *buffer, char *command, char **parameters);
 void addPathToCmd(hshpack *shpack, char *pathCmd);
 ssize_t built_ints(hshpack *shpack);
-ssize_t _exit_cmd(hshpack *shpack);
+ssize_t exitCmd(hshpack *shpack);
 int _strcmp(char *s1, char *s2);
-long _atoi(char *s);
+long atoiFol(char *s);
 long _pow(long base, long pot);
 char **_copydoublep(char **p, int old_size, int new_size);
 int _strlendp(char **s);
 char **_setenv(char **env, char *variable, char *value, hshpack *shpack);
 char **_unsetenv(char **env, char *variable, hshpack *shpack);
 int _isdigit(int c);
-int _isnumber(char *s);
+int is_numb(char *s);
 ssize_t _cd_cmd(hshpack *shpack);
 char *deleteComment(char *str);
 
@@ -122,6 +122,13 @@ void help_help(void);
 void help_alias(void);
 void printsHelp(void);
 
+void freeCharFoluke(char *temp);
+
 void string_reverse(char *s);
 void string_reverseSub(char *s, char tmp, int x, int y);
+int lenBTen(unsigned long int n, unsigned long int base);
+char *_itoa(int n);
+char *errorSub(int errn, char *concB, char *optn);
+
+
 #endif
