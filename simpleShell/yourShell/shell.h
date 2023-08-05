@@ -103,7 +103,7 @@ ssize_t built_ints(hshpack *shpack);
 ssize_t exitCmd(hshpack *shpack);
 int _strcmp(char *s1, char *s2);
 long atoiFol(char *s);
-long _pow(long base, long pot);
+long powerFunc(long base, long pot);
 char **_copydoublep(char **p, int old_size, int new_size);
 int _strlendp(char **s);
 char **_setenv(char **env, char *variable, char *value, hshpack *shpack);
@@ -129,6 +129,14 @@ void string_reverseSub(char *s, char tmp, int x, int y);
 int lenBTen(unsigned long int n, unsigned long int base);
 char *_itoa(int n);
 char *errorSub(int errn, char *concB, char *optn);
+ssize_t envCmd(hshpack *shpack);
+ssize_t setEnvironCmd(hshpack *shpack);
+ssize_t unSetEnvironComnd(hshpack *shpack);
+char *secAuxCd(hshpack *shpack, char *currdir);
+char *secAuxCdDaf(char *home, char *dire);
+char *firstAuxCd(hshpack *shpack, char *currdir);
+ssize_t cDirCmnd(hshpack *shpack);
+long powerFuncDaf(long base, long res);
 
 
 #endif

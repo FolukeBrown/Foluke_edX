@@ -2,10 +2,8 @@
 
 /* ................................NUM 1 START..............................*/
 /**
- * string_reverse - Reverses a string
- * @s: string to reverse
- *
- * Return: Nothing
+ * string_reverse - Reverses string
+ * @s: str to rev
  */
 void string_reverse(char *s)
 {
@@ -23,10 +21,8 @@ void string_reverse(char *s)
 
 /* ................................NUM 1 BTW................................*/
 /**
- * string_reverse - Reverses a string
- * @s: string to reverse
- *
- * Return: Nothing
+ * string_reverse - R
+ * @s: str
  */
 void string_reverseSub(char *s, char tempVar, int x, int y)
 {
@@ -41,7 +37,6 @@ void string_reverseSub(char *s, char tempVar, int x, int y)
 /**
  * empty_dif_list - frees
  * @head: head
-
  */
 
 void freeCharFoluke(char *temp)
@@ -52,12 +47,11 @@ void freeCharFoluke(char *temp)
 
 
 /**
- * lenBTen - obtains length of number in base
+ * lenBTen - get length
  *
  * @n: number
- * @base: base of number
- *
- * Return: length of number
+ * @base: base
+ * Return: length
  */
 int lenBTen(unsigned long int n, unsigned long int base)
 {
@@ -69,11 +63,9 @@ int lenBTen(unsigned long int n, unsigned long int base)
         return (ret);
 }
 /**
- * _itoa - converts an integer to string
- *
+ * _itoa - converts
  * @n: number
- *
- * Return: pointer to string
+ * Return: ptr
  */
 char *_itoa(int n)
 {
@@ -100,20 +92,14 @@ char *_itoa(int n)
 
 
 /**
- * _error - creates a string with error line
- * @errn: number corresponding to type of error
- * @shpack: struct containing shell information
- * @exnum: value of exit the shell should have
- *
- * Return: 0 success, -1 fail
+ * _error - creates str
+ * @errn: numb
+ * @shpack: struct
+ * @exnum: val
+ * Return: 0
  */
 int _error(int errn, hshpack *shpack, int exnum)
 {
-        /**
-         * 0 - file or cmd not found , 1 - permission denied, 2 - illegal exit number
-         * 3 - setenv error,         , 4 - can´t cd         , 5 - invalid optn cd
-         * 6 - help _error           , 7 - memory allocation, 8 - Alias Error
-         **/
         int cnt = shpack->errnum[0], z = 0;
         char *cmd = shpack->cmd, **optn = shpack->options;
         char *hshname = shpack->hshname;
@@ -121,7 +107,7 @@ int _error(int errn, hshpack *shpack, int exnum)
         char *err[] = {
                 "not found", "Permission denied", "Invalid number",
                 "name is NULL, points to string of length 0, or has an '=' chararacter",
-                "can't cd(change dir) to ", "Invalid optn ", "Help command error",
+                "can't cd(change dire) to ", "Invalid optn ", "Help command error",
                 "Error allocating memory", "Wrong Alias",
                 NULL
         };
@@ -193,20 +179,14 @@ int _error(int errn, hshpack *shpack, int exnum)
 
 }
 /**
- * errorSub - extra modes for error generation
- * @errn: number corresponding to type of error
- * @concB: error part from _error
- * @optn: cmd optn thaat
- *
- * Return: pointer to string
+ * errorSub - extra modes
+ * @errn: number
+ * @concB: error
+ * @optn: cmd
+ * Return: pointer
  */
 char *errorSub(int errn, char *concB, char *optn)
 {
-        /**
-         * 0 - file or cmd not found , 1 - permission denied, 2 - illegal exit number
-         * 3 - setenv error,         , 4 - can´t cd         , 5 - invalid optn cd
-         * 6 - help _error           , 7 - memory allocation, 8 - Alias Error
-         **/
         char *concA, *coluspc = ": ";
 
         if (errn == 2) /* exit error */
@@ -241,59 +221,50 @@ char *errorSub(int errn, char *concB, char *optn)
                 return (concA);
         }
         return (concB);
-
 }
 
 
 /**
- * exitCmd - built in command exit
- * @shpack: struct containing shell info
- *
+ * exitCmd - exit command
+ * @shpack: struct
  * Return: -1 if error
  */
 ssize_t exitCmd(hshpack *shpack)
 {
-        long valueToExit;
+        long exit_value;
 
         if (shpack->options[1] == NULL || is_numb(shpack->options[1]))
         {
-                valueToExit = atoiFol(shpack->options[1]);
+                exit_value = atoiFol(shpack->options[1]);
 
-                if (valueToExit >= 0 && valueToExit < INT_MAX)
+                if (exit_value >= 0 && exit_value < INT_MAX)
                 {
-                        if (valueToExit > 255)
-                                valueToExit %= 256;
+                        if (exit_value > 255)
+                                exit_value %= 256;
                         if (shpack->options[1] == NULL)
-                                valueToExit = shpack->exitnum[0];
+                                exit_value = shpack->exitnum[0];
                         free(*(shpack->options));
                         free(shpack->options);
                         if (*(shpack->envCpy))
                                 free_doubpoint(*(shpack->envCpy));
                         free(shpack);
-                        exit(valueToExit);
+                        exit(exit_value);
                 }
         }
-
         _error(2, shpack, 2);
         free(shpack->options);
         return (-1);
 }
 
-/* ................................NUM 3 START..............................*/
-/* ................................NUM 3 BTW................................*/
-/* ................................NUM 3 END................................*/
-
-
 /**
- * _env_cmd - built in command env
- * @shpack: struct containing shell info
- *
- * Return: 1 if succesful
+ * envCmd - env command
+ * @shpack: struct
+ * Return: 1 
  */
-ssize_t _env_cmd(hshpack *shpack)
+ssize_t envCmd(hshpack *shpack)
 {
         char **str;
-        int checker = 1;
+        int chckr = 1;
 
         if (*(shpack->envCpy) == NULL)
         {
@@ -316,27 +287,24 @@ ssize_t _env_cmd(hshpack *shpack)
         else
         {
                 _error(0, shpack, 2);
-                checker = -1;
+                chckr = -1;
         }
 
         free(shpack->options);
-        return (checker);
+        return (chckr);
 }
 /**
- * _setenv_cmd - built in command setenv
- * @shpack: struct containing shell info
- *
- * Return: 1 if succesful, -1 if fail
+ * setEnvironCmd - setenv command
+ * @shpack: struct
+ * Return: 1
  */
-ssize_t _setenv_cmd(hshpack *shpack)
+ssize_t setEnvironCmd(hshpack *shpack)
 {
-        char **newenv;
-        char *variable = NULL;
-        char *value = NULL;
+        char **nenviron, *var1 = NULL, *val1 = NULL;
 
         if (shpack->options[1])
         {
-                variable = shpack->options[1];
+                var1 = shpack->options[1];
                 if (!shpack->options[2])
                 {
                         write(2, "Invalid VALUE\n", 14);
@@ -345,10 +313,9 @@ ssize_t _setenv_cmd(hshpack *shpack)
                         return (-1);
                 }
                 else
-                        value = shpack->options[2];
-
+                        val1 = shpack->options[2];
         }
-        if (variable == 0)
+        if (var1 == 0)
         {
                 write(2, "Invalid VARIABLE\n", 17);
                 shpack->exitnum[0] = 2;
@@ -356,31 +323,29 @@ ssize_t _setenv_cmd(hshpack *shpack)
                 return (-1);
         }
 
-        newenv = _setenv(*(shpack->envCpy), variable, value, shpack);
+        nenviron = _setenv(*(shpack->envCpy), var1, val1, shpack);
 
-        if (newenv == 0)
+        if (nenviron == 0)
         {
                 free(shpack->options);
                 return (-1);
         }
 
-        *(shpack->envCpy) = newenv;
+        *(shpack->envCpy) = nenviron;
         free(shpack->options);
         return (1);
 }
 /**
- * _unsetenv_cmd - built in command unsetenv
- * @shpack: struct containing shell info
- *
- * Return: 1 if succesful, -1 if fail
+ * unSetEnvironComnd - unsetenv command
+ * @shpack: struct
+ * Return: 1
  */
-ssize_t _unsetenv_cmd(hshpack *shpack)
+ssize_t unSetEnvironComnd(hshpack *shpack)
 {
-        char **newenv;
-        char *variable = NULL;
+        char **nenviron, *var1 = NULL;
 
         if (shpack->options[1])
-                variable = shpack->options[1];
+                var1 = shpack->options[1];
         else
         {
                 shpack->exitnum[0] = 2;
@@ -388,40 +353,39 @@ ssize_t _unsetenv_cmd(hshpack *shpack)
                 return (free(shpack->options), -1);
         }
 
-        if (variable == 0)
+        if (var1 == 0)
         {
                 free(shpack->options);
                 return (1);
         }
 
-        newenv = _unsetenv(*(shpack->envCpy), variable, shpack);
+        nenviron = _unsetenv(*(shpack->envCpy), var1, shpack);
 
-        if (newenv == 0 && shpack->unsetnull[0] == 0)
+        if (nenviron == 0 && shpack->unsetnull[0] == 0)
         {
                 free(shpack->options);
                 shpack->exitnum[0] = 2;
                 return (-1);
         }
 
-        *(shpack->envCpy) = newenv;
+        *(shpack->envCpy) = nenviron;
         free(shpack->options);
         return (1);
 }
 
 /**
- * built_ints - checks if cmd is a built in
- * @shpack: struct containing shell info
- *
+ * built_ints - checks if the command is built in
+ * @shpack: struct
  * Return: On fail 0
  */
 ssize_t built_ints(hshpack *shpack)
 {
         b_ins ops[] = {
                 {"exit", exitCmd},
-                {"env", _env_cmd},
-                {"setenv", _setenv_cmd},
-                {"unsetenv", _unsetenv_cmd},
-                {"cd", _cd_cmd},
+                {"env", envCmd},
+                {"setenv", setEnvironCmd},
+                {"unsetenv", unSetEnvironComnd},
+                {"cd", cDirCmnd},
                 {"help", _help_cmd}
         };
 
@@ -441,128 +405,168 @@ ssize_t built_ints(hshpack *shpack)
 }
 
 
-/**
- * auxcd2 - auxiliary function of cd built in
- * @shpack: struct containing shell info
- * @currdir: current directory
- *
- * Return: pointer to HOME or NULL if fail
- */
-char *auxcd2(hshpack *shpack, char *currdir)
-{
-        char *home, *dir = NULL;
+/* ................................NUM 3 START..............................*/
 
-        (void) currdir;
+/**
+ * secAuxCd - auxiliary built in func of cd
+ * @shpack: struct
+ * @curDir: current dir
+ * Return: pointer
+ */
+char *secAuxCd(hshpack *shpack, char *curDir)
+{
+        char *home, *dire = NULL;
+
+        (void) curDir;
         home = _getenv("HOME", *(shpack->envCpy));
         if (home)
-                dir = home + 5;
+                dire = secAuxCdDaf(home, dire);
 
-        return (dir);
+        return (dire);
 }
+/* ................................NUM 3 BTW................................*/
+/**
+ * secAuxCd - auxiliary built in func of cd
+ * @shpack: struct
+ * @curDir: current dir
+ * Return: pointer
+ */
+char *secAuxCdDaf(char *home, char *dire)
+{
+        dire = home + 5;
+        return (dire);
+}
+/* ................................NUM 3 END................................*/
+
 
 /**
- * auxcd - auxiliary function of cd built in
- * @shpack: struct containing shell info
- * @currdir: the current directory
- *
- * Return: Pointer to dir or NULL if fail
+ * secAuxCd - auxiliary built in func of cd
+ * @shpack: struct
+ * @curDir: current dir
+ * Return: Pointe
  */
-char *auxcd(hshpack *shpack, char *currdir)
+char *firstAuxCd(hshpack *shpack, char *curDir)
 {
-        char *oldpwd2 = NULL, *oldpwd = NULL, *dir = NULL;
+        char *oldpwd2 = NULL, *oldpwDir = NULL, *dire = NULL;
 
         if (shpack->options[1] && shpack->options[2])
         {
                 write(2, "cd: too many arguments\n", 23);
                 shpack->exitnum[0] = 2;
                 free(shpack->options);
-                free(currdir);
-                return (dir);
+                freeCharFoluke(curDir);
+                return (dire);
         }
 
         oldpwd2 = _strdup(_getenv("OLDPWD", *(shpack->envCpy)));
         if (oldpwd2)
-                oldpwd = _strdup(oldpwd2 + 7), free(oldpwd2);
+                oldpwDir = _strdup(oldpwd2 + 7), free(oldpwd2);
         if (!oldpwd2)
         {
-                oldpwd = _strdup(currdir);
-                /* free(oldpwd), free(shpack->options), free(currdir); */
+                oldpwDir = _strdup(curDir);
+                /* free(oldpwDir), free(shpack->options), free(curDir); */
                 /* return (shpack->exitnum[0] = 2, NULL); */
         }
 
-        dir = oldpwd;
+        dire = oldpwDir;
 
-        return (dir);
+        return (dire);
 }
 
 /**
- * _cd_cmd - built in command cd
- * @shpack: struct containing shell info
- *
- * Return: 1 if succesful, -1 if fail
+ * cDirCmnd - built in command for cd
+ * @shpack: struct
+ * Return: 1
  */
-ssize_t _cd_cmd(hshpack *shpack)
+ssize_t cDirCmnd(hshpack *shpack)
 {
-        char *currdir = NULL, *dir = NULL, **newenv, *oldpwd = NULL;
-        int exit = 1, checker = 1, checkerminus = 0;
+        char *curDir = NULL, *dire = NULL, **nenviron, *oldpwDir = NULL;
+        int exit = 1, chckr = 1, checkerSubtrctn = 0;
 
-        currdir = getcwd(NULL, 4096);
-        if (!currdir)
+        curDir = getcwd(NULL, 4096);
+        if (!curDir)
                 return (_error(4, shpack, 2), free(shpack->options), -1);
         if (!shpack->options[1] ||
                         (shpack->options[1] && (!_strcmp(shpack->options[1], "~"))))
         {
-                dir = auxcd2(shpack, currdir);
-                if (!dir)
-                        return (free(shpack->options), free(currdir), 1);
+                dire = secAuxCd(shpack, curDir);
+                if (!dire)
+                        return (free(shpack->options), freeCharFoluke(curDir), 1);
         }
         else
                 if (!_strcmp(shpack->options[1], "-"))
                 {
-                        dir = auxcd(shpack, currdir);
-                        if (!dir)
-                                return (free(shpack->options), free(currdir), 1);
-                        checkerminus = 1;
+                        dire = firstAuxCd(shpack, curDir);
+                        if (!dire)
+                                return (free(shpack->options), freeCharFoluke(curDir), 1);
+                        checkerSubtrctn = 1;
                 }
                 else
-                        dir = shpack->options[1];
-        if (dir)
-                checker = chdir(dir);
-        if (checker == 0 && checkerminus == 1)
-                write(1, dir, _strlen(dir)), write(1, "\n", 1);
-        if (checker != 0)
+                        dire = shpack->options[1];
+        if (dire)
+                chckr = chdir(dire);
+        if (chckr == 0 && checkerSubtrctn == 1)
+                write(1, dire, _strlen(dire)), write(1, "\n", 1);
+        if (chckr != 0)
                 _error(4, shpack, 2), exit = -1;
         else
         {
-                newenv = _setenv(*(shpack->envCpy), "PWD", dir, shpack);
-                *(shpack->envCpy) = newenv;
-                newenv = _setenv(*(shpack->envCpy), "OLDPWD", currdir, shpack);
-                *(shpack->envCpy) = newenv;
+                nenviron = _setenv(*(shpack->envCpy), "PWD", dire, shpack);
+                *(shpack->envCpy) = nenviron;
+                nenviron = _setenv(*(shpack->envCpy), "OLDPWD", curDir, shpack);
+                *(shpack->envCpy) = nenviron;
         }
-        free(shpack->options), free(currdir), free(oldpwd);
-        if (checkerminus == 1)
-                free(dir);
+        free(shpack->options), freeCharFoluke(curDir), freeCharFoluke(oldpwDir);
+        if (checkerSubtrctn == 1)
+                freeCharFoluke(dire);
         return (exit);
 }
 
+/* ................................500..............................*/
 
+
+/* ................................NUM 3 START..............................*/
+/* ................................NUM 3 BTW................................*/
+/* ................................NUM 3 END................................*/
 /**
- * _pow - gets the result of base to ower
+ * powerFunc - gets the result of base to ower
  * @base: base decimal
  * @pot: power
  *
  * Return: result
  */
-long _pow(long base, long pot)
+long powerFunc(long base, long pot)
 {
-        long x = 0;
-        long res = 1;
+        long x = 0, res = 1;
 
         for (x = 0; x < pot; x++)
-                res *= base;
+                powerFuncDaf(base, res);
 
         return (res);
 }
+
+/* ................................NUM 3 START..............................*/
+/* ................................NUM 3 BTW................................*/
+/* ................................NUM 3 END................................*/
+/**
+ * powerFunc - gets the result of base to ower
+ * @base: base decimal
+ * @pot: power
+ *
+ * Return: result
+ */
+long powerFuncDaf(long base, long res)
+{
+        res *= base;
+        return (res);
+}
+/* ................................NUM 3 START..............................*/
+/* ................................NUM 3 BTW................................*/
+/* ................................NUM 3 END................................*/
+
+/* ................................NUM 3 START..............................*/
+/* ................................NUM 3 BTW................................*/
+/* ................................NUM 3 END................................*/
 
 /**
  * atoiFol - convert a char input to int
@@ -598,7 +602,7 @@ long atoiFol(char *s)
         }
 
         for (x--; len > 0; x--, k++, len--)
-                result +=  (*(s + x) - offset) * _pow(10, k);
+                result +=  (*(s + x) - offset) * powerFunc(10, k);
 
         toReturn = (minus % 2 != 0) ? result * (-1) : result;
 
@@ -609,7 +613,7 @@ long atoiFol(char *s)
  * @s1: string 1
  * @s2: string 2
  *
- * Return: 0 if strings are equal or another value if not
+ * Return: 0 if strings are equal or another val1 if not
  *
  */
 int _strcmp(char *s1, char *s2)
@@ -737,7 +741,7 @@ char *deleteComment(char *str)
  * @env: current environment
  * @shpack: struct with shell information
  *
- * Return: pointer to the value in the environment,
+ * Return: pointer to the val1 in the environment,
  * or NULL if there is no match
  *
  */
@@ -780,12 +784,12 @@ int executeCmd(char *program, char *command[], char **env, hshpack *shpack)
 
 
 /**
- * _getenv - gets an environment variable
+ * _getenv - gets an environment var1
  *
- * @name: name of environmental variable
+ * @name: name of environmental var1
  * @env: current environment
  *
- * Return: pointer to the value in the environment,
+ * Return: pointer to the val1 in the environment,
  * or NULL if there is no match
  *
  */
@@ -993,8 +997,8 @@ char **getParameters(char *raw_buffer, hshpack *shpack)
 
 
 /**
- * _pathcheck - check if current dir must be added
- * @path: path env variable
+ * _pathcheck - check if current dire must be added
+ * @path: path env var1
  *
  * Return: Pointer to adress of new PATH
  *
@@ -1044,7 +1048,7 @@ char *_pathcheck(char *path)
 }
 /**
  * _path - Searches for a cmd in PATH
- * @cmd: string contating env variable PATH
+ * @cmd: string contating env var1 PATH
  * @env: current environment
  * @shpack: struct containing shell info
  *
@@ -1139,7 +1143,7 @@ void help_env(void)
 void help_setenv(void)
 {
         _puts("setenv: setenv [VARIABLE] [VALUE]\n");
-        _puts("    Initializes a new environment variable, ");
+        _puts("    Initializes a new environment var1, ");
         _puts("    or modifies an existing one.\n\n");
         _puts("    VARIABLE must not have the character '='.\n");
         _puts("    If no arguments are given, setenv prints ");
@@ -1199,7 +1203,7 @@ ssize_t _help_cmd(hshpack *shpack)
 void help_unsetenv(void)
 {
         _puts("unsetenv: unsetenv [VARIABLE]\n");
-        _puts("    Initializes a new environment variable, or ");
+        _puts("    Initializes a new environment var1, or ");
         _puts("    modifies an existing one.\n\n");
         _puts("    VARIABLE must not have the character '='.\n");
         _puts("    If no arguments are given, setenv prints the current ");
@@ -1216,13 +1220,13 @@ void help_cd(void)
         _puts("cd: cd [DIRECTORY]\n");
         _puts("    Change the shell working directory.\n\n");
         _puts("    Change the current directory to DIR.  ");
-        _puts("    The default DIR is the value of the\n");
-        _puts("    HOME shell variable.\n\n");
+        _puts("    The default DIR is the val1 of the\n");
+        _puts("    HOME shell var1.\n\n");
         _puts("    Options:\n");
         _puts("    -  If a minus signed is used instead a directory, ");
         _puts("    cd will change to the\n");
         _puts("       previous used directory\n\n");
-        _puts("    Each time cd runs successfuly, the env variable ");
+        _puts("    Each time cd runs successfuly, the env var1 ");
         _puts("    PWD is updated\n\n");
         _puts("    Exit Status:\n");
         _puts("    Returns 1 if the directory is changed, and if $PWD is set ");
@@ -1255,7 +1259,7 @@ void help_help(void)
  */
 void help_alias(void)
 {
-        _puts("alias: alias alias [name[='value'] ...]\n");
+        _puts("alias: alias alias [name[='val1'] ...]\n");
         _puts("    Define or display aliases.\n\n");
         _puts("    Without arguments, `alias' prints the list of aliases ");
         _puts("    in the reusable\n");
@@ -1289,7 +1293,7 @@ void printsHelp(void)
         _puts(" unsetenv [VARIABLE]\n");
         _puts(" cd [DIRECTORY]\n");
         _puts(" help [BUILTIN ...]\n");
-        _puts(" alias [name[='value'] ...]\n");
+        _puts(" alias [name[='val1'] ...]\n");
 }
 
 
@@ -1382,36 +1386,36 @@ int _strlendp(char **s)
         return (x);
 }
 /**
- * _setenv - overwrite an env variable or creates it
+ * _setenv - overwrite an env var1 or creates it
  *
  * @env: array of env variables
- * @variable: env variable to set
- * @value: value to set
+ * @var1: env var1 to set
+ * @val1: val1 to set
  * @shpack: struct with shell info
  *
  * Return: 0 on success, -1 on error
  */
-char **_setenv(char **env, char *variable, char *value, hshpack *shpack)
+char **_setenv(char **env, char *var1, char *val1, hshpack *shpack)
 {
         int x, y, check, z = 0, zenv = 0;
         char *envjoin, *envjoin2, *copydup, **copy;
 
-        if (_strlen(variable) == 0 || variable == 0)
+        if (_strlen(var1) == 0 || var1 == 0)
                 return (_error(3, shpack, 1), NULL);
-        envjoin2 = str_concat(variable, "=");
+        envjoin2 = str_concat(var1, "=");
         if (envjoin2 == 0)
                 return (_error(3, shpack, 1), NULL);
-        envjoin = str_concat(envjoin2, value), free(envjoin2);
+        envjoin = str_concat(envjoin2, val1), free(envjoin2);
         if (envjoin == 0)
                 return (_error(3, shpack, 1), NULL);
-        z = _strlen(variable), zenv = _strlendp(env);
+        z = _strlen(var1), zenv = _strlendp(env);
         for (x = 0; env && env[x] != 0; x++)
         {
                 for (check = 0, y = 0; y < z && env[x][y] != 0; y++)
                 {
-                        if (variable[y] == '=')
+                        if (var1[y] == '=')
                                 return (free(envjoin), _error(3, shpack, 2), NULL);
-                        if (env[x][y] == variable[y])
+                        if (env[x][y] == var1[y])
                                 check++;
                 }
                 if (check == z && env[x][check] == '=')
@@ -1436,7 +1440,7 @@ char **_setenv(char **env, char *variable, char *value, hshpack *shpack)
 
 /**
  * signal_handler - handles ctrl + c in runtime
- * @x: unused value, just for betty
+ * @x: unused val1, just for betty
  *
  * Return: No return
  */
@@ -1447,7 +1451,7 @@ void signal_handler(int x)
 }
 /**
  * signal_handler2 - handles ctrl + c during cmd exec
- * @x: unused value, just for betty
+ * @x: unused val1, just for betty
  *
  * Return: No return
  */
@@ -1622,7 +1626,7 @@ char *_strtok(char *str, const char *delim)
  *
  * @p: double pointer to copy
  * @new_size: size of copy
- * @jump: value that must be skipped in copy
+ * @jump: val1 that must be skipped in copy
  *
  * Return: Pointer malloec
  */
@@ -1657,15 +1661,15 @@ char **_copydoublepDel(char **p, int new_size, int jump)
 }
 
 /**
- * _unsetenv - unsets an enviromental variable
+ * _unsetenv - unsets an enviromental var1
  *
  * @env: array of env variables
- * @variable: env variable to unset
+ * @var1: env var1 to unset
  * @shpack: struct with shell info
  *
  * Return: 0 on success, -1 on error
  */
-char **_unsetenv(char **env, char *variable, hshpack *shpack)
+char **_unsetenv(char **env, char *var1, hshpack *shpack)
 {
         int i, j, check, l = 0, lenv = 0, found = 0;
         char **copy;
@@ -1673,16 +1677,16 @@ char **_unsetenv(char **env, char *variable, hshpack *shpack)
         shpack->unsetnull[0] = 0;
         if (!env)
                 return (write(2, "Environment is NULL\n", 20), NULL);
-        if (_strlen(variable) == 0 || variable == 0)
+        if (_strlen(var1) == 0 || var1 == 0)
                 return (_error(3, shpack, 1), NULL);
-        l = _strlen(variable), lenv = _strlendp(env);
+        l = _strlen(var1), lenv = _strlendp(env);
         for (i = 0; env[i] != 0; i++)
         {
                 for (check = 0, j = 0; j < l && env[i][j] != 0; j++)
                 {
-                        if (variable[j] == '=')
+                        if (var1[j] == '=')
                                 return (_error(3, shpack, 2), NULL);
-                        if (env[i][j] == variable[j])
+                        if (env[i][j] == var1[j])
                                 check++;
                 }
                 if (check == l && env[i][check] == '=')
