@@ -1,7 +1,16 @@
 #ifndef SHELL_H
 #define SHELL_H
 
+
+#include <stdlib.h>
+#include <stdio.h>
+#include <unistd.h>
+#include <limits.h>
 #include <sys/types.h>
+#include <string.h>
+#include <sys/stat.h>
+#include <signal.h>
+#include <sys/wait.h>
 
 /**
  * struct Hshpack - struct containing important shell info
@@ -113,4 +122,6 @@ void help_help(void);
 void help_alias(void);
 void printsHelp(void);
 
+void string_reverse(char *s);
+void string_reverseSub(char *s, char tmp, int x, int y);
 #endif

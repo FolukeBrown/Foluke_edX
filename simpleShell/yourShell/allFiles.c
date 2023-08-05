@@ -1,30 +1,45 @@
-#include <stdlib.h>
-#include <stdio.h>
-#include <unistd.h>
 #include "shell.h"
 
+/* ................................NUM 1 START..............................*/
 /**
- * rev_str - Reverses a string
+ * string_reverse - Reverses a string
  * @s: string to reverse
  *
  * Return: Nothing
  */
-void rev_str(char *s)
+void string_reverse(char *s)
 {
         int x = 0, y = 0, z;
-        char tmp;
+        char tempVar = 'A';
 
         while (s[x])
                 x++;
         z = x / 2, x = x - 1;
         while (x >= z)
         {
-                tmp  = s[y];
-                s[y] = s[x];
-                s[x] = tmp;
-                x--, y++;
+                string_reverseSub(s, tempVar, x, y);
         }
 }
+
+/* ................................NUM 1 BTW................................*/
+/**
+ * string_reverse - Reverses a string
+ * @s: string to reverse
+ *
+ * Return: Nothing
+ */
+void string_reverseSub(char *s, char tempVar, int x, int y)
+{
+        tempVar  = s[y];
+        s[y] = s[x];
+        s[x] = tempVar;
+        x--, y++;
+}
+/* ................................NUM 1 END................................*/
+
+/* ................................NUM 3 START..............................*/
+/* ................................NUM 3 BTW................................*/
+/* ................................NUM 3 END................................*/
 /**
  * blen - obtains length of number in base
  *
@@ -35,11 +50,12 @@ void rev_str(char *s)
  */
 int blen(unsigned long int n, unsigned long int base)
 {
-        unsigned long int x, neg = 0;
+        unsigned long int x, negNum = 0, ret;
 
         for (x = 0; n > 0; x++)
                 n = n / base;
-        return (x + neg);
+        ret = x + negNum;
+        return (ret);
 }
 /**
  * _itoa - converts an integer to string
@@ -67,7 +83,7 @@ char *_itoa(int n)
                 n = n / base;
         }
         str[x] = '\0';
-        rev_str(str);
+        string_reverse(str);
         return (str);
 }
 
@@ -216,12 +232,7 @@ char *_error2(int errn, char *conc2, char *option)
         return (conc2);
 
 }
-#include <limits.h>
-#include <sys/types.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <unistd.h>
-#include "shell.h"
+
 
 /**
  * _exit_cmd - built in command exit
@@ -411,12 +422,7 @@ ssize_t built_ints(hshpack *shpack)
 
         return (0);
 }
-#include <limits.h>
-#include <sys/types.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <unistd.h>
-#include "shell.h"
+
 
 /**
  * auxcd2 - auxiliary function of cd built in
@@ -521,12 +527,7 @@ ssize_t _cd_cmd(hshpack *shpack)
                 free(dir);
         return (exit);
 }
-#include <limits.h>
-#include <sys/types.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <unistd.h>
-#include "shell.h"
+
 
 /**
  * _pow - gets the result of base to ower
@@ -629,14 +630,7 @@ int _isnumber(char *s)
                         return (0);
         return (1);
 }
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <signal.h>
-#include "shell.h"
+
 
 /**
  * checkInput - checks for input in after shell prompt
@@ -716,15 +710,7 @@ char *deleteComment(char *str)
         return (org);
 }
 
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <sys/types.h>
-#include <sys/wait.h>
-#include <sys/stat.h>
-#include <signal.h>
-#include "shell.h"
+
 
 /**
  * executeCmd - creates a child process to execute a cmd
@@ -774,8 +760,7 @@ int executeCmd(char *program, char *command[], char **env, hshpack *shpack)
         shpack->errnum[0] += 1;
         return (0);
 }
-#include <unistd.h>
-#include "shell.h"
+
 
 /**
  * _getenv - gets an environment variable
@@ -808,9 +793,7 @@ char *_getenv(const char *name, char **env)
 
         return (NULL);
 }
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
+
 
 #define BSIZE 4
 /**
@@ -939,14 +922,7 @@ int _getline(char **buffer, size_t *bufsize, int fd)
         } while (1);
         return (len);
 }
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <signal.h>
-#include "shell.h"
+
 /**
  * getParameters - obtains parameters from buffer of prompt
  * @raw_buffer: raw_buffer
@@ -997,13 +973,7 @@ char **getParameters(char *raw_buffer, hshpack *shpack)
         buffer[i] = NULL;
         return (buffer);
 }
-#include "shell.h"
-#include <string.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <unistd.h>
+
 
 /**
  * _pathcheck - check if current dir must be added
@@ -1108,9 +1078,7 @@ char *_path(char *cmd, char **env, hshpack *shpack)
         return (0);
 }
 
-#include <unistd.h>
-#include <stdlib.h>
-#include "shell.h"
+
 
 /**
  * _puts - prints string to std output
@@ -1204,8 +1172,7 @@ ssize_t _help_cmd(hshpack *shpack)
         free(shpack->options);
         return (check);
 }
-#include <unistd.h>
-#include "shell.h"
+
 
 /**
  * help_unsetenv - prints help of unsetenv built in
@@ -1286,7 +1253,6 @@ void help_alias(void)
         _puts("    no alias has been\n");
         _puts("    defined.\n");
 }
-#include "shell.h"
 
 /**
  * printsHelp - prints help of help built in
@@ -1308,9 +1274,7 @@ void printsHelp(void)
         _puts(" help [BUILTIN ...]\n");
         _puts(" alias [name[='value'] ...]\n");
 }
-#include <stdio.h>
-#include <stdlib.h>
-#include "shell.h"
+
 
 /**
  * free_doubpoint - frees a double pointer array of strings
@@ -1451,8 +1415,7 @@ char **_setenv(char **env, char *variable, char *value, hshpack *shpack)
                 return (_error(3, shpack, 1), NULL);
         return (env[zenv] = copydup, env);
 }
-#include <unistd.h>
-#include "shell.h"
+
 
 /**
  * signal_handler - handles ctrl + c in runtime
@@ -1477,8 +1440,7 @@ void signal_handler2(int x)
         write(1, "\n", 1);
 }
 
-#include <stdlib.h>
-#include "shell.h"
+
 
 /**
  * str_concat - concatenates two strings
@@ -1517,8 +1479,7 @@ char *str_concat(char *s1, char *s2)
 
         return (s);
 }
-#include <stdlib.h>
-#include "shell.h"
+
 
 /**
  * _strcpy - copy a source input ont destinated input
@@ -1582,14 +1543,7 @@ char *_strdup(char *str)
 
         return (arr);
 }
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <signal.h>
-#include "shell.h"
+
 
 /**
  * _strtok - tokenizes a string based on a delimiter
@@ -1636,7 +1590,6 @@ char *_strtok(char *str, const char *delim)
                         if (*str == *delim)
                         {
                                 issGetInto = 1, issEqual = 1;
-#include <stdio.h>
                                 isEnd = (*(str + 1)) ? 0 : 1, *str = '\0';
                         }
                 str = (issEqual) ? str : str + 1;
@@ -1645,10 +1598,7 @@ char *_strtok(char *str, const char *delim)
         }
         return (stepNull = str, step);
 }
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include "shell.h"
+
 
 /**
  * _copydoublepDel - copies an array of strings (double pointer)
