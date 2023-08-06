@@ -899,7 +899,7 @@ void *reAllocateFunc(void *ptr, unsigned int old_size, unsigned int new_size)
         return (pointr3);
 }
 /**
- * _getline - read a string or a line from an input stream
+ * fetchLine - read a string or a line from an input stream
  * @buffer: pointer to a space where the stdin read will be saved
  * as a string
  * @bufsize: current size of buffer (must be given as 0 initially)
@@ -907,7 +907,7 @@ void *reAllocateFunc(void *ptr, unsigned int old_size, unsigned int new_size)
  *
  * Return: Number of Characters Read
  */
-int _getline(char **buffer, size_t *bufsize, int fd)
+int fetchLine(char **buffer, size_t *bufsize, int fd)
 {
         static char *buff;
         static size_t size;

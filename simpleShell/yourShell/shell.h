@@ -90,7 +90,7 @@ char **getParameters(char *buffer, hshpack *shpack);
 int executeCmd(char *program, char *command[], char **env, hshpack *shpack);
 void signal_handler(int x);
 void signal_handler2(int x);
-int _getline(char **buffer, size_t *bufsize, int fd);
+int fetchLine(char **buffer, size_t *bufsize, int fd);
 void free_doubpoint(char **p);
 int _strlendp(char **s);
 char **checkInput(int ac, char **av, size_t *bufsize,
