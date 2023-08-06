@@ -1,6 +1,7 @@
 #ifndef SHELL_H
 #define SHELL_H
 
+#define BSIZE 4
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -78,7 +79,7 @@ typedef struct Helps
 
 
 
-char *_getenv(const char *name, char **env);
+char *fetchEnviron(const char *name, char **env);
 char *_path(char *cmd, char **env, hshpack *shpack);
 char *_strdup(char *str);
 char *str_concat(char *s1, char *s2);
@@ -101,17 +102,17 @@ void addCmd(hshpack *shpack, char *buffer, char *command, char **parameters);
 void addPathToCmd(hshpack *shpack, char *pathCmd);
 ssize_t built_ints(hshpack *shpack);
 ssize_t exitCmd(hshpack *shpack);
-int _strcmp(char *s1, char *s2);
+int stringCompare(char *s1, char *s2);
 long atoiFol(char *s);
 long powerFunc(long base, long pot);
 char **_copydoublep(char **p, int old_size, int new_size);
 int _strlendp(char **s);
 char **_setenv(char **env, char *variable, char *value, hshpack *shpack);
 char **_unsetenv(char **env, char *variable, hshpack *shpack);
-int _isdigit(int c);
-int is_numb(char *s);
+int isDigitFunc(int c);
+int isNumba(char *s);
 ssize_t _cd_cmd(hshpack *shpack);
-char *deleteComment(char *str);
+char *delComnt(char *str);
 
 
 ssize_t _help_cmd(hshpack *shpack);
@@ -137,6 +138,10 @@ char *secAuxCdDaf(char *home, char *dire);
 char *firstAuxCd(hshpack *shpack, char *currdir);
 ssize_t cDirCmnd(hshpack *shpack);
 long powerFuncDaf(long base, long res);
+long atoiFolDaf(long subtracn);
+char *memorySet(char *s, char b, unsigned int n);
+char *memoryCopy(char *dest, char *src, unsigned int n);
+void *reAllocateFunc(void *ptr, unsigned int old_size, unsigned int new_size);
 
 
 #endif

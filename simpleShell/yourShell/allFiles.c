@@ -233,7 +233,7 @@ ssize_t exitCmd(hshpack *shpack)
 {
         long exit_value;
 
-        if (shpack->options[1] == NULL || is_numb(shpack->options[1]))
+        if (shpack->options[1] == NULL || isNumba(shpack->options[1]))
         {
                 exit_value = atoiFol(shpack->options[1]);
 
@@ -392,7 +392,7 @@ ssize_t built_ints(hshpack *shpack)
         int x = 6, builtcheck; /* lenght of ops array */
 
         while (x--)
-                if (!_strcmp(shpack->cmd, ops[x].cmd))
+                if (!stringCompare(shpack->cmd, ops[x].cmd))
                 {
                         shpack->errnum[0] += 1;
                         builtcheck = ops[x].f(shpack);
@@ -418,7 +418,7 @@ char *secAuxCd(hshpack *shpack, char *curDir)
         char *home, *dire = NULL;
 
         (void) curDir;
-        home = _getenv("HOME", *(shpack->envCpy));
+        home = fetchEnviron("HOME", *(shpack->envCpy));
         if (home)
                 dire = secAuxCdDaf(home, dire);
 
@@ -458,7 +458,7 @@ char *firstAuxCd(hshpack *shpack, char *curDir)
                 return (dire);
         }
 
-        oldpwd2 = _strdup(_getenv("OLDPWD", *(shpack->envCpy)));
+        oldpwd2 = _strdup(fetchEnviron("OLDPWD", *(shpack->envCpy)));
         if (oldpwd2)
                 oldpwDir = _strdup(oldpwd2 + 7), free(oldpwd2);
         if (!oldpwd2)
@@ -487,14 +487,14 @@ ssize_t cDirCmnd(hshpack *shpack)
         if (!curDir)
                 return (_error(4, shpack, 2), free(shpack->options), -1);
         if (!shpack->options[1] ||
-                        (shpack->options[1] && (!_strcmp(shpack->options[1], "~"))))
+                        (shpack->options[1] && (!stringCompare(shpack->options[1], "~"))))
         {
                 dire = secAuxCd(shpack, curDir);
                 if (!dire)
                         return (free(shpack->options), freeCharFoluke(curDir), 1);
         }
         else
-                if (!_strcmp(shpack->options[1], "-"))
+                if (!stringCompare(shpack->options[1], "-"))
                 {
                         dire = firstAuxCd(shpack, curDir);
                         if (!dire)
@@ -525,9 +525,7 @@ ssize_t cDirCmnd(hshpack *shpack)
 /* ................................500..............................*/
 
 
-/* ................................NUM 3 START..............................*/
-/* ................................NUM 3 BTW................................*/
-/* ................................NUM 3 END................................*/
+/* ................................NUM 4 START..............................*/
 /**
  * powerFunc - gets the result of base to ower
  * @base: base decimal
@@ -545,9 +543,7 @@ long powerFunc(long base, long pot)
         return (res);
 }
 
-/* ................................NUM 3 START..............................*/
-/* ................................NUM 3 BTW................................*/
-/* ................................NUM 3 END................................*/
+/* ................................NUM 4 BTW................................*/
 /**
  * powerFunc - gets the result of base to ower
  * @base: base decimal
@@ -560,32 +556,23 @@ long powerFuncDaf(long base, long res)
         res *= base;
         return (res);
 }
-/* ................................NUM 3 START..............................*/
-/* ................................NUM 3 BTW................................*/
-/* ................................NUM 3 END................................*/
+/* ................................NUM 4 END................................*/
 
-/* ................................NUM 3 START..............................*/
-/* ................................NUM 3 BTW................................*/
-/* ................................NUM 3 END................................*/
+
+/* ................................NUM 5 START..............................*/
 
 /**
  * atoiFol - convert a char input to int
  * @s: char input
- *
- *
  * Return: input transformed to integer
  * On error: -1 inapropiate entry
  */
 
 long atoiFol(char *s)
 {
-        long x = 0;
-        long k = 0;
-        long len = 0;
+        long x = 0, k = 0, len = 0, toRet = 0, subtracn = 0, offset = 48;                                       
         unsigned long result = 0;
-        long toReturn = 0;
-        long minus = 0;
-        long offset = 48;
+        
 
         if (!s)
                 return (0);
@@ -598,61 +585,81 @@ long atoiFol(char *s)
                         break;
 
                 if (*(s + x) == '-')
-                        minus++;
+                        subtracn = atoiFolDaf(subtracn);
         }
 
         for (x--; len > 0; x--, k++, len--)
                 result +=  (*(s + x) - offset) * powerFunc(10, k);
 
-        toReturn = (minus % 2 != 0) ? result * (-1) : result;
+        toRet = (subtracn % 2 != 0) ? result * (-1) : result;
 
-        return (toReturn);
+        return (toRet);
 }
+
+/* ................................NUM 5 BTW................................*/
 /**
- * _strcmp - compares two strings
+ * atoiFol - convert a char input to int
+ * @s: char input
+ * Return: input transformed to integer
+ * On error: -1 inapropiate entry
+ */
+
+long atoiFolDaf(long subtracn)
+{
+       return (subtracn++);
+}
+/* ................................NUM 5 END................................*/
+
+
+/**
+ * stringCompare - compares two strings
  * @s1: string 1
  * @s2: string 2
  *
- * Return: 0 if strings are equal or another val1 if not
+ * Return: 0 if strings are eql or another val1 if not
  *
  */
-int _strcmp(char *s1, char *s2)
+int stringCompare(char *s1, char *s2)
 {
         int x = 0;
-        int equal = 0;
+        int eql = 0;
 
-        for (x = 0; (*(s1 + x) || *(s2 + x)) && !equal; x++)
+        for (x = 0; (*(s1 + x) || *(s2 + x)) && !eql; x++)
                 if (*(s1 + x) != *(s2 + x))
-                        equal = *(s1 + x) - *(s2 + x);
+                        eql = *(s1 + x) - *(s2 + x);
 
-        return (equal);
+        return (eql);
 }
+
+
 /**
- * _isdigit - checks if a character is a digit
+ * isDigitFunc - checks if a character is a digit
  * @c: character
  *
  * Return: 1 if digit, 0 if not
  *
  */
-int _isdigit(int c)
+int isDigitFunc(int c)
 {
         return ((c >= 48 && c <= 57) ? 1 : 0);
 }
 /**
- * is_numb - checks if a string is composed of numbers
+ * isNumba - checks if a string is composed of numbers
  * @s: string
  *
  * Return: 1 if string has only numbers, 0 if not
  */
-int is_numb(char *s)
+int isNumba(char *s)
 {
         for (; *s; s++)
-                if (!_isdigit(*s))
+                if (!isDigitFunc(*s))
                         return (0);
         return (1);
 }
 
-
+/* ................................NUM 3 START..............................*/
+/* ................................NUM 3 BTW................................*/
+/* ................................NUM 3 END................................*/
 /**
  * checkInput - checks for input in after shell prompt
  * @ac: cnt of main arguments
@@ -667,7 +674,7 @@ int is_numb(char *s)
 char **checkInput(int ac, char **av, size_t *bufsize,
                    char **buffer, hshpack *shpack)
 {
-        ssize_t characters;
+        ssize_t charctrs;
         char **command;
         int exitnum;
 
@@ -675,12 +682,12 @@ char **checkInput(int ac, char **av, size_t *bufsize,
         {
                 if (isatty(STDIN_FILENO))
                         write(1, "prompt_by_foluke $ ", 19);
-                characters = getline(buffer, bufsize, stdin);
+                charctrs = getline(buffer, bufsize, stdin);
 
-                if (characters == -1)
+                if (charctrs == -1)
                 {
                         exitnum = shpack->exitnum[0];
-                        free(*buffer);
+                        freeCharFoluke(*buffer);
                         if (*(shpack->envCpy))
                                 free_doubpoint(*(shpack->envCpy));
                         free(shpack);
@@ -688,9 +695,9 @@ char **checkInput(int ac, char **av, size_t *bufsize,
                                 write(1, "\n", 1);
                         exit(exitnum);
                 }
-                if (**buffer == '#' || !characters || **buffer == '\n')
+                if (**buffer == '#' || !charctrs || **buffer == '\n')
                         return (NULL);
-                *buffer = deleteComment(*buffer);
+                *buffer = delComnt(*buffer);
                 command = getParameters(*buffer, shpack);
         }
         else
@@ -710,16 +717,16 @@ char **checkInput(int ac, char **av, size_t *bufsize,
 }
 
 /**
- * deleteComment - deletes a commnet inside a command line
+ * delComnt - deletes a commnet inside a command line
  *
  * @str: string to operate
  *
  * Return: pointer to string
  *
  */
-char *deleteComment(char *str)
+char *delComnt(char *str)
 {
-        char *org = str;
+        char *C_org = str;
 
         for (; str && *str; str++)
                 if (*str == '#' && *(str - 1) == ' ')
@@ -728,13 +735,13 @@ char *deleteComment(char *str)
                         break;
                 }
 
-        return (org);
+        return (C_org);
 }
 
 
 
 /**
- * executeCmd - creates a child process to execute a cmd
+ * executeCmd - creates a child prcss to execute a cmd
  *
  * @program: command that will be executed
  * @command: arguments of command
@@ -747,32 +754,32 @@ char *deleteComment(char *str)
  */
 int executeCmd(char *program, char *command[], char **env, hshpack *shpack)
 {
-        pid_t process, status;
-        int execveSts = 0, waitSts = 0;
+        pid_t prcss, sttus;
+        int execSts = 0, wait1_Sts = 0;
 
-        process = fork();
+        prcss = fork();
         signal(SIGINT, signal_handler2);
-        if (process == -1)
+        if (prcss == -1)
         {
                 write(2, "Fork Error", 10);
                 exit(-1);
         }
-        if (process == 0)
+        if (prcss == 0)
         {
 
-                execveSts = execve(program, command, env);
-                if (execveSts == -1)
+                execSts = execve(program, command, env);
+                if (execSts == -1)
                 {
                         _exit(-1);
                 }
         }
         else
         {
-                waitSts = wait(&status);
+                wait1_Sts = wait(&sttus);
                 signal(SIGINT, signal_handler);
-                if (waitSts == -1)
+                if (wait1_Sts == -1)
                         exit(-1);
-                if (WEXITSTATUS(status) == 0)
+                if (WEXITSTATUS(sttus) == 0)
                         shpack->exitnum[0] = 0;
                 else
                         shpack->exitnum[0] = 2;
@@ -784,7 +791,7 @@ int executeCmd(char *program, char *command[], char **env, hshpack *shpack)
 
 
 /**
- * _getenv - gets an environment var1
+ * fetchEnviron - gets an environment var1
  *
  * @name: name of environmental var1
  * @env: current environment
@@ -793,7 +800,7 @@ int executeCmd(char *program, char *command[], char **env, hshpack *shpack)
  * or NULL if there is no match
  *
  */
-char *_getenv(const char *name, char **env)
+char *fetchEnviron(const char *name, char **env)
 {
         int x, y, check, z = 0;
 
@@ -816,9 +823,9 @@ char *_getenv(const char *name, char **env)
 }
 
 
-#define BSIZE 4
+
 /**
- * _memset - fills memory with constant byte
+ * memorySet - fills memory with constant byte
  * @s: memory area
  * @b: constant byte b
  * @n: first n bytes of memory area pointed by s
@@ -826,7 +833,7 @@ char *_getenv(const char *name, char **env)
  * Return: On success 1.
  * On error, -1 is returned, and errno is set appropriately.
  */
-char *_memset(char *s, char b, unsigned int n)
+char *memorySet(char *s, char b, unsigned int n)
 {
         unsigned int x;
 
@@ -835,14 +842,14 @@ char *_memset(char *s, char b, unsigned int n)
         return (s);
 }
 /**
- * _memcpy - copies memory
+ * memoryCopy - copies memory
  * @dest: destination
  * @src: source
  * @n: size of memory to copy
  *
  * Return: Returns memory copied
  */
-char *_memcpy(char *dest, char *src, unsigned int n)
+char *memoryCopy(char *dest, char *src, unsigned int n)
 {
         unsigned int x;
 
@@ -851,27 +858,27 @@ char *_memcpy(char *dest, char *src, unsigned int n)
         return (dest);
 }
 /**
- * _realloc - reallocates a memory block using malloc and free
+ * reAllocateFunc - reallocates a memory block using malloc and free
  * @ptr: pointer to modify
  * @old_size: current size of memory
  * @new_size: size memory will now have
  *
  * Return: Pointer to reallocated memory
  */
-void *_realloc(void *ptr, unsigned int old_size, unsigned int new_size)
+void *reAllocateFunc(void *ptr, unsigned int old_size, unsigned int new_size)
 {
-        void *ptr2;
+        void *pointr3;
 
         if (old_size == new_size)
                 return (ptr);
 
         if (ptr == NULL)
         {
-                ptr2 = malloc(new_size);
-                if (ptr2 == 0)
+                pointr3 = malloc(new_size);
+                if (pointr3 == 0)
                         return (0);
                 free(ptr);
-                return (ptr2);
+                return (pointr3);
         }
 
         if (new_size == 0 && ptr != NULL)
@@ -880,16 +887,16 @@ void *_realloc(void *ptr, unsigned int old_size, unsigned int new_size)
                 return (0);
         }
 
-        ptr2 = malloc(new_size);
+        pointr3 = malloc(new_size);
 
-        if (ptr2 == 0)
+        if (pointr3 == 0)
                 return (0);
 
-        ptr2 = _memset(ptr2, '\0', new_size);
+        pointr3 = memorySet(pointr3, '\0', new_size);
 
-        _memcpy(ptr2, ptr, old_size);
+        memoryCopy(pointr3, ptr, old_size);
         free(ptr);
-        return (ptr2);
+        return (pointr3);
 }
 /**
  * _getline - read a string or a line from an input stream
@@ -916,7 +923,7 @@ int _getline(char **buffer, size_t *bufsize, int fd)
                         return (write(2, "Memory Error", 22), 0);
                 *buffer = buff;
         }
-        buff = _memset(buff, '\0', size);
+        buff = memorySet(buff, '\0', size);
         do {
 
                 r = read(fd, buff + len, BSIZE);
@@ -927,7 +934,7 @@ int _getline(char **buffer, size_t *bufsize, int fd)
                 if  (len >= size)
                 {
                         sizeold = size, size += BSIZE;
-                        buff = _realloc(buff, sizeold, size);
+                        buff = reAllocateFunc(buff, sizeold, size);
                         if (!buff)
                                 return (write(2, "Memory Error", 22), 0);
                 }
@@ -1072,7 +1079,7 @@ char *_path(char *cmd, char **env, hshpack *shpack)
                                 return (0);
                 }
 
-        path2 = _getenv("PATH", env);
+        path2 = fetchEnviron("PATH", env);
         (void) shpack;
         if (!path2)
                 return (0);
@@ -1120,8 +1127,8 @@ void help_exit(void)
 {
         _puts("exit: exit [n]\n");
         _puts("    Exit the shell.\n\n");
-        _puts("    Exits the shell with a status of N.  ");
-        _puts("    If N is omitted, the exit status\n");
+        _puts("    Exits the shell with a sttus of N.  ");
+        _puts("    If N is omitted, the exit sttus\n");
         _puts("    is that of the last command executed.\n");
 }
 /**
@@ -1176,7 +1183,7 @@ ssize_t _help_cmd(hshpack *shpack)
         for (; shpack->options[p]; p++, i = 7)
         {
                 while (i--)
-                        if (!_strcmp(shpack->options[p], help[i].built))
+                        if (!stringCompare(shpack->options[p], help[i].built))
                                 help[i].h(), bcheck = 1;
         }
         if (shpack->options[1] == NULL)
@@ -1223,7 +1230,7 @@ void help_cd(void)
         _puts("    The default DIR is the val1 of the\n");
         _puts("    HOME shell var1.\n\n");
         _puts("    Options:\n");
-        _puts("    -  If a minus signed is used instead a directory, ");
+        _puts("    -  If a subtracn signed is used instead a directory, ");
         _puts("    cd will change to the\n");
         _puts("       previous used directory\n\n");
         _puts("    Each time cd runs successfuly, the env var1 ");
@@ -1578,8 +1585,8 @@ char *_strdup(char *str)
  */
 char *_strtok(char *str, const char *delim)
 {
-        const char *org = delim;
-        int issEqual = 1, issGetInto = 0;
+        const char *C_org = delim;
+        int issEql = 1, issGetInto = 0;
         static char *step, *stepNull;
         static int isEnd;
 
@@ -1592,28 +1599,28 @@ char *_strtok(char *str, const char *delim)
                 stepNull = str;
         else
                 str = step;
-        while (*str && issEqual)
+        while (*str && issEql)
         {
-                issEqual = 0;
-                for (delim = org; *delim; delim++)
+                issEql = 0;
+                for (delim = C_org; *delim; delim++)
                         if (*str == *delim)
-                                issEqual = 1;
-                str = (!issEqual) ? str : str + 1;
+                                issEql = 1;
+                str = (!issEql) ? str : str + 1;
                 isEnd = (*str) ? 0 : 1;
                 if (isEnd)
                         return (NULL);
         }
         step = str;
-        while (*str && !issEqual)
+        while (*str && !issEql)
         {
-                issEqual = 0;
-                for (delim = org; *delim; delim++)
+                issEql = 0;
+                for (delim = C_org; *delim; delim++)
                         if (*str == *delim)
                         {
-                                issGetInto = 1, issEqual = 1;
+                                issGetInto = 1, issEql = 1;
                                 isEnd = (*(str + 1)) ? 0 : 1, *str = '\0';
                         }
-                str = (issEqual) ? str : str + 1;
+                str = (issEql) ? str : str + 1;
                 if (!issGetInto && !*str)
                         isEnd = 1;
         }
