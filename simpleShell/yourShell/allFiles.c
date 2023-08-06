@@ -877,13 +877,13 @@ void *reAllocateFunc(void *ptr, unsigned int old_size, unsigned int new_size)
                 pointr3 = malloc(new_size);
                 if (pointr3 == 0)
                         return (0);
-                free(ptr);
+                freeCharFoluke(ptr);
                 return (pointr3);
         }
 
         if (new_size == 0 && ptr != NULL)
         {
-                free(ptr);
+                freeCharFoluke(ptr);
                 return (0);
         }
 
@@ -895,7 +895,7 @@ void *reAllocateFunc(void *ptr, unsigned int old_size, unsigned int new_size)
         pointr3 = memorySet(pointr3, '\0', new_size);
 
         memoryCopy(pointr3, ptr, old_size);
-        free(ptr);
+        freeCharFoluke(ptr);
         return (pointr3);
 }
 /**
