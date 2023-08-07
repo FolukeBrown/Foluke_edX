@@ -905,40 +905,40 @@ char memoryCopyFol(char *dest, char *src, unsigned int x)
 /**
  * reAllocateFunc - reallocates a memory block
  * @ptr: pointer
- * @old_size: current size
- * @new_size: size of memory
+ * @oldSize: current size
+ * @nwSize: size of memory
  * Return: Pointer
  */
-void *reAllocateFunc(void *ptr, unsigned int old_size, unsigned int new_size)
+void *reAllocateFunc(void *ptr, unsigned int oldSize, unsigned int nwSize)
 {
         void *pointr3;
 
-        if (old_size == new_size)
+        if (oldSize == nwSize)
                 return (ptr);
 
         if (ptr == NULL)
         {
-                pointr3 = malloc(new_size);
+                pointr3 = malloc(nwSize);
                 if (pointr3 == 0)
                         return (0);
                 freeCharFoluke(ptr);
                 return (pointr3);
         }
 
-        if (new_size == 0 && ptr != NULL)
+        if (nwSize == 0 && ptr != NULL)
         {
                 freeCharFoluke(ptr);
                 return (0);
         }
 
-        pointr3 = malloc(new_size);
+        pointr3 = malloc(nwSize);
 
         if (pointr3 == 0)
                 return (0);
 
-        pointr3 = memorySet(pointr3, '\0', new_size);
+        pointr3 = memorySet(pointr3, '\0', nwSize);
 
-        memoryCopy(pointr3, ptr, old_size);
+        memoryCopy(pointr3, ptr, oldSize);
         freeCharFoluke(ptr);
         return (pointr3);
 }
@@ -1058,8 +1058,8 @@ char **fetchParam(char *raw_buffer, hshpack *shpack)
 
 char *pthChcker(char *path)
 {
-        char *npath;
-        int x, y, nsize, cnt = 0;
+        char *nwpath;
+        int x, y, nwsize, cnt = 0;
 
         for (x = 0; path[x]; x++)
         {
@@ -1073,30 +1073,30 @@ char *pthChcker(char *path)
         }
         if (cnt == 0)
                 return (0);
-        nsize = stringLengthFunc(path) + 1 + cnt;
-        npath = malloc(sizeof(char) * nsize);
+        nwsize = stringLengthFunc(path) + 1 + cnt;
+        nwpath = malloc(sizeof(char) * nwsize);
 
-        for (x = 0, y = 0; x < nsize; x++, y++)
+        for (x = 0, y = 0; x < nwsize; x++, y++)
         {
                 if (path[y] == '=' && path[y + 1] == ':')
                 {
-                        npath[x] = pthChckerFol(path, npath, x, y);
+                        nwpath[x] = pthChckerFol(path, nwpath, x, y);
                         continue;
                 }
                 if (path[y] == ':' && path[y + 1] == ':')
                 {
-                        npath[x] = pthChckerFol(path, npath, x, y);
+                        nwpath[x] = pthChckerFol(path, nwpath, x, y);
                         continue;
                 }
                 if (path[y] == ':' && path[y + 1] == '\0')
                 {
-                        npath[x] = pthChckerFol(path, npath, x, y);
+                        nwpath[x] = pthChckerFol(path, nwpath, x, y);
                         continue;
                 }
-                npath[x] = path[y];
+                nwpath[x] = path[y];
         }
         freeCharFoluke(path);
-        return (npath);
+        return (nwpath);
 }
 /* ................................NUM 10 BTW................................*/
 /**
@@ -1105,10 +1105,10 @@ char *pthChcker(char *path)
  * Return: Pointer to adress of new PAT
  */
 
-char pthChckerFol(char *path, char *npath, int x, int y)
+char pthChckerFol(char *path, char *nwpath, int x, int y)
 {
-        npath[x] = path[y], npath[x + 1] = '.', x++;
-        return (npath[x]);
+        nwpath[x] = path[y], nwpath[x + 1] = '.', x++;
+        return (nwpath[x]);
 }
 /* ................................NUM 10 END................................*/
 
@@ -1125,7 +1125,7 @@ char *searchPath(char *cmd, char **env, hshpack *shpack)
 {
         char *path, *path2;
         struct stat st;
-        char *token, *concat, *concat2, *pathcheck, *delim = ":=";
+        char *token, *concat, *concatenat2, *pathChck, *delim = ":=";
         int x;
 
         for (x = 0; cmd[x]; x++)
@@ -1142,22 +1142,22 @@ char *searchPath(char *cmd, char **env, hshpack *shpack)
         if (!path2)
                 return (0);
         path = stringDuplicateFunc(path2);
-        pathcheck = pthChcker(path);
-        if (pathcheck)
-                path = pathcheck;
+        pathChck = pthChcker(path);
+        if (pathChck)
+                path = pathChck;
         token = stringTokenizeFunc(path, delim);
         for (token = stringTokenizeFunc(0, delim); token; token = stringTokenizeFunc(0, delim))
         {
                 concat = stringCatenator(token, "/");
-                concat2 = stringCatenator(concat, cmd);
+                concatenat2 = stringCatenator(concat, cmd);
                 freeCharFoluke(concat);
-                if (stat(concat2, &st) == 0)
+                if (stat(concatenat2, &st) == 0)
                 {
                         /*Found the command in PATH*/
                         free(path);
-                        return (concat2);
+                        return (concatenat2);
                 }
-                freeCharFoluke(concat2);
+                freeCharFoluke(concatenat2);
         }
 
         freeCharFoluke(path);
@@ -1257,7 +1257,7 @@ void hlpSetEnvironFol(void)
  */
 ssize_t hlpComnd(hshpack *shpack)
 {
-        int check = 1, bcheck = 0;
+        int check = 1, bchck = 0;
         helps help[] = {
                 {"exit", hlpExitFunc},
                 {"env", hlpEnviron},
@@ -1275,14 +1275,14 @@ ssize_t hlpComnd(hshpack *shpack)
         {
                 while (i--)
                         if (!stringCompare(shpack->options[p], help[i].built))
-                                help[i].h(), bcheck = 1;
+                                help[i].h(), bchck = 1;
         }
         if (shpack->options[1] == NULL)
         {
                 prntHlp();
-                bcheck = 1;
+                bchck = 1;
         }
-        if (bcheck == 0)
+        if (bchck == 0)
         {
                 check = -1;
                 errorSetStr(6, shpack, 2);
@@ -1464,27 +1464,27 @@ void freeDobleCharPntrFoluke(char **p)
  * cpyDoblePtr - copies an array of string
  *
  * @p: double pointe
- * @old_size: original siz
- * @new_size: size of copy
+ * @oldSize: original siz
+ * @nwSize: size of copy
  * Return: Pointer malloec
  */
-char **cpyDoblePtr(char **p, int old_size, int new_size)
+char **cpyDoblePtr(char **p, int oldSize, int nwSize)
 {
         char **copy;
         int x, copSize;
 
-        if (!p && (old_size == new_size))
+        if (!p && (oldSize == nwSize))
                 return (NULL);
 
-        if (new_size < old_size)
+        if (nwSize < oldSize)
         {
-                copSize = new_size;
+                copSize = nwSize;
                 copy = malloc(sizeof(char *) * (copSize + 1));
         }
         else
         {
-                copSize = old_size;
-                copy = malloc(sizeof(char *) * (new_size + 1));
+                copSize = oldSize;
+                copy = malloc(sizeof(char *) * (nwSize + 1));
         }
         if (copy == 0)
                 return (0);
@@ -1503,7 +1503,7 @@ char **cpyDoblePtr(char **p, int old_size, int new_size)
                         }
                 }
         /* Add Null in the end */
-        copy[new_size] = '\0';
+        copy[nwSize] = '\0';
 
         return (copy);
 }
@@ -1794,12 +1794,12 @@ char *stringTokenizeFunc(char *str, const char *delim)
  * @jump: val to skip during operation
  * Return: Pointer malloec
  */
-char **cpyDoblePtrDel(char **p, int new_size, int jump)
+char **cpyDoblePtrDel(char **p, int nwSize, int jump)
 {
         char **copy;
         int i, j, copSize;
 
-        copSize = new_size;
+        copSize = nwSize;
         copy = malloc(sizeof(char *) * (copSize + 1));
         if (copy == 0)
                 return (0);
@@ -1819,7 +1819,7 @@ char **cpyDoblePtrDel(char **p, int new_size, int jump)
                 }
         }
 
-        copy[new_size] = '\0';
+        copy[nwSize] = '\0';
 
         return (copy);
 }
