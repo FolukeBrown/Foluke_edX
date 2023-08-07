@@ -72,16 +72,16 @@ else
 		DFILENAME="defaultCTemplate"
 
 	elif [[ $OPTION =~ "h" || $OPTION =~ "H" ]]; then
-		FILETYPE="cfile"
+		FILETYPE="c"
 		DFILENAME="guessGame"
 	elif [[ $OPTION =~ "i" || $OPTION =~ "I" ]]; then
-		FILETYPE="cfile"
+		FILETYPE="c"
 		DFILENAME="rot13"
 	elif [[ $OPTION =~ "j" || $OPTION =~ "J" ]]; then
-		FILETYPE="cfile"
+		FILETYPE="c"
 		DFILENAME="rot47"
 	elif [[ $OPTION =~ "k" || $OPTION =~ "K" ]]; then
-		FILETYPE="cfile"
+		FILETYPE="c"
 		DFILENAME="myascii"
 	else
 		echo -e "You can only choose from the options provided"
@@ -95,10 +95,10 @@ else
 
 	echo -e "\n.....Creating $DFILENAME as a command....."
 
-	if [[ $FILETYPE =~ "script" ]]; then
+	if [[ $DFILENAME =~ "script" ]]; then
 		echo -e "PASTE THE SCRIPT YOU COPIED HERE" >  $SDIR/$DFILENAME
 		chmod 744 $SDIR/$DFILENAME
-	elif [[ $FILETYPE =~ "cfile" ]]; then
+	elif [[ $DFILENAME =~ "c" ]]; then
 		echo -e "PASTE THE SCRIPT YOU COPIED HERE" >  $SDIR/$DFILENAME.c
 	fi
 
@@ -164,7 +164,7 @@ else
 		cp "scpts/1_my_ascii.c" "$SDIR/$DFILENAME.c"
 	fi
 
-	if [[ $FILETYPE =~ "cfile" ]]; then
+	if [[ $FILETYPE =~ "c" ]]; then
 		make $SDIR/$DFILENAME
 	fi
 

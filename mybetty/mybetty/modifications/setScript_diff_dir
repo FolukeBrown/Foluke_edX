@@ -1,0 +1,126 @@
+#!/bin/bash
+
+OPTION="$1"
+DFILENAME="$2"
+PHONE="$3"
+ANYWHERE="from anywhere in your environment"
+SDIR=~/tester_dir
+TILDE=~"/"
+SHOW="tester_dir"
+
+
+echo -e "\n.....Creating $SHOW....."
+mkdir -p $SDIR
+
+echo ""
+
+echo -e "[a] or [A] or [1] - to setup file checker(betty) command"
+echo -e "[b] or [B] or [2] - to setup push command"
+echo -e "[c] or [C] or [3] - to setup pull command"
+echo -e "[d] or [D] or [4] - to setup create repo command"
+echo -e "[e] or [E] or [5] - to setup clone repo command"
+echo ""
+
+echo -n "What do you want to do? [q] - quit >>> "
+read OPTION
+
+
+if [[ -z "$OPTION" || $OPTION =~ "q" ]]; then
+	if [[ $OPTION =~ "q" ]]; then
+		echo -e "Cheers!"
+	else
+		echo -e "You must must choose an option"
+	fi
+	exit 1
+
+else
+	if [[ $OPTION =~ "a" || $OPTION =~ "A" || $OPTION =~ "1" ]]; then
+		echo -n "Enter your name(or the command name e.g betty) >>> "
+		read DFILENAME
+	elif [[ $OPTION =~ "b" || $OPTION =~ "B" || $OPTION =~ "2" ]]; then
+		DFILENAME="push"
+	elif [[ $OPTION =~ "c" || $OPTION =~ "C" || $OPTION =~ "3" ]]; then
+		DFILENAME="pull"
+	elif [[ $OPTION =~ "d" || $OPTION =~ "D" || $OPTION =~ "4" ]]; then
+		DFILENAME="createRepo"
+	elif [[ $OPTION =~ "e" || $OPTION =~ "E" || $OPTION =~ "5" ]]; then
+		DFILENAME="cloneRepo"
+	else
+		echo -e "You can only choose from the options provided"
+		exit 1
+	fi
+
+
+	echo -e "\n.....Creating $DFILENAME and setting permission script....."
+
+	echo -e "PASTE THE SCRIPT YOU COPIED HERE" >  $SDIR/$DFILENAME
+	chmod 744 $SDIR/$DFILENAME
+
+	
+	if ! grep -q tester_dir ~/.bashrc; then
+		echo -e "\n.....Creating $DFILENAME env variable....."
+  		echo 'export PATH="$PATH:~/tester_dir"' >> ~/.bashrc
+	else
+		echo -e "\n.....env variable exists!....."
+	fi
+
+	if ! grep -q  bashrc ~/.bash_profile; then
+
+		echo -e ".....Writing or Appending to bash profile.....\n"
+		echo '[ -r ~/.bashrc ] && . ~/.bashrc ' >> ~/.bash_profile
+	else
+		echo -e ".....profile exists!.....\n"
+	fi
+
+
+	if [[ $OPTION =~ "a" || $OPTION =~ "A" || $OPTION =~ "1" ]]; then
+		echo -n "Is your device a phone? [y/N] ([n] - pc)>>> "
+		read PHONE
+
+		echo ""
+		if [[ $PHONE =~ "y" || $PHONE =~ "Y" ]]; then
+			echo -e "It is a phone!"
+			cp "scpts/copyMe4Phone" "$SDIR/$DFILENAME"
+		elif [[ $PHONE =~ "n" || $PHONE =~ "N" ]]; then
+			echo -e "It is a pc!"
+			cp "scpts/copyMe4Pc" "$SDIR/$DFILENAME"
+		else
+			echo -e "Invalid response! I will assume it is a pc!"
+			cp "scpts/copyMe4Pc" "$SDIR/$DFILENAME"
+		fi
+		
+	elif [[ $OPTION =~ "b" || $OPTION =~ "B" || $OPTION =~ "2" ]]; then
+		cp "scpts/$DFILENAME" "$SDIR/$DFILENAME"
+	elif [[ $OPTION =~ "c" || $OPTION =~ "C" || $OPTION =~ "3" ]]; then
+		cp "scpts/$DFILENAME" "$SDIR/$DFILENAME"
+	elif [[ $OPTION =~ "d" || $OPTION =~ "D" || $OPTION =~ "4" ]]; then
+		cp "scpts/createRepoGeneral" "$SDIR/$DFILENAME"
+	elif [[ $OPTION =~ "e" || $OPTION =~ "E" || $OPTION =~ "5" ]]; then
+		cp "scpts/cloneRepoGeneral" "$SDIR/$DFILENAME"
+	fi
+
+	echo ""
+	echo -e "Now, RESTART YOUR TERMINAL or START A NEW SESSION."
+	if [[ $OPTION =~ "a" || $OPTION =~ "A" || $OPTION =~ "1" ]]; then
+		echo -e "Now, you can check your file(s) by running ($ANYWHERE): $DFILENAME <filename>\n"
+	elif [[ $OPTION =~ "b" || $OPTION =~ "B" || $OPTION =~ "2" ]]; then
+		echo -e "Now, you can push to github. Simply run($ANYWHERE): $DFILENAME\n"
+	elif [[ $OPTION =~ "c" || $OPTION =~ "C" || $OPTION =~ "3" ]]; then
+		echo -e "Now, you can pull from github. Simply run($ANYWHERE): $DFILENAME\n"
+	elif [[ $OPTION =~ "d" || $OPTION =~ "D" || $OPTION =~ "4" ]]; then
+		echo -e "Now, you can create a repo without right from your terminal without visiting github. Simply run($ANYWHERE): $DFILENAME\n"
+	elif [[ $OPTION =~ "e" || $OPTION =~ "E" || $OPTION =~ "5" ]]; then
+		echo -e "Now, you can clone from github. Simply run($ANYWHERE): $DFILENAME\n"
+	fi
+
+	if [[ $OPTION =~ "d" || $OPTION =~ "D" || $OPTION =~ "4" || $OPTION =~ "e" || $OPTION =~ "E" || $OPTION =~ "5" ]]; then
+		echo "ONE more step. RUN: vi $TILDE$SHOW/$DFILENAME"
+		echo "When you open it you will replace <YOUR_GUTHUB_USERNAME> with your github username."
+		echo "You will also replace <YOUR_PERSONAL_ACCESS_TOKEN> with your classic token."
+		echo "Example of what the token will be is ek81wkYt15bHQzABMQVeFpiNRNcrpy46Hqc7 and not ghp_ek81wkYt15bHQzABMQVeFpiNRNcrpy46Hqc7"
+		echo "Therefore ghp_ek81wkYt15bHQzABMQVeFpiNRNcrpy46Hqc7 = ghp_ + ek81wkYt15bHQzABMQVeFpiNRNcrpy46Hqc7"
+		echo "What you need to supply is ek81wkYt15bHQzABMQVeFpiNRNcrpy46Hqc7 and leave out the rest."
+	fi
+fi
+
+echo -e "\ncompleted."

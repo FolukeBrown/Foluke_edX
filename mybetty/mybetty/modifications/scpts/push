@@ -1,0 +1,20 @@
+#!/bin/bash
+
+resp="$1"
+
+if [ -z "$resp" ]; then
+	echo -n "You have to provide a commit message >>> "
+	read resp
+	
+	if [ -z "$resp" ]; then
+		echo ""
+		echo "....................Operation aborted....................."
+		exit 1
+	fi
+fi
+
+echo "....................Pushing...................."
+git add .
+git commit -m "$resp"
+git push
+echo "....................Done...................."
