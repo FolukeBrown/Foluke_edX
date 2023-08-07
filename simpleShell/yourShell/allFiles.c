@@ -1,46 +1,6 @@
 #include "shell.h"
 
-/* ................................NUM 22 START..............................*/
-/**
- * string_reverse - Reverses string
- * @s: str to rev
- */
-void printCmt(int chk)
-{
-        switch (chk)
-        {
-                case 1:
-                        write(2, "Memory Error", 22);
-;                        break;
-                case 2:
-                        write(2, "\n", 1);
-                        break;
-                case 3:
-                        write(2, "Environment is Null, Can't Print it\n", 36);
-                        break;
-                case 4:
-                        write(2, "Invalid VALUE\n", 14);
-                        break;
-                case 5:
-                        write(2, "Invalid VARIABLE\n", 17);
-                        break;
-                case 6:
-                       write(2, "Please provide an argument\n", 27);
-                        break;
-                case 7:
-                       write(2, "cd: too many arguments\n", 23);
-                        break;
-                case 8:
-                       write(1, "prompt by foluke $ ", 19);
-                        break;
-                case 9:
-                       write(2, "Fork Error", 10);
-                        break;
-                case 10:
-                       write(1, "\nprompt by foluke $ ", 20);
-        }
-}
-/* ................................NUM 22 END................................*/
+
 
 /* ................................NUM 1 START..............................*/
 /**
@@ -1140,6 +1100,59 @@ char *pthChcker(char *path)
         freeCharFoluke(path);
         return (nwpath);
 }
+
+
+/* ................................NUM 22 START..............................*/
+/**
+ * string_reverse - Reverses string
+ * @s: str to rev
+ */
+void printCmt(int chk)
+{
+        switch (chk)
+        {
+                case 1:
+                        write(2, "Memory Error", 22);
+;                        break;
+                case 2:
+                        write(2, "\n", 1);
+                        break;
+                case 3:
+                        write(2, "Environment is Null\n", 36);
+                        break;
+                case 4:
+                        write(2, "Invalid VALUE\n", 14);
+                        break;
+                case 5:
+                        write(2, "Invalid VARIABLE\n", 17);
+                        break;
+                case 6:
+                       write(2, "Please provide an argument\n", 27);
+                        break;
+                case 7:
+                       write(2, "cd: too many arguments\n", 23);
+                        break;
+                case 8:
+                       write(1, "prompt by foluke $ ", 19);
+                        break;
+                case 9:
+                       write(2, "Fork Error", 10);
+                        break;
+                case 10:
+                       write(1, "\nprompt by foluke $ ", 20);
+                       break;
+                case 11:
+                       write(1, "\n", 1);
+                       break;
+                case 12:
+                       write(2, "VARIABLE not found\n", 19);
+                       break;
+        }
+}
+/* ................................NUM 22 END................................*/
+
+
+
 /* ................................NUM 10 BTW................................*/
 /**
  * pthChcker - check current dir
@@ -1641,7 +1654,7 @@ void sigHandlr(int x)
 void sigHandlr2(int x)
 {
         (void) x;
-        write(1, "\n", 1);
+        printCmt(11);
 }
 
 
@@ -1878,7 +1891,7 @@ char **unSetEnviron(char **env, char *var1, shellDType *shellVar)
 
         shellVar->unsetnull[0] = 0;
         if (!env)
-                return (write(2, "Environment is NULL\n", 20), NULL);
+                return (printCmt(3), NULL);
         if (stringLengthFunc(var1) == 0 || var1 == 0)
                 return (errorSetStr(3, shellVar, 1), NULL);
         l = stringLengthFunc(var1), lenv = strLenPtr(env);
@@ -1908,6 +1921,6 @@ char **unSetEnviron(char **env, char *var1, shellDType *shellVar)
                 }
         }
         if (found == 0)
-                return (write(2, "VARIABLE not found\n", 19), NULL);
+                return (printCmt(12), NULL);
         return (env);
 }
