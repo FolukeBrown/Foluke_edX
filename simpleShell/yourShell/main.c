@@ -54,7 +54,7 @@ int main(int ac, char **av, char **env)
 		free(pathCmd);
 
 	}
-	free_doubpoint(*(shpack->envCpy)), free(shpack);
+	freeDobleCharPntr(*(shpack->envCpy)), free(shpack);
 	return (0);
 }
 /**

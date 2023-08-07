@@ -246,7 +246,7 @@ ssize_t exitCmd(hshpack *shpack)
                         free(*(shpack->options));
                         free(shpack->options);
                         if (*(shpack->envCpy))
-                                free_doubpoint(*(shpack->envCpy));
+                                freeDobleCharPntr(*(shpack->envCpy));
                         free(shpack);
                         exit(exit_value);
                 }
@@ -420,7 +420,7 @@ char *secAuxCd(hshpack *shpack, char *curDir)
         (void) curDir;
         home = fetchEnviron("HOME", *(shpack->envCpy));
         if (home)
-                dire = secAuxCdDaf(home, dire);
+                dire = secAuxCdFol(home, dire);
 
         return (dire);
 }
@@ -431,7 +431,7 @@ char *secAuxCd(hshpack *shpack, char *curDir)
  * @curDir: current dir
  * Return: pointer
  */
-char *secAuxCdDaf(char *home, char *dire)
+char *secAuxCdFol(char *home, char *dire)
 {
         dire = home + 5;
         return (dire);
@@ -525,10 +525,12 @@ ssize_t cDirCmnd(hshpack *shpack)
 /* ................................500..............................*/
 
 
+
+
 /* ................................NUM 4 START..............................*/
 /**
  * powerFunc - gets the result of base to ower
- * @base: base decimal
+ * @base: base
  * @pot: power
  *
  * Return: result
@@ -538,7 +540,7 @@ long powerFunc(long base, long pot)
         long x = 0, res = 1;
 
         for (x = 0; x < pot; x++)
-                powerFuncDaf(base, res);
+                powerFuncFol(base, res);
 
         return (res);
 }
@@ -546,12 +548,11 @@ long powerFunc(long base, long pot)
 /* ................................NUM 4 BTW................................*/
 /**
  * powerFunc - gets the result of base to ower
- * @base: base decimal
+ * @base: base
  * @pot: power
- *
  * Return: result
  */
-long powerFuncDaf(long base, long res)
+long powerFuncFol(long base, long res)
 {
         res *= base;
         return (res);
@@ -562,10 +563,9 @@ long powerFuncDaf(long base, long res)
 /* ................................NUM 5 START..............................*/
 
 /**
- * atoiFol - convert a char input to int
+ * atoiFol - convert char to int
  * @s: char input
- * Return: input transformed to integer
- * On error: -1 inapropiate entry
+ * Return: input
  */
 
 long atoiFol(char *s)
@@ -585,7 +585,7 @@ long atoiFol(char *s)
                         break;
 
                 if (*(s + x) == '-')
-                        subtracn = atoiFolDaf(subtracn);
+                        subtracn = atoiFolFol(subtracn);
         }
 
         for (x--; len > 0; x--, k++, len--)
@@ -598,56 +598,68 @@ long atoiFol(char *s)
 
 /* ................................NUM 5 BTW................................*/
 /**
- * atoiFol - convert a char input to int
- * @s: char input
- * Return: input transformed to integer
- * On error: -1 inapropiate entry
+ * atoiFol - convert char to int
+ * @s: char
+ * Return: input
  */
 
-long atoiFolDaf(long subtracn)
+long atoiFolFol(long subtracn)
 {
        return (subtracn++);
 }
 /* ................................NUM 5 END................................*/
 
 
+/* ................................NUM 6 START..............................*/
+
 /**
  * stringCompare - compares two strings
- * @s1: string 1
- * @s2: string 2
- *
+ * @s1: str1
+ * @s2: str
  * Return: 0 if strings are eql or another val1 if not
- *
  */
 int stringCompare(char *s1, char *s2)
 {
-        int x = 0;
-        int eql = 0;
+        int x = 0, eql = 0;
 
         for (x = 0; (*(s1 + x) || *(s2 + x)) && !eql; x++)
                 if (*(s1 + x) != *(s2 + x))
-                        eql = *(s1 + x) - *(s2 + x);
+                        eql = stringCompareFol(s1, s2, x);
 
         return (eql);
 }
-
+/* ................................NUM 6 BTW................................*/
+/**
+ * stringCompare - compares two strings
+ * @s1: str1
+ * @s2: str
+ * Return: 0 if strings are eql or another val1 if not
+ *
+ */
+int stringCompareFol(char *s1, char *s2, int x)
+{
+        int eql;
+        
+        eql = *(s1 + x) - *(s2 + x);
+        return (eql);
+}
+/* ................................NUM 6 END................................*/
 
 /**
- * isDigitFunc - checks if a character is a digit
+ * isDigitFunc - checks if a character is a digit num
  * @c: character
- *
- * Return: 1 if digit, 0 if not
+ * Return: 1
  *
  */
 int isDigitFunc(int c)
 {
         return ((c >= 48 && c <= 57) ? 1 : 0);
 }
+
 /**
- * isNumba - checks if a string is composed of numbers
- * @s: string
- *
- * Return: 1 if string has only numbers, 0 if not
+ * isNumba - checks if a str has numbers
+ * @s: str
+ * Return: 1 
  */
 int isNumba(char *s)
 {
@@ -657,19 +669,15 @@ int isNumba(char *s)
         return (1);
 }
 
-/* ................................NUM 3 START..............................*/
-/* ................................NUM 3 BTW................................*/
-/* ................................NUM 3 END................................*/
+
 /**
- * checkInput - checks for input in after shell prompt
- * @ac: cnt of main arguments
- * @av: main arguments
- * @bufsize: size of buffer in prompt
- * @buffer: buffer in prompt
+ * checkInput - checks for input
+ * @ac: numb of main arguments
+ * @av: main arg
+ * @bufsize: size of buffer
+ * @buffer: buffer
  * @shpack: struct of shell info
- *
  * Return: On success 1.
- * On error, -1 is returned, and errno is set appropriately.
  */
 char **checkInput(int ac, char **av, size_t *bufsize,
                    char **buffer, hshpack *shpack)
@@ -689,7 +697,7 @@ char **checkInput(int ac, char **av, size_t *bufsize,
                         exitnum = shpack->exitnum[0];
                         freeCharFoluke(*buffer);
                         if (*(shpack->envCpy))
-                                free_doubpoint(*(shpack->envCpy));
+                                freeDobleCharPntr(*(shpack->envCpy));
                         free(shpack);
                         if (isatty(STDIN_FILENO))
                                 write(1, "\n", 1);
@@ -698,7 +706,7 @@ char **checkInput(int ac, char **av, size_t *bufsize,
                 if (**buffer == '#' || !charctrs || **buffer == '\n')
                         return (NULL);
                 *buffer = delComnt(*buffer);
-                command = getParameters(*buffer, shpack);
+                command = fetchParam(*buffer, shpack);
         }
         else
         {
@@ -716,13 +724,13 @@ char **checkInput(int ac, char **av, size_t *bufsize,
         return (command);
 }
 
+
+/* ................................NUM 7 START..............................*/
+
 /**
- * delComnt - deletes a commnet inside a command line
- *
- * @str: string to operate
- *
- * Return: pointer to string
- *
+ * delComnt - deletes a commnet
+ * @str: str
+ * Return: pointer
  */
 char *delComnt(char *str)
 {
@@ -731,26 +739,33 @@ char *delComnt(char *str)
         for (; str && *str; str++)
                 if (*str == '#' && *(str - 1) == ' ')
                 {
-                        *str = '\0';
+                        *str = delComntFol(*str);
                         break;
                 }
 
         return (C_org);
 }
-
+/* ................................NUM 7 BTW................................*/
+/**
+ * delComnt - deletes a commnet
+ * @str: str
+ * Return: pointer
+ */
+char delComntFol(char str)
+{
+        str = '\0';
+        return (str);
+}
+/* ................................NUM 7 END................................*/
 
 
 /**
  * executeCmd - creates a child prcss to execute a cmd
- *
- * @program: command that will be executed
- * @command: arguments of command
- * @env: current environment
- * @shpack: struct with shell information
- *
- * Return: pointer to the val1 in the environment,
- * or NULL if there is no match
- *
+ * @program: command
+ * @command: arg
+ * @env: curr env
+ * @shpack: struct
+ * Return: pointer
  */
 int executeCmd(char *program, char *command[], char **env, hshpack *shpack)
 {
@@ -791,14 +806,11 @@ int executeCmd(char *program, char *command[], char **env, hshpack *shpack)
 
 
 /**
- * fetchEnviron - gets an environment var1
+ * fetchEnviron - fetch an environ var
  *
- * @name: name of environmental var1
- * @env: current environment
- *
- * Return: pointer to the val1 in the environment,
- * or NULL if there is no match
- *
+ * @name: name
+ * @env: current env
+ * Return: pointer to the val1 in the environment, *
  */
 char *fetchEnviron(const char *name, char **env)
 {
@@ -823,29 +835,44 @@ char *fetchEnviron(const char *name, char **env)
 }
 
 
-
+/* ................................NUM 8 START..............................*/
 /**
- * memorySet - fills memory with constant byte
- * @s: memory area
- * @b: constant byte b
- * @n: first n bytes of memory area pointed by s
- *
+ * memorySet - fills memory
+ * @s: memory
+ * @b: constant
+ * @n: first n byte
  * Return: On success 1.
- * On error, -1 is returned, and errno is set appropriately.
  */
 char *memorySet(char *s, char b, unsigned int n)
 {
         unsigned int x;
 
         for (x = 0; x < n; x++)
-                s[x] = b;
+                s[x] = memorySetFol(s, b, x);
         return (s);
 }
+/* ................................NUM 8 BTW................................*/
 /**
- * memoryCopy - copies memory
+ * memorySet - fills memory
+ * @s: memory
+ * @b: constant
+ * @n: first n byte
+ * Return: On success 1.
+ */
+char memorySetFol(char *s, char b, unsigned int x)
+{
+        s[x] = b;
+        return (s[x]);
+}
+/* ................................NUM 8 END................................*/
+
+
+/* ................................NUM 9 START..............................*/
+/**
+ * memoryCopy - copies mem
  * @dest: destination
  * @src: source
- * @n: size of memory to copy
+ * @n: size of memory
  *
  * Return: Returns memory copied
  */
@@ -854,16 +881,31 @@ char *memoryCopy(char *dest, char *src, unsigned int n)
         unsigned int x;
 
         for (x = 0; x < n; x++)
-                dest[x] = src[x];
+                dest[x] = memoryCopyFol(dest, src, x);
         return (dest);
 }
+/* ................................NUM 9 BTW................................*/
 /**
- * reAllocateFunc - reallocates a memory block using malloc and free
- * @ptr: pointer to modify
- * @old_size: current size of memory
- * @new_size: size memory will now have
+ * memoryCopy - copies mem
+ * @dest: destination
+ * @src: source
+ * @n: size of memory
  *
- * Return: Pointer to reallocated memory
+ * Return: Returns memory copied
+ */
+char memoryCopyFol(char *dest, char *src, unsigned int x)
+{
+        dest[x] = src[x];
+        return (dest[x]);
+}
+/* ................................NUM 9 END................................*/
+
+/**
+ * reAllocateFunc - reallocates a memory block
+ * @ptr: pointer
+ * @old_size: current size
+ * @new_size: size of memory
+ * Return: Pointer
  */
 void *reAllocateFunc(void *ptr, unsigned int old_size, unsigned int new_size)
 {
@@ -899,13 +941,11 @@ void *reAllocateFunc(void *ptr, unsigned int old_size, unsigned int new_size)
         return (pointr3);
 }
 /**
- * fetchLine - read a string or a line from an input stream
- * @buffer: pointer to a space where the stdin read will be saved
- * as a string
- * @bufsize: current size of buffer (must be given as 0 initially)
- * @fd: stream to read
- *
- * Return: Number of Characters Read
+ * fetchLine - read string/line from an input stream
+ * @buffer: pointer
+ * @bufsize: current size
+ * @fd: stream
+ * Return: Number
  */
 int fetchLine(char **buffer, size_t *bufsize, int fd)
 {
@@ -952,14 +992,12 @@ int fetchLine(char **buffer, size_t *bufsize, int fd)
 }
 
 /**
- * getParameters - obtains parameters from buffer of prompt
- * @raw_buffer: raw_buffer
- * @shpack: struct containing shell info
- *
+ * fetchParam - obtains parameters
+ * @raw_buffer: Rbuffer
+ * @shpack: struct of shell info
  * Return: On success 1.
- * On error, -1 is returned, and errno is set appropriately.
  */
-char **getParameters(char *raw_buffer, hshpack *shpack)
+char **fetchParam(char *raw_buffer, hshpack *shpack)
 {
         char **buffer, *cp_raw_buffer;
         ssize_t cnt = 0, i = 0;
@@ -994,7 +1032,7 @@ char **getParameters(char *raw_buffer, hshpack *shpack)
 
         if (!buffer[i - 1])
         {
-                free_doubpoint(buffer);
+                freeDobleCharPntr(buffer);
                 return (NULL);
         }
 
@@ -1002,16 +1040,22 @@ char **getParameters(char *raw_buffer, hshpack *shpack)
         return (buffer);
 }
 
+/* ................................1000..............................*/
+
+
+
+
+/* ................................NUM 10 START..............................*/
 
 /**
- * _pathcheck - check if current dire must be added
+ * pthChcker - check if current dire must be added
  * @path: path env var1
  *
  * Return: Pointer to adress of new PATH
  *
  */
 
-char *_pathcheck(char *path)
+char *pthChcker(char *path)
 {
         char *npath;
         int x, y, nsize, cnt = 0;
@@ -1035,24 +1079,41 @@ char *_pathcheck(char *path)
         {
                 if (path[y] == '=' && path[y + 1] == ':')
                 {
-                        npath[x] = path[y], npath[x + 1] = '.', x++;
+                        npath[x] = pthChckerFol(path, npath, x, y);
                         continue;
                 }
                 if (path[y] == ':' && path[y + 1] == ':')
                 {
-                        npath[x] = path[y], npath[x + 1] = '.', x++;
+                        npath[x] = pthChckerFol(path, npath, x, y);
                         continue;
                 }
                 if (path[y] == ':' && path[y + 1] == '\0')
                 {
-                        npath[x] = path[y], npath[x + 1] = '.', x++;
+                        npath[x] = pthChckerFol(path, npath, x, y);
                         continue;
                 }
                 npath[x] = path[y];
         }
-        free(path);
+        freeCharFoluke(path);
         return (npath);
 }
+/* ................................NUM 10 BTW................................*/
+/**
+ * pthChcker - check if current dire must be added
+ * @path: path env var1
+ *
+ * Return: Pointer to adress of new PATH
+ *
+ */
+
+char pthChckerFol(char *path, char *npath, int x, int y)
+{
+        npath[x] = path[y], npath[x + 1] = '.', x++;
+        return (npath[x]);
+}
+/* ................................NUM 10 END................................*/
+
+
 /**
  * _path - Searches for a cmd in PATH
  * @cmd: string contating env var1 PATH
@@ -1084,7 +1145,7 @@ char *_path(char *cmd, char **env, hshpack *shpack)
         if (!path2)
                 return (0);
         path = _strdup(path2);
-        pathcheck = _pathcheck(path);
+        pathcheck = pthChcker(path);
         if (pathcheck)
                 path = pathcheck;
         token = _strtok(path, delim);
@@ -1092,70 +1153,118 @@ char *_path(char *cmd, char **env, hshpack *shpack)
         {
                 concat = str_concat(token, "/");
                 concat2 = str_concat(concat, cmd);
-                free(concat);
+                freeCharFoluke(concat);
                 if (stat(concat2, &st) == 0)
                 {
                         /*Found the command in PATH*/
                         free(path);
                         return (concat2);
                 }
-                free(concat2);
+                freeCharFoluke(concat2);
         }
 
-        free(path);
+        freeCharFoluke(path);
         return (0);
 }
 
 
 
+
 /**
- * _puts - prints string to std output
+ * putsFunctn - prints string to std output
  * @s: string (must be NULL terminated)
  *
  * Return: No Return
  */
-void _puts(char *s)
+void putsFunctn(char *s)
 {
         write(1, s, _strlen(s));
 }
+
+
+
+
+/* ................................NUM 11 START..............................*/
 /**
- * help_exit - prints help of exit built in
+ * hlpExitFunc - prints help of exit built in
  *
  * Return: No Return
  */
-void help_exit(void)
+void hlpExitFunc(void)
 {
-        _puts("exit: exit [n]\n");
-        _puts("    Exit the shell.\n\n");
-        _puts("    Exits the shell with a sttus of N.  ");
-        _puts("    If N is omitted, the exit sttus\n");
-        _puts("    is that of the last command executed.\n");
+        hlpExitFuncFol();
 }
+/* ................................NUM 11 BTW................................*/
 /**
- * help_env - prints help of env built in
+ * hlpExitFunc - prints help of exit built in
  *
  * Return: No Return
  */
-void help_env(void)
+void hlpExitFuncFol(void)
 {
-        _puts("env: env\n");
-        _puts("    prints the current environment.\n\n");
-        _puts("    Has no options\n");
+        putsFunctn("exit: exit [n]\n");
+        putsFunctn("    Exit the shell.\n\n");
+        putsFunctn("    Exits the shell with a sttus of N.  ");
+        putsFunctn("    If N is omitted, the exit sttus\n");
+        putsFunctn("    is that of the last command executed.\n");
 }
+/* ................................NUM 11 END................................*/
+
+
+
+/* ................................NUM 12 START..............................*/
 /**
- * help_setenv - prints help of setenv built in
+ * hlpEnviron - prints help of env built in
  *
  * Return: No Return
  */
-void help_setenv(void)
+void hlpEnviron(void)
 {
-        _puts("setenv: setenv [VARIABLE] [VALUE]\n");
-        _puts("    Initializes a new environment var1, ");
-        _puts("    or modifies an existing one.\n\n");
-        _puts("    VARIABLE must not have the character '='.\n");
-        _puts("    If no arguments are given, setenv prints ");
-        _puts("    the current environment.\n");
+        hlpEnvironFol();
 }
+/* ................................NUM 12 BTW................................*/
+/**
+ * hlpEnviron - prints help of env built in
+ *
+ * Return: No Return
+ */
+void hlpEnvironFol(void)
+{
+        putsFunctn("env: env\n");
+        putsFunctn("    prints the current environment.\n\n");
+        putsFunctn("    Has no options\n");
+}
+/* ................................NUM 12 END................................*/
+
+
+
+
+/* ................................NUM 13 START..............................*/
+/**
+ * hlpSetEnviron - prints help of setenv built in
+ *
+ * Return: No Return
+ */
+void hlpSetEnviron(void)
+{
+        hlpSetEnvironFol();
+}
+/* ................................NUM 13 BTW................................*/
+/**
+ * hlpSetEnviron - prints help of setenv built in
+ *
+ * Return: No Return
+ */
+void hlpSetEnvironFol(void)
+{
+        putsFunctn("setenv: setenv [VARIABLE] [VALUE]\n");
+        putsFunctn("    Initializes a new environment var1, ");
+        putsFunctn("    or modifies an existing one.\n\n");
+        putsFunctn("    VARIABLE must not have the character '='.\n");
+        putsFunctn("    If no arguments are given, setenv prints ");
+        putsFunctn("    the current environment.\n");
+}
+/* ................................NUM 13 END................................*/
 
 
 /**
@@ -1168,13 +1277,13 @@ ssize_t _help_cmd(hshpack *shpack)
 {
         int check = 1, bcheck = 0;
         helps help[] = {
-                {"exit", help_exit},
-                {"env", help_env},
-                {"setenv", help_setenv},
-                {"unsetenv", help_unsetenv},
-                {"cd", help_cd},
-                {"help", help_help},
-                {"alias", help_alias}
+                {"exit", hlpExitFunc},
+                {"env", hlpEnviron},
+                {"setenv", hlpSetEnviron},
+                {"unsetenv", hlpUnSetEnviron},
+                {"cd", cdHelp},
+                {"help", hlpHlp},
+                {"alias", hlpAlias}
         };
 
         int i = 7;
@@ -1188,7 +1297,7 @@ ssize_t _help_cmd(hshpack *shpack)
         }
         if (shpack->options[1] == NULL)
         {
-                printsHelp();
+                prntHlp();
                 bcheck = 1;
         }
         if (bcheck == 0)
@@ -1202,117 +1311,187 @@ ssize_t _help_cmd(hshpack *shpack)
 }
 
 
+/* ................................NUM 14 START..............................*/
 /**
- * help_unsetenv - prints help of unsetenv built in
+ * hlpUnSetEnviron - prints help of unsetenv built in
  *
  * Return: No Return
  */
-void help_unsetenv(void)
+void hlpUnSetEnviron(void)
 {
-        _puts("unsetenv: unsetenv [VARIABLE]\n");
-        _puts("    Initializes a new environment var1, or ");
-        _puts("    modifies an existing one.\n\n");
-        _puts("    VARIABLE must not have the character '='.\n");
-        _puts("    If no arguments are given, setenv prints the current ");
-        _puts("    environment.\n");
+        hlpUnSetEnvironFol();
 }
-
+/* ................................NUM 14 BTW................................*/
 /**
- * help_cd - prints help of cd built in
+ * hlpUnSetEnviron - prints help of unsetenv built in
  *
  * Return: No Return
  */
-void help_cd(void)
+void hlpUnSetEnvironFol(void)
 {
-        _puts("cd: cd [DIRECTORY]\n");
-        _puts("    Change the shell working directory.\n\n");
-        _puts("    Change the current directory to DIR.  ");
-        _puts("    The default DIR is the val1 of the\n");
-        _puts("    HOME shell var1.\n\n");
-        _puts("    Options:\n");
-        _puts("    -  If a subtracn signed is used instead a directory, ");
-        _puts("    cd will change to the\n");
-        _puts("       previous used directory\n\n");
-        _puts("    Each time cd runs successfuly, the env var1 ");
-        _puts("    PWD is updated\n\n");
-        _puts("    Exit Status:\n");
-        _puts("    Returns 1 if the directory is changed, and if $PWD is set ");
-        _puts("    successfully when\n");
-        _puts("    is used; -1 otherwise.\n");
+        putsFunctn("unsetenv: unsetenv [VARIABLE]\n");
+        putsFunctn("    Initializes a new environment var1, or ");
+        putsFunctn("    modifies an existing one.\n\n");
+        putsFunctn("    VARIABLE must not have the character '='.\n");
+        putsFunctn("    If no arguments are given, setenv prints the current ");
+        putsFunctn("    environment.\n");
 }
-/**
- * help_help - prints help of help built in
- *
- * Return: No Return
- */
-void help_help(void)
-{
-        _puts("help: help [BUILTIN ...]\n");
-        _puts("    Display information about builtin commands.\n\n");
-        _puts("    Displays brief summaries of builtin commands.  If BUILTIN is\n");
-        _puts("    specified, gives detailed help on all commands ");
-        _puts("    matching BUILTIN,\n");
-        _puts("    otherwise the list of help topics is printed.\n\n");
-        _puts("    Arguments:\n");
-        _puts("      BUILTIN   Builtin specifying a help topic\n\n");
-        _puts("    Exit Status:\n");
-        _puts("    Returns success unless PATTERN is not found or an invalid ");
-        _puts("    optn is given.\n");
-}
-/**
- * help_alias - prints help of alias built in
- *
- * Return: No Return
- */
-void help_alias(void)
-{
-        _puts("alias: alias alias [name[='val1'] ...]\n");
-        _puts("    Define or display aliases.\n\n");
-        _puts("    Without arguments, `alias' prints the list of aliases ");
-        _puts("    in the reusable\n");
-        _puts("    form `alias NAME=VALUE' on standard output.\n\n");
-        _puts("     Otherwise, an alias is defined for each NAME whose ");
-        _puts("    VALUE is given.\n");
-        _puts("    A trailing space in VALUE causes the next word to ");
-        _puts("    be checked for\n");
-        _puts("    alias substitution when the alias is expanded.\n\n");
-        _puts("    Exit Status:\n");
-        _puts("    alias returns true unless a NAME is supplied for which ");
-        _puts("    no alias has been\n");
-        _puts("    defined.\n");
-}
-
-/**
- * printsHelp - prints help of help built in
- *
- * Return: No Return
- */
-void printsHelp(void)
-{
-        _puts("Shell HSH, version 1.0(1)-release (x86_64-pc-linux-gnu)\n");
-        _puts("These shell commands are defined internally.\n");
-        _puts("Type `help' to see this list.\n");
-        _puts("Type help  'BUILTIN'' to find out more about ");
-        _puts("the function 'BUILTIN'.\n\n");
-        _puts(" exit [n]\n");
-        _puts(" env\n");
-        _puts(" setenv [VARIABLE] [VALUE]\n");
-        _puts(" unsetenv [VARIABLE]\n");
-        _puts(" cd [DIRECTORY]\n");
-        _puts(" help [BUILTIN ...]\n");
-        _puts(" alias [name[='val1'] ...]\n");
-}
+/* ................................NUM 14 END................................*/
 
 
+/* ................................NUM 15 START..............................*/
 /**
- * free_doubpoint - frees a double pointer array of strings
+ * cdHelp - prints help of cd built in
+ *
+ * Return: No Return
+ */
+void cdHelp(void)
+{
+        void cdHelpFol(void);
+}
+/* ................................NUM 15 BTW................................*/
+/**
+ * cdHelp - prints help of cd built in
+ *
+ * Return: No Return
+ */
+void cdHelpFol(void)
+{
+        putsFunctn("cd: cd [DIRECTORY]\n");
+        putsFunctn("    Change the shell working directory.\n\n");
+        putsFunctn("    Change the current directory to DIR.  ");
+        putsFunctn("    The default DIR is the val1 of the\n");
+        putsFunctn("    HOME shell var1.\n\n");
+        putsFunctn("    Options:\n");
+        putsFunctn("    -  If a subtracn signed is used instead a directory, ");
+        putsFunctn("    cd will change to the\n");
+        putsFunctn("       previous used directory\n\n");
+        putsFunctn("    Each time cd runs successfuly, the env var1 ");
+        putsFunctn("    PWD is updated\n\n");
+        putsFunctn("    Exit Status:\n");
+        putsFunctn("    Returns 1 if the directory is changed, and if $PWD is set ");
+        putsFunctn("    successfully when\n");
+        putsFunctn("    is used; -1 otherwise.\n");
+}
+/* ................................NUM 15 END................................*/
+
+
+
+/* ................................NUM 16 START..............................*/
+/**
+ * hlpHlp - prints help of help built in
+ *
+ * Return: No Return
+ */
+void hlpHlp(void)
+{
+        hlpHlpFol();
+}
+/* ................................NUM 16 BTW................................*/
+/**
+ * hlpHlp - prints help of help built in
+ *
+ * Return: No Return
+ */
+void hlpHlpFol(void)
+{
+        putsFunctn("help: help [BUILTIN ...]\n");
+        putsFunctn("    Display information about builtin commands.\n\n");
+        putsFunctn("    Displays brief summaries of builtin commands.  If BUILTIN is\n");
+        putsFunctn("    specified, gives detailed help on all commands ");
+        putsFunctn("    matching BUILTIN,\n");
+        putsFunctn("    otherwise the list of help topics is printed.\n\n");
+        putsFunctn("    Arguments:\n");
+        putsFunctn("      BUILTIN   Builtin specifying a help topic\n\n");
+        putsFunctn("    Exit Status:\n");
+        putsFunctn("    Returns success unless PATTERN is not found or an invalid ");
+        putsFunctn("    optn is given.\n");
+}
+/* ................................NUM 16 END................................*/
+
+
+/* ................................NUM 17 START..............................*/
+/**
+ * hlpAlias - prints help of alias built in
+ *
+ * Return: No Return
+ */
+void hlpAlias(void)
+{
+        hlpAliasFol();
+}
+/* ................................NUM 17 BTW................................*/
+/**
+ * hlpAlias - prints help of alias built in
+ *
+ * Return: No Return
+ */
+void hlpAliasFol(void)
+{
+        putsFunctn("alias: alias alias [name[='val1'] ...]\n");
+        putsFunctn("    Define or display aliases.\n\n");
+        putsFunctn("    Without arguments, `alias' prints the list of aliases ");
+        putsFunctn("    in the reusable\n");
+        putsFunctn("    form `alias NAME=VALUE' on standard output.\n\n");
+        putsFunctn("     Otherwise, an alias is defined for each NAME whose ");
+        putsFunctn("    VALUE is given.\n");
+        putsFunctn("    A trailing space in VALUE causes the next word to ");
+        putsFunctn("    be checked for\n");
+        putsFunctn("    alias substitution when the alias is expanded.\n\n");
+        putsFunctn("    Exit Status:\n");
+        putsFunctn("    alias returns true unless a NAME is supplied for which ");
+        putsFunctn("    no alias has been\n");
+        putsFunctn("    defined.\n");
+}
+/* ................................NUM 17 END................................*/
+
+
+/* ................................NUM 18 START..............................*/
+/**
+ * prntHlp - prints help of help built in
+ *
+ * Return: No Return
+ */
+void prntHlp(void)
+{
+        prntHlpFol();
+}
+/* ................................NUM 18 BTW................................*/
+/**
+ * prntHlp - prints help of help built in
+ *
+ * Return: No Return
+ */
+void prntHlpFol(void)
+{
+        putsFunctn("Shell HSH, version 1.0(1)-release (x86_64-pc-linux-gnu)\n");
+        putsFunctn("These shell commands are defined internally.\n");
+        putsFunctn("Type `help' to see this list.\n");
+        putsFunctn("Type help  'BUILTIN'' to find out more about ");
+        putsFunctn("the function 'BUILTIN'.\n\n");
+        putsFunctn(" exit [n]\n");
+        putsFunctn(" env\n");
+        putsFunctn(" setenv [VARIABLE] [VALUE]\n");
+        putsFunctn(" unsetenv [VARIABLE]\n");
+        putsFunctn(" cd [DIRECTORY]\n");
+        putsFunctn(" help [BUILTIN ...]\n");
+        putsFunctn(" alias [name[='val1'] ...]\n");
+}
+/* ................................NUM 18 END................................*/
+
+
+/* ................................NUM 18 START..............................*/
+/* ................................NUM 18 BTW................................*/
+/* ................................NUM 18 END................................*/
+/**
+ * freeDobleCharPntr - frees a double pointer array of strings
  * (must end in NULL)
  *
  * @p: double pointer to free
  *
  * Return: no return
  */
-void free_doubpoint(char **p)
+void freeDobleCharPntr(char **p)
 {
         int x, z = 0;
 
@@ -1321,9 +1500,9 @@ void free_doubpoint(char **p)
 
         for (x = 0; x < z; x++)
         {
-                free(p[x]);
+                freeCharFoluke(p[x]);
         }
-        free(p);
+        freeDobleCharPntr(p);
 }
 /**
  * _copydoublep - copies an array of strings (double pointer)
@@ -1435,7 +1614,7 @@ char **_setenv(char **env, char *var1, char *val1, hshpack *shpack)
         }
         copy = _copydoublep(env, zenv, zenv + 1);
         if (env)
-                free_doubpoint(env);
+                freeDobleCharPntr(env);
         if (copy == 0)
                 return (free(envjoin), _error(3, shpack, 1), NULL);
         env = copy, copydup = _strdup(envjoin), free(envjoin);
@@ -1708,7 +1887,7 @@ char **_unsetenv(char **env, char *var1, hshpack *shpack)
                         }
                         else
                                 shpack->unsetnull[0] = 1, copy = NULL;
-                        free_doubpoint(env), env = copy;
+                        freeDobleCharPntr(env), env = copy;
                         return (env);
                 }
         }

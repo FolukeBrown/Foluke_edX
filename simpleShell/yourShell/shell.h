@@ -33,18 +33,18 @@
  */
 typedef struct Hshpack
 {
-	char *hshname;        /* Name of shell argv[0] */
-	char *buffer;         /* complete line written in prompt */
-	char *cmd;            /* current command */
-	char **options;       /* options of current command */
-	char *path;           /* absolute path of command */
-	int *errnum;          /* error number for message */
-	int *exitnum;         /* exit number */
-	int *relation;        /* 0 Undef, 1 ||, 2 && */
-	int *run_able;        /* 0 False 1 True (Is able to run)*/
+	char *hshname;		  /* Name of shell argv[0] */
+	char *buffer;		  /* complete line written in prompt */
+	char *cmd;			  /* current command */
+	char **options;		  /* options of current command */
+	char *path;			  /* absolute path of command */
+	int *errnum;		  /* error number for message */
+	int *exitnum;		  /* exit number */
+	int *relation;		  /* 0 Undef, 1 ||, 2 && */
+	int *run_able;		  /* 0 False 1 True (Is able to run)*/
 	struct Hshpack *next; /*adress of next cmd to run */
-	char ***envCpy;       /* current environment */
-	int *unsetnull;       /*check for setting environment to NULL */
+	char ***envCpy;		  /* current environment */
+	int *unsetnull;		  /*check for setting environment to NULL */
 
 } hshpack;
 
@@ -76,9 +76,6 @@ typedef struct Helps
 	void (*h)(void);
 } helps;
 
-
-
-
 char *fetchEnviron(const char *name, char **env);
 char *_path(char *cmd, char **env, hshpack *shpack);
 char *_strdup(char *str);
@@ -86,17 +83,16 @@ char *str_concat(char *s1, char *s2);
 int _strlen(char *s);
 char *_strcpy(char *dest, char *src);
 char *_strtok(char *str, const char *delim);
-char **getParameters(char *buffer, hshpack *shpack);
+char **fetchParam(char *buffer, hshpack *shpack);
 int executeCmd(char *program, char *command[], char **env, hshpack *shpack);
 void signal_handler(int x);
 void signal_handler2(int x);
 int fetchLine(char **buffer, size_t *bufsize, int fd);
-void free_doubpoint(char **p);
 int _strlendp(char **s);
 char **checkInput(int ac, char **av, size_t *bufsize,
-		  char **buffer, hshpack *shpack);
+				  char **buffer, hshpack *shpack);
 hshpack *set_struct(char *argv0, int *errn, int *exnum, int *relation,
-		    int *run_able, char ***env, int *unsetnull);
+					int *run_able, char ***env, int *unsetnull);
 int _error(int errn, hshpack *shpack, int exnum);
 void addCmd(hshpack *shpack, char *buffer, char *command, char **parameters);
 void addPathToCmd(hshpack *shpack, char *pathCmd);
@@ -114,16 +110,16 @@ int isNumba(char *s);
 ssize_t _cd_cmd(hshpack *shpack);
 char *delComnt(char *str);
 
-
 ssize_t _help_cmd(hshpack *shpack);
-void _puts(char *s);
-void help_unsetenv(void);
-void help_cd(void);
+void putsFunctn(char *s);
+void hlpUnSetEnviron(void);
+void cdHelp(void);
 void help_help(void);
 void help_alias(void);
 void printsHelp(void);
 
 void freeCharFoluke(char *temp);
+void freeDobleCharPntr(char **p);
 
 void string_reverse(char *s);
 void string_reverseSub(char *s, char tmp, int x, int y);
@@ -134,14 +130,36 @@ ssize_t envCmd(hshpack *shpack);
 ssize_t setEnvironCmd(hshpack *shpack);
 ssize_t unSetEnvironComnd(hshpack *shpack);
 char *secAuxCd(hshpack *shpack, char *currdir);
-char *secAuxCdDaf(char *home, char *dire);
+char *secAuxCdFol(char *home, char *dire);
 char *firstAuxCd(hshpack *shpack, char *currdir);
 ssize_t cDirCmnd(hshpack *shpack);
-long powerFuncDaf(long base, long res);
-long atoiFolDaf(long subtracn);
+long powerFuncFol(long base, long res);
+long atoiFolFol(long subtracn);
 char *memorySet(char *s, char b, unsigned int n);
 char *memoryCopy(char *dest, char *src, unsigned int n);
 void *reAllocateFunc(void *ptr, unsigned int old_size, unsigned int new_size);
+int stringCompareFol(char *s1, char *s2, int x);
+char delComntFol(char str);
+char memorySetFol(char *s, char b, unsigned int x);
+char memoryCopyFol(char *dest, char *src, unsigned int x);
+char *pthChcker(char *path);
+char pthChckerFol(char *path, char *npath, int x, int y);
+void hlpExitFunc(void);
+void hlpExitFuncFol(void);
+void hlpEnviron(void);
+void hlpEnvironFol(void);
+void hlpSetEnviron(void);
+void hlpSetEnvironFol(void);
+void hlpUnSetEnviron(void);
+void hlpUnSetEnvironFol(void);
+void hlpHlp(void);
+void hlpHlpFol(void);
+void hlpAlias(void);
+void hlpAliasFol(void);
+void prntHlp(void);
+void prntHlpFol(void);
+
+
 
 
 #endif
