@@ -10,14 +10,34 @@ void printCmt(int chk)
         switch (chk)
         {
                 case 1:
-                        printCmt(1)
+                        write(2, "Memory Error", 22);
 ;                        break;
                 case 2:
                         write(2, "\n", 1);
                         break;
                 case 3:
-                        write(2, "\n", 1);
+                        write(2, "Environment is Null, Can't Print it\n", 36);
                         break;
+                case 4:
+                        write(2, "Invalid VALUE\n", 14);
+                        break;
+                case 5:
+                        write(2, "Invalid VARIABLE\n", 17);
+                        break;
+                case 6:
+                       write(2, "Please provide an argument\n", 27);
+                        break;
+                case 7:
+                       write(2, "cd: too many arguments\n", 23);
+                        break;
+                case 8:
+                       write(1, "prompt by foluke $ ", 19);
+                        break;
+                case 9:
+                       write(2, "Fork Error", 10);
+                        break;
+                case 10:
+                       write(1, "\nprompt by foluke $ ", 20);
         }
 }
 /* ................................NUM 22 END................................*/
@@ -190,13 +210,13 @@ int errorSetStr(int errn, shellDType *shellVar, int exnum)
                 concB = errorSub(errn, concB, optn[1]);
         if (concB == NULL)
         {
-                printCmt(1)
-;                return (-1);
+                printCmt(1);
+                return (-1);
         }
 
         while (concB[z] != 0)
                 z++;
-        write(2, concB, z), write(2, "\n", 1);
+        write(2, concB, z), printCmt(2);
         freeCharFoluke(concB);
         shellVar->exitnum[0] = exnum;
         return (0);
@@ -219,8 +239,8 @@ char *errorSub(int errn, char *concB, char *optn)
                 concA = stringCatenator(concB, coluspc);
                 if (!concA) /*hsh: cnt: cmd: error: */
                 {
-                        printCmt(1)
-;                        return (freeCharFoluke(concB), NULL);
+                        printCmt(1);
+                        return (freeCharFoluke(concB), NULL);
                 }
                 freeCharFoluke(concB);
 
@@ -228,8 +248,8 @@ char *errorSub(int errn, char *concB, char *optn)
 
                 if (!concB) /*hsh: cnt: cmd: error: optn*/
                 {
-                        printCmt(1)
-;                        return (freeCharFoluke(concA), NULL);
+                        printCmt(1);
+                        return (freeCharFoluke(concA), NULL);
                 }
                 freeCharFoluke(concA);
         }
@@ -238,8 +258,8 @@ char *errorSub(int errn, char *concB, char *optn)
                 concA = stringCatenator(concB, optn);
                 if (!concA) /*hsh: cnt: cmd: error optn*/
                 {
-                        printCmt(1)
-;                        return (freeCharFoluke(concB), NULL);
+                        printCmt(1);
+                        return (freeCharFoluke(concB), NULL);
                 }
                 freeCharFoluke(concB);
                 return (concA);
@@ -292,7 +312,7 @@ ssize_t envCmd(shellDType *shellVar)
 
         if (*(shellVar->envCpy) == NULL)
         {
-                write(2, "Environment is Null, Can't Print it\n", 36);
+                printCmt(3);
                 shellVar->exitnum[0] = 2;
                 free(shellVar->options);
                 return (-1);
@@ -305,7 +325,7 @@ ssize_t envCmd(shellDType *shellVar)
                 for (; str && *str; str++)
                 {
                         write(1, *str, stringLengthFunc(*str));
-                        write(1, "\n", 0);
+                        printCmt(2);
                 }
         }
         else
@@ -331,7 +351,7 @@ ssize_t setEnvironCmd(shellDType *shellVar)
                 var1 = shellVar->options[1];
                 if (!shellVar->options[2])
                 {
-                        write(2, "Invalid VALUE\n", 14);
+                        printCmt(4);
                         shellVar->exitnum[0] = 2;
                         free(shellVar->options);
                         return (-1);
@@ -341,7 +361,7 @@ ssize_t setEnvironCmd(shellDType *shellVar)
         }
         if (var1 == 0)
         {
-                write(2, "Invalid VARIABLE\n", 17);
+                printCmt(5);
                 shellVar->exitnum[0] = 2;
                 free(shellVar->options);
                 return (-1);
@@ -373,7 +393,7 @@ ssize_t unSetEnvironComnd(shellDType *shellVar)
         else
         {
                 shellVar->exitnum[0] = 2;
-                write(2, "Please provide an argument\n", 27);
+                printCmt(6);
                 return (free(shellVar->options), -1);
         }
 
@@ -475,7 +495,7 @@ char *firstAuxCd(shellDType *shellVar, char *curDir)
 
         if (shellVar->options[1] && shellVar->options[2])
         {
-                write(2, "cd: too many arguments\n", 23);
+                printCmt(7);
                 shellVar->exitnum[0] = 2;
                 free(shellVar->options);
                 freeCharFoluke(curDir);
@@ -530,7 +550,7 @@ ssize_t cDirCmnd(shellDType *shellVar)
         if (dire)
                 chckr = chdir(dire);
         if (chckr == 0 && checkerSubtrctn == 1)
-                write(1, dire, stringLengthFunc(dire)), write(1, "\n", 1);
+                write(1, dire, stringLengthFunc(dire)), printCmt(2);
         if (chckr != 0)
                 errorSetStr(4, shellVar, 2), exit = -1;
         else
@@ -713,7 +733,7 @@ char **chckInputFunc(int ac, char **av, size_t *bufsize,
         if (ac == 1)
         {
                 if (isatty(STDIN_FILENO))
-                        write(1, "prompt_by_foluke $ ", 19);
+                        printCmt(8);
                 charctrs = getline(buffer, bufsize, stdin);
 
                 if (charctrs == -1)
@@ -724,7 +744,7 @@ char **chckInputFunc(int ac, char **av, size_t *bufsize,
                                 freeDobleCharPntrFoluke(*(shellVar->envCpy));
                         free(shellVar);
                         if (isatty(STDIN_FILENO))
-                                write(1, "\n", 1);
+                                printCmt(2);
                         exit(exitnum);
                 }
                 if (**buffer == '#' || !charctrs || **buffer == '\n')
@@ -800,7 +820,7 @@ int excuteCmd(char *program, char *command[], char **env, shellDType *shellVar)
         signal(SIGINT, sigHandlr2);
         if (prcss == -1)
         {
-                write(2, "Fork Error", 10);
+                printCmt(9);
                 exit(-1);
         }
         if (prcss == 0)
@@ -1609,7 +1629,7 @@ char **setEnvironm(char **env, char *var1, char *val1, shellDType *shellVar)
 void sigHandlr(int x)
 {
         (void) x;
-        write(1, "\n$ ", 3);
+        printCmt(10);
 }
 
 
