@@ -77,37 +77,36 @@ typedef struct Helps
 } helps;
 
 char *fetchEnviron(const char *name, char **env);
-char *_path(char *cmd, char **env, hshpack *shpack);
-char *_strdup(char *str);
-char *str_concat(char *s1, char *s2);
-int _strlen(char *s);
-char *_strcpy(char *dest, char *src);
-char *_strtok(char *str, const char *delim);
+char *searchPath(char *cmd, char **env, hshpack *shpack);
+char *stringDuplicateFunc(char *str);
+char *stringCatenator(char *s1, char *s2);
+int stringLengthFunc(char *s);
+char *stringCopy(char *dest, char *src);
+char *stringTokenizeFunc(char *str, const char *delim);
 char **fetchParam(char *buffer, hshpack *shpack);
-int executeCmd(char *program, char *command[], char **env, hshpack *shpack);
-void signal_handler(int x);
-void signal_handler2(int x);
+int excuteCmd(char *program, char *command[], char **env, hshpack *shpack);
+void sigHandlr(int x);
+void sigHandlr2(int x);
 int fetchLine(char **buffer, size_t *bufsize, int fd);
-int _strlendp(char **s);
-char **checkInput(int ac, char **av, size_t *bufsize,
-				  char **buffer, hshpack *shpack);
-hshpack *set_struct(char *argv0, int *errn, int *exnum, int *relation,
-					int *run_able, char ***env, int *unsetnull);
-int _error(int errn, hshpack *shpack, int exnum);
-void addCmd(hshpack *shpack, char *buffer, char *command, char **parameters);
-void addPathToCmd(hshpack *shpack, char *pathCmd);
-ssize_t built_ints(hshpack *shpack);
-ssize_t exitCmd(hshpack *shpack);
+int strLenPtr(char **s);
+char **chckInputFunc(int ac, char **av, size_t *bufsize,
+					 char **buffer, hshpack *shpack);
+hshpack *shellStructDef(char *argv0, int *errn, int *exnum, int *relation,
+						int *run_able, char ***env, int *unsetnull);
+int errorSetStr(int errn, hshpack *shpack, int exnum);
+void addComnd(hshpack *shpack, char *buffer, char *command, char **parameters);
+void addPath2Comnd(hshpack *shpack, char *pathCmd);
+ssize_t chckBuiltIn(hshpack *shpack);
+ssize_t exitCmdFunc(hshpack *shpack);
 int stringCompare(char *s1, char *s2);
 long atoiFol(char *s);
 long powerFunc(long base, long pot);
-char **_copydoublep(char **p, int old_size, int new_size);
-int _strlendp(char **s);
-char **_setenv(char **env, char *variable, char *value, hshpack *shpack);
-char **_unsetenv(char **env, char *variable, hshpack *shpack);
+char **cpyDoblePtr(char **p, int old_size, int new_size);
+char **setEnvironm(char **env, char *variable, char *value, hshpack *shpack);
+char **unSetEnviron(char **env, char *variable, hshpack *shpack);
 int isDigitFunc(int c);
 int isNumba(char *s);
-ssize_t _cd_cmd(hshpack *shpack);
+ssize_t cdComndFunc(hshpack *shpack);
 char *delComnt(char *str);
 
 ssize_t _help_cmd(hshpack *shpack);
@@ -119,7 +118,7 @@ void help_alias(void);
 void printsHelp(void);
 
 void freeCharFoluke(char *temp);
-void freeDobleCharPntr(char **p);
+void freeDobleCharPntrFoluke(char **p);
 
 void string_reverse(char *s);
 void string_reverseSub(char *s, char tmp, int x, int y);
@@ -158,8 +157,9 @@ void hlpAlias(void);
 void hlpAliasFol(void);
 void prntHlp(void);
 void prntHlpFol(void);
-
-
-
+char *stringCatenator(char *s1, char *s2);
+char *stringCatenatorFol();
+char stringCatenatorFol2(char *sx, char *sy, int k);
+char stringCopyFol(char *destinatn, char *source, int i);
 
 #endif

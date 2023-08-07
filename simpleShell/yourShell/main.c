@@ -24,41 +24,41 @@ int main(int ac, char **av, char **env)
 
 	if (ac > 1 || av == NULL)
 		write(2, "Please run with no arguments\n", 29), exit(127);
-	signal(SIGINT, signal_handler);
-	sizeEnv = _strlendp(env);
-	env = _copydoublep(env, sizeEnv, sizeEnv);
-	shpack = set_struct(av[0], &errn, &exnum, &relation, &run_able, &env, &enul);
+	signal(SIGINT, sigHandlr);
+	sizeEnv = strLenPtr(env);
+	env = cpyDoblePtr(env, sizeEnv, sizeEnv);
+	shpack = shellStructDef(av[0], &errn, &exnum, &relation, &run_able, &env, &enul);
 	while (1)
 	{
 		command = NULL;
-		command = checkInput(ac, av, &bufsize, &buffer, shpack);
+		command = chckInputFunc(ac, av, &bufsize, &buffer, shpack);
 		if (!command)
 			continue;
-		addCmd(shpack, buffer, command[0], command);
-		isBuiltIn = built_ints(shpack);
+		addComnd(shpack, buffer, command[0], command);
+		isBuiltIn = chckBuiltIn(shpack);
 		if (isBuiltIn == -1 || isBuiltIn == 1)
 			continue;
-		pathCmd = _path(command[0], env, shpack);
-		addPathToCmd(shpack, pathCmd);
+		pathCmd = searchPath(command[0], env, shpack);
+		addPath2Comnd(shpack, pathCmd);
 		if (!pathCmd)
 		{
 			free(command);
-			shpack->errnum[0] += 1, _error(0, shpack, 127);
+			shpack->errnum[0] += 1, errorSetStr(0, shpack, 127);
 			continue;
 		}
 		else if (access(pathCmd, X_OK) == -1)
-			_error(1, shpack, 126);
+			errorSetStr(1, shpack, 126);
 		else
-			executeCmd(pathCmd, command, env, shpack);
+			excuteCmd(pathCmd, command, env, shpack);
 		free(command);
 		free(pathCmd);
 
 	}
-	freeDobleCharPntr(*(shpack->envCpy)), free(shpack);
+	freeDobleCharPntrFoluke(*(shpack->envCpy)), free(shpack);
 	return (0);
 }
 /**
- * set_struct - initializes shell struct
+ * shellStructDef - initializes shell struct
  * @argv0: name of executable
  * @errn: number of error message
  * @exnum: exit number of shell
@@ -70,7 +70,7 @@ int main(int ac, char **av, char **env)
  * Return: Pointer to struct
  *
  */
-hshpack *set_struct(char *argv0, int *errn, int *exnum,
+hshpack *shellStructDef(char *argv0, int *errn, int *exnum,
 		    int *relation, int *run_able, char ***env, int *unsetnull)
 {
 	hshpack *shellpack;
@@ -93,7 +93,7 @@ hshpack *set_struct(char *argv0, int *errn, int *exnum,
 	return (shellpack);
 }
 /**
- * addCmd - adds values to shell struct
+ * addComnd - adds values to shell struct
  * @shpack: shell struct
  * @buffer: string written after prompt
  * @command: command written after prompt
@@ -101,7 +101,7 @@ hshpack *set_struct(char *argv0, int *errn, int *exnum,
  *
  * Return: No return
  */
-void addCmd(hshpack *shpack, char *buffer, char *command, char **parameters)
+void addComnd(hshpack *shpack, char *buffer, char *command, char **parameters)
 {
 	shpack->buffer = buffer;
 	shpack->cmd = command;
@@ -109,13 +109,13 @@ void addCmd(hshpack *shpack, char *buffer, char *command, char **parameters)
 }
 
 /**
- * addPathToCmd - initializes path value of struct
+ * addPath2Comnd - initializes path value of struct
  * @shpack: shell struct
  * @pathCmd: path of cmd written after propmpt
  *
  * Return: No Return
  */
-void addPathToCmd(hshpack *shpack, char *pathCmd)
+void addPath2Comnd(hshpack *shpack, char *pathCmd)
 {
 	shpack->path = pathCmd;
 }

@@ -92,13 +92,13 @@ char *_itoa(int n)
 
 
 /**
- * _error - creates str
+ * errorSetStr - creates str
  * @errn: numb
  * @shpack: struct
  * @exnum: val
  * Return: 0
  */
-int _error(int errn, hshpack *shpack, int exnum)
+int errorSetStr(int errn, hshpack *shpack, int exnum)
 {
         int cnt = shpack->errnum[0], z = 0;
         char *cmd = shpack->cmd, **optn = shpack->options;
@@ -112,13 +112,13 @@ int _error(int errn, hshpack *shpack, int exnum)
                 NULL
         };
 
-        concA = str_concat(hshname, coluspc);
+        concA = stringCatenator(hshname, coluspc);
         if (!concA) /*hsh: */
                 return (write(2, "Memory Error", 22), -1);
 
         if (errn == 7) /* Alloc Error */
         {
-                concB = str_concat(concA, err[errn]); /*hsh: cnt: error*/
+                concB = stringCatenator(concA, err[errn]); /*hsh: cnt: error*/
                 if (!concB)
                         return (freeCharFoluke(concA), write(2, "Memory Error", 22), -1);
                 freeCharFoluke(concA);
@@ -134,7 +134,7 @@ int _error(int errn, hshpack *shpack, int exnum)
         if (!nustr)  /* number to string */
                 return (freeCharFoluke(concA), write(2, "Memory Error", 22), -1);
 
-        concB = str_concat(concA, nustr);
+        concB = stringCatenator(concA, nustr);
         if (!concB) /*hsh: cnt*/
         {
                 write(2, "Memory Error", 22);
@@ -142,22 +142,22 @@ int _error(int errn, hshpack *shpack, int exnum)
         }
         freeCharFoluke(concA), freeCharFoluke(nustr);
 
-        concA = str_concat(concB, coluspc);
+        concA = stringCatenator(concB, coluspc);
         if (!concA) /*hsh: cnt: */
                 return (freeCharFoluke(concB), write(2, "Memory Error", 22), -1);
 
         freeCharFoluke(concB);
-        concB = str_concat(concA, cmd);
+        concB = stringCatenator(concA, cmd);
         if (!concB) /*hsh: cnt: cmd*/
                 return (freeCharFoluke(concA), write(2, "Memory Error", 22), -1);
         freeCharFoluke(concA);
 
-        concA = str_concat(concB, coluspc);
+        concA = stringCatenator(concB, coluspc);
         if (!concA) /*hsh: cnt: cmd: */
                 return (freeCharFoluke(concB), write(2, "Memory Error", 22), -1);
         freeCharFoluke(concB);
 
-        concB = str_concat(concA, err[errn]);
+        concB = stringCatenator(concA, err[errn]);
         if (!concB) /*hsh: cnt: cmd: error*/
                 return (freeCharFoluke(concA), write(2, "Memory Error", 22), -1);
         freeCharFoluke(concA);
@@ -192,7 +192,7 @@ char *errorSub(int errn, char *concB, char *optn)
         if (errn == 2) /* exit error */
         {
 
-                concA = str_concat(concB, coluspc);
+                concA = stringCatenator(concB, coluspc);
                 if (!concA) /*hsh: cnt: cmd: error: */
                 {
                         write(2, "Memory Error", 22);
@@ -200,7 +200,7 @@ char *errorSub(int errn, char *concB, char *optn)
                 }
                 freeCharFoluke(concB);
 
-                concB = str_concat(concA, optn);
+                concB = stringCatenator(concA, optn);
 
                 if (!concB) /*hsh: cnt: cmd: error: optn*/
                 {
@@ -211,7 +211,7 @@ char *errorSub(int errn, char *concB, char *optn)
         }
         if (errn > 3) /* Errors with options at end */
         {
-                concA = str_concat(concB, optn);
+                concA = stringCatenator(concB, optn);
                 if (!concA) /*hsh: cnt: cmd: error optn*/
                 {
                         write(2, "Memory Error", 22);
@@ -225,11 +225,11 @@ char *errorSub(int errn, char *concB, char *optn)
 
 
 /**
- * exitCmd - exit command
+ * exitCmdFunc - exit command
  * @shpack: struct
  * Return: -1 if error
  */
-ssize_t exitCmd(hshpack *shpack)
+ssize_t exitCmdFunc(hshpack *shpack)
 {
         long exit_value;
 
@@ -246,12 +246,12 @@ ssize_t exitCmd(hshpack *shpack)
                         free(*(shpack->options));
                         free(shpack->options);
                         if (*(shpack->envCpy))
-                                freeDobleCharPntr(*(shpack->envCpy));
+                                freeDobleCharPntrFoluke(*(shpack->envCpy));
                         free(shpack);
                         exit(exit_value);
                 }
         }
-        _error(2, shpack, 2);
+        errorSetStr(2, shpack, 2);
         free(shpack->options);
         return (-1);
 }
@@ -280,13 +280,13 @@ ssize_t envCmd(hshpack *shpack)
         {
                 for (; str && *str; str++)
                 {
-                        write(1, *str, _strlen(*str));
+                        write(1, *str, stringLengthFunc(*str));
                         write(1, "\n", 0);
                 }
         }
         else
         {
-                _error(0, shpack, 2);
+                errorSetStr(0, shpack, 2);
                 chckr = -1;
         }
 
@@ -323,7 +323,7 @@ ssize_t setEnvironCmd(hshpack *shpack)
                 return (-1);
         }
 
-        nenviron = _setenv(*(shpack->envCpy), var1, val1, shpack);
+        nenviron = setEnvironm(*(shpack->envCpy), var1, val1, shpack);
 
         if (nenviron == 0)
         {
@@ -359,7 +359,7 @@ ssize_t unSetEnvironComnd(hshpack *shpack)
                 return (1);
         }
 
-        nenviron = _unsetenv(*(shpack->envCpy), var1, shpack);
+        nenviron = unSetEnviron(*(shpack->envCpy), var1, shpack);
 
         if (nenviron == 0 && shpack->unsetnull[0] == 0)
         {
@@ -374,14 +374,14 @@ ssize_t unSetEnvironComnd(hshpack *shpack)
 }
 
 /**
- * built_ints - checks if the command is built in
+ * chckBuiltIn - checks if the command is built in
  * @shpack: struct
  * Return: On fail 0
  */
-ssize_t built_ints(hshpack *shpack)
+ssize_t chckBuiltIn(hshpack *shpack)
 {
         b_ins ops[] = {
-                {"exit", exitCmd},
+                {"exit", exitCmdFunc},
                 {"env", envCmd},
                 {"setenv", setEnvironCmd},
                 {"unsetenv", unSetEnvironComnd},
@@ -458,12 +458,12 @@ char *firstAuxCd(hshpack *shpack, char *curDir)
                 return (dire);
         }
 
-        oldpwd2 = _strdup(fetchEnviron("OLDPWD", *(shpack->envCpy)));
+        oldpwd2 = stringDuplicateFunc(fetchEnviron("OLDPWD", *(shpack->envCpy)));
         if (oldpwd2)
-                oldpwDir = _strdup(oldpwd2 + 7), free(oldpwd2);
+                oldpwDir = stringDuplicateFunc(oldpwd2 + 7), free(oldpwd2);
         if (!oldpwd2)
         {
-                oldpwDir = _strdup(curDir);
+                oldpwDir = stringDuplicateFunc(curDir);
                 /* free(oldpwDir), free(shpack->options), free(curDir); */
                 /* return (shpack->exitnum[0] = 2, NULL); */
         }
@@ -485,7 +485,7 @@ ssize_t cDirCmnd(hshpack *shpack)
 
         curDir = getcwd(NULL, 4096);
         if (!curDir)
-                return (_error(4, shpack, 2), free(shpack->options), -1);
+                return (errorSetStr(4, shpack, 2), free(shpack->options), -1);
         if (!shpack->options[1] ||
                         (shpack->options[1] && (!stringCompare(shpack->options[1], "~"))))
         {
@@ -506,14 +506,14 @@ ssize_t cDirCmnd(hshpack *shpack)
         if (dire)
                 chckr = chdir(dire);
         if (chckr == 0 && checkerSubtrctn == 1)
-                write(1, dire, _strlen(dire)), write(1, "\n", 1);
+                write(1, dire, stringLengthFunc(dire)), write(1, "\n", 1);
         if (chckr != 0)
-                _error(4, shpack, 2), exit = -1;
+                errorSetStr(4, shpack, 2), exit = -1;
         else
         {
-                nenviron = _setenv(*(shpack->envCpy), "PWD", dire, shpack);
+                nenviron = setEnvironm(*(shpack->envCpy), "PWD", dire, shpack);
                 *(shpack->envCpy) = nenviron;
-                nenviron = _setenv(*(shpack->envCpy), "OLDPWD", curDir, shpack);
+                nenviron = setEnvironm(*(shpack->envCpy), "OLDPWD", curDir, shpack);
                 *(shpack->envCpy) = nenviron;
         }
         free(shpack->options), freeCharFoluke(curDir), freeCharFoluke(oldpwDir);
@@ -671,7 +671,7 @@ int isNumba(char *s)
 
 
 /**
- * checkInput - checks for input
+ * chckInputFunc - checks for input
  * @ac: numb of main arguments
  * @av: main arg
  * @bufsize: size of buffer
@@ -679,7 +679,7 @@ int isNumba(char *s)
  * @shpack: struct of shell info
  * Return: On success 1.
  */
-char **checkInput(int ac, char **av, size_t *bufsize,
+char **chckInputFunc(int ac, char **av, size_t *bufsize,
                    char **buffer, hshpack *shpack)
 {
         ssize_t charctrs;
@@ -697,7 +697,7 @@ char **checkInput(int ac, char **av, size_t *bufsize,
                         exitnum = shpack->exitnum[0];
                         freeCharFoluke(*buffer);
                         if (*(shpack->envCpy))
-                                freeDobleCharPntr(*(shpack->envCpy));
+                                freeDobleCharPntrFoluke(*(shpack->envCpy));
                         free(shpack);
                         if (isatty(STDIN_FILENO))
                                 write(1, "\n", 1);
@@ -713,7 +713,7 @@ char **checkInput(int ac, char **av, size_t *bufsize,
                 command = malloc(sizeof(char *) * (ac - 1));
                 if (!command)
                 {
-                        _error(7, shpack, 1);
+                        errorSetStr(7, shpack, 1);
                         return (NULL);
                 }
 
@@ -760,20 +760,20 @@ char delComntFol(char str)
 
 
 /**
- * executeCmd - creates a child prcss to execute a cmd
+ * excuteCmd - creates a child prcss to execute a cmd
  * @program: command
  * @command: arg
  * @env: curr env
  * @shpack: struct
  * Return: pointer
  */
-int executeCmd(char *program, char *command[], char **env, hshpack *shpack)
+int excuteCmd(char *program, char *command[], char **env, hshpack *shpack)
 {
         pid_t prcss, sttus;
         int execSts = 0, wait1_Sts = 0;
 
         prcss = fork();
-        signal(SIGINT, signal_handler2);
+        signal(SIGINT, sigHandlr2);
         if (prcss == -1)
         {
                 write(2, "Fork Error", 10);
@@ -791,7 +791,7 @@ int executeCmd(char *program, char *command[], char **env, hshpack *shpack)
         else
         {
                 wait1_Sts = wait(&sttus);
-                signal(SIGINT, signal_handler);
+                signal(SIGINT, sigHandlr);
                 if (wait1_Sts == -1)
                         exit(-1);
                 if (WEXITSTATUS(sttus) == 0)
@@ -1002,37 +1002,37 @@ char **fetchParam(char *raw_buffer, hshpack *shpack)
         char **buffer, *cp_raw_buffer;
         ssize_t cnt = 0, i = 0;
 
-        cp_raw_buffer = _strdup(raw_buffer);
+        cp_raw_buffer = stringDuplicateFunc(raw_buffer);
         if (!cp_raw_buffer)
         {
-                _error(7, shpack, 1);
+                errorSetStr(7, shpack, 1);
                 exit(-1);
         }
 
-        if (_strtok(cp_raw_buffer, " \n"))
+        if (stringTokenizeFunc(cp_raw_buffer, " \n"))
                 cnt++;
         else
         {
                 free(cp_raw_buffer);
                 return (NULL);
         }
-        while (_strtok(NULL, " \n"))
+        while (stringTokenizeFunc(NULL, " \n"))
                 cnt++;
 
         free(cp_raw_buffer);
         buffer = malloc(sizeof(char *) * (cnt + 1));
         if (!buffer)
         {
-                _error(7, shpack, 1);
+                errorSetStr(7, shpack, 1);
                 exit(-1);
         }
-        buffer[0] = _strtok(raw_buffer, " \n");
+        buffer[0] = stringTokenizeFunc(raw_buffer, " \n");
         for (i = 1; i < cnt && buffer[i - 1]; i++)
-                buffer[i] = _strtok(NULL, " \n");
+                buffer[i] = stringTokenizeFunc(NULL, " \n");
 
         if (!buffer[i - 1])
         {
-                freeDobleCharPntr(buffer);
+                freeDobleCharPntrFoluke(buffer);
                 return (NULL);
         }
 
@@ -1072,7 +1072,7 @@ char *pthChcker(char *path)
         }
         if (cnt == 0)
                 return (0);
-        nsize = _strlen(path) + 1 + cnt;
+        nsize = stringLengthFunc(path) + 1 + cnt;
         npath = malloc(sizeof(char) * nsize);
 
         for (x = 0, y = 0; x < nsize; x++, y++)
@@ -1115,7 +1115,7 @@ char pthChckerFol(char *path, char *npath, int x, int y)
 
 
 /**
- * _path - Searches for a cmd in PATH
+ * searchPath - Searches for a cmd in PATH
  * @cmd: string contating env var1 PATH
  * @env: current environment
  * @shpack: struct containing shell info
@@ -1124,7 +1124,7 @@ char pthChckerFol(char *path, char *npath, int x, int y)
  *
  */
 
-char *_path(char *cmd, char **env, hshpack *shpack)
+char *searchPath(char *cmd, char **env, hshpack *shpack)
 {
         char *path, *path2;
         struct stat st;
@@ -1135,7 +1135,7 @@ char *_path(char *cmd, char **env, hshpack *shpack)
                 if (cmd[x] == '/')
                 {
                         if (stat(cmd, &st) == 0)
-                                return (concat = str_concat(cmd, '\0'));
+                                return (concat = stringCatenator(cmd, '\0'));
                         else
                                 return (0);
                 }
@@ -1144,15 +1144,15 @@ char *_path(char *cmd, char **env, hshpack *shpack)
         (void) shpack;
         if (!path2)
                 return (0);
-        path = _strdup(path2);
+        path = stringDuplicateFunc(path2);
         pathcheck = pthChcker(path);
         if (pathcheck)
                 path = pathcheck;
-        token = _strtok(path, delim);
-        for (token = _strtok(0, delim); token; token = _strtok(0, delim))
+        token = stringTokenizeFunc(path, delim);
+        for (token = stringTokenizeFunc(0, delim); token; token = stringTokenizeFunc(0, delim))
         {
-                concat = str_concat(token, "/");
-                concat2 = str_concat(concat, cmd);
+                concat = stringCatenator(token, "/");
+                concat2 = stringCatenator(concat, cmd);
                 freeCharFoluke(concat);
                 if (stat(concat2, &st) == 0)
                 {
@@ -1178,7 +1178,7 @@ char *_path(char *cmd, char **env, hshpack *shpack)
  */
 void putsFunctn(char *s)
 {
-        write(1, s, _strlen(s));
+        write(1, s, stringLengthFunc(s));
 }
 
 
@@ -1303,7 +1303,7 @@ ssize_t _help_cmd(hshpack *shpack)
         if (bcheck == 0)
         {
                 check = -1;
-                _error(6, shpack, 2);
+                errorSetStr(6, shpack, 2);
         }
 
         free(shpack->options);
@@ -1479,19 +1479,15 @@ void prntHlpFol(void)
 }
 /* ................................NUM 18 END................................*/
 
-
-/* ................................NUM 18 START..............................*/
-/* ................................NUM 18 BTW................................*/
-/* ................................NUM 18 END................................*/
 /**
- * freeDobleCharPntr - frees a double pointer array of strings
+ * freeDobleCharPntrFoluke - frees a double pointer array of strings
  * (must end in NULL)
  *
  * @p: double pointer to free
  *
  * Return: no return
  */
-void freeDobleCharPntr(char **p)
+void freeDobleCharPntrFoluke(char **p)
 {
         int x, z = 0;
 
@@ -1502,10 +1498,12 @@ void freeDobleCharPntr(char **p)
         {
                 freeCharFoluke(p[x]);
         }
-        freeDobleCharPntr(p);
+        free(p);
 }
+
+
 /**
- * _copydoublep - copies an array of strings (double pointer)
+ * cpyDoblePtr - copies an array of strings (double pointer)
  *
  * @p: double pointer to copy
  * @old_size: original size of P
@@ -1513,54 +1511,56 @@ void freeDobleCharPntr(char **p)
  *
  * Return: Pointer malloec
  */
-char **_copydoublep(char **p, int old_size, int new_size)
+char **cpyDoblePtr(char **p, int old_size, int new_size)
 {
         char **copy;
-        int x, csize;
+        int x, copSize;
 
         if (!p && (old_size == new_size))
                 return (NULL);
 
         if (new_size < old_size)
         {
-                csize = new_size;
-                copy = malloc(sizeof(char *) * (csize + 1));
+                copSize = new_size;
+                copy = malloc(sizeof(char *) * (copSize + 1));
         }
         else
         {
-                csize = old_size;
+                copSize = old_size;
                 copy = malloc(sizeof(char *) * (new_size + 1));
         }
         if (copy == 0)
                 return (0);
 
         if (p)
-                for (x = 0; x < csize; x++)
+                for (x = 0; x < copSize; x++)
                 {
-                        copy[x] = _strdup(p[x]);
+                        copy[x] = stringDuplicateFunc(p[x]);
                         if (copy[x] == 0)
                         {
                                 x--;
                                 for (; x >= 0; x--)
-                                        free(copy[x]);
-                                free(copy);
+                                        freeCharFoluke(copy[x]);
+                                freeDobleCharPntrFoluke(copy);
                                 return (0);
                         }
                 }
-
         /* Add Null in the end */
         copy[new_size] = '\0';
 
         return (copy);
 }
+
+
+
 /**
- * _strlendp - calculates length of double pointer (ending in NULL)
+ * strLenPtr - calculates length of double pointer (ending in NULL)
  * @s: double pointer
  *
  * Return: Length of double pointer
  *
  */
-int _strlendp(char **s)
+int strLenPtr(char **s)
 {
         int x = 0;
 
@@ -1571,8 +1571,11 @@ int _strlendp(char **s)
                 x++;
         return (x);
 }
+
+
+
 /**
- * _setenv - overwrite an env var1 or creates it
+ * setEnvironm - overwrite an env var1 or creates it
  *
  * @env: array of env variables
  * @var1: env var1 to set
@@ -1581,91 +1584,94 @@ int _strlendp(char **s)
  *
  * Return: 0 on success, -1 on error
  */
-char **_setenv(char **env, char *var1, char *val1, hshpack *shpack)
+char **setEnvironm(char **env, char *var1, char *val1, hshpack *shpack)
 {
-        int x, y, check, z = 0, zenv = 0;
-        char *envjoin, *envjoin2, *copydup, **copy;
+        int x, y, check, z = 0, env6 = 0;
+        char *catEnvs1, *catEnvs2, *DupCp, **copy;
 
-        if (_strlen(var1) == 0 || var1 == 0)
-                return (_error(3, shpack, 1), NULL);
-        envjoin2 = str_concat(var1, "=");
-        if (envjoin2 == 0)
-                return (_error(3, shpack, 1), NULL);
-        envjoin = str_concat(envjoin2, val1), free(envjoin2);
-        if (envjoin == 0)
-                return (_error(3, shpack, 1), NULL);
-        z = _strlen(var1), zenv = _strlendp(env);
+        if (stringLengthFunc(var1) == 0 || var1 == 0)
+                return (errorSetStr(3, shpack, 1), NULL);
+        catEnvs2 = stringCatenator(var1, "=");
+        if (catEnvs2 == 0)
+                return (errorSetStr(3, shpack, 1), NULL);
+        catEnvs1 = stringCatenator(catEnvs2, val1), free(catEnvs2);
+        if (catEnvs1 == 0)
+                return (errorSetStr(3, shpack, 1), NULL);
+        z = stringLengthFunc(var1), env6 = strLenPtr(env);
         for (x = 0; env && env[x] != 0; x++)
         {
                 for (check = 0, y = 0; y < z && env[x][y] != 0; y++)
                 {
                         if (var1[y] == '=')
-                                return (free(envjoin), _error(3, shpack, 2), NULL);
+                                return (free(catEnvs1), errorSetStr(3, shpack, 2), NULL);
                         if (env[x][y] == var1[y])
                                 check++;
                 }
                 if (check == z && env[x][check] == '=')
                 {
-                        free(env[x]), copydup = _strdup(envjoin), free(envjoin);
-                        if (copydup == 0)
-                                return (_error(3, shpack, 1), NULL);
-                        return (env[x] = copydup, env);
+                        free(env[x]), DupCp = stringDuplicateFunc(catEnvs1), free(catEnvs1);
+                        if (DupCp == 0)
+                                return (errorSetStr(3, shpack, 1), NULL);
+                        return (env[x] = DupCp, env);
                 }
         }
-        copy = _copydoublep(env, zenv, zenv + 1);
+        copy = cpyDoblePtr(env, env6, env6 + 1);
         if (env)
-                freeDobleCharPntr(env);
+                freeDobleCharPntrFoluke(env);
         if (copy == 0)
-                return (free(envjoin), _error(3, shpack, 1), NULL);
-        env = copy, copydup = _strdup(envjoin), free(envjoin);
-        if (copydup == 0)
-                return (_error(3, shpack, 1), NULL);
-        return (env[zenv] = copydup, env);
+                return (free(catEnvs1), errorSetStr(3, shpack, 1), NULL);
+        env = copy, DupCp = stringDuplicateFunc(catEnvs1), free(catEnvs1);
+        if (DupCp == 0)
+                return (errorSetStr(3, shpack, 1), NULL);
+        return (env[env6] = DupCp, env);
 }
 
 
 /**
- * signal_handler - handles ctrl + c in runtime
+ * sigHandlr - handles ctrl + c in runtime
  * @x: unused val1, just for betty
  *
  * Return: No return
  */
-void signal_handler(int x)
+void sigHandlr(int x)
 {
         (void) x;
         write(1, "\n$ ", 3);
 }
+
+
+
 /**
- * signal_handler2 - handles ctrl + c during cmd exec
+ * sigHandlr2 - handles ctrl + c during cmd exec
  * @x: unused val1, just for betty
  *
  * Return: No return
  */
-void signal_handler2(int x)
+void sigHandlr2(int x)
 {
         (void) x;
         write(1, "\n", 1);
 }
 
 
-
+/* ................................NUM 19 START..............................*/
 /**
- * str_concat - concatenates two strings
+ * stringCatenator - concatenates two strings
  * @s1: string1
  * @s2: string2
  *
  * Return: Pointer
  */
-char *str_concat(char *s1, char *s2)
+char *stringCatenator(char *s1, char *s2)
 {
         int l1, l2, i, j;
         char *s;
-        char *nul = "";
+        /* char *nul = ""; */
 
         if (s1 == NULL)
-                s1 = nul;
+                s1 = stringCatenatorFol();
         if (s2 == NULL)
-                s2 = nul;
+                s2 = stringCatenatorFol();
 
         l1 = 0, l2 = 0;
         while (*(s1 + l1))
@@ -1686,32 +1692,63 @@ char *str_concat(char *s1, char *s2)
 
         return (s);
 }
-
-
+/* ................................NUM 19 BTW................................*/
 /**
- * _strcpy - copy a source input ont destinated input
+ * stringCatenator - concatenates two strings
+ * @s1: string1
+ * @s2: string2
+ * Return: Pointer
+ */
+char *stringCatenatorFol()
+{
+        char *sx;
+
+        return (sx = "");
+}
+
+/* ................................NUM 19 END................................*/
+
+
+/* ................................NUM 20 START..............................*/
+/**
+ * stringCopy - copy a source input ont destinated input
  * @dest: target where will be stored the input
  * @src: source to copy from
- *
- *
  * Return: dest address
  * On error: -1 inapropiate entry
  */
-
-char *_strcpy(char *dest, char *src)
+char *stringCopy(char *dest, char *src)
 {
         int i = 0;
 
         for (i = 0; *(src + i) != '\0'; i++)
-                *(dest + i) = *(src + i);
-
-        *(dest + i) = *(src + i); /* adding '\0' character */
+                stringCopyFol(dest, src, i);
+                /* *(dest + i) = *(src + i); */
+        
+        stringCopyFol(dest, src, i);
+        /* *(dest + i) = *(src + i); */ /* adding '\0' character */
 
         return (dest);
 }
+/* ................................NUM 20 BTW................................*/
+/**
+ * stringCopy - copy a source input ont destinated input
+ * @dest: target where will be stored the input
+ * @src: source to copy from
+ * Return: dest address
+ * On error: -1 inapropiate entry
+ */
+char stringCopyFol(char *destinatn, char *source, int i)
+{
+        *(destinatn + i) = *(source + i);
+        return (*(destinatn + i));
+}
+/* ................................NUM 20 END................................*/
+
+
 
 /**
- * _strlen - function that returns the length of a string
+ * stringLengthFunc - function that returns the length of a string
  * @s: string address
  *
  *
@@ -1719,13 +1756,14 @@ char *_strcpy(char *dest, char *src)
  * On error: -1 inapropiate entry
  */
 
-int _strlen(char *s)
+int stringLengthFunc(char *s)
 {
-        return ((!*s) ? 0 : 1 + _strlen(s + 1));
+        return ((!*s) ? 0 : 1 + stringLengthFunc(s + 1));
 }
 
+
 /**
- * _strdup - function that returns a pointer to a newly allocated space
+ * stringDuplicateFunc - function that returns a pointer to a newly allocated space
  * in memory, which contains a copy of the string given as a parameter
  * @str: source to copy
  *
@@ -1734,26 +1772,28 @@ int _strlen(char *s)
  * On error: -1 inapropiate entry
  */
 
-char *_strdup(char *str)
+char *stringDuplicateFunc(char *str)
 {
         char *arr;
 
         if (!str)
                 return (NULL);
 
-        arr = malloc((_strlen(str) * sizeof(*arr)) + 1);
+        arr = malloc((stringLengthFunc(str) * sizeof(*arr)) + 1);
 
         if (!arr)
                 return (NULL);
 
-        _strcpy(arr, str);
+        stringCopy(arr, str);
 
         return (arr);
 }
 
-
+/* ................................NUM 21 START..............................*/
+/* ................................NUM 21 BTW................................*/
+/* ................................NUM 21 END................................*/
 /**
- * _strtok - tokenizes a string based on a delimiter
+ * stringTokenizeFunc - tokenizes a string based on a delimiter
  *
  * @str: string to operate
  * @delim: delimiter
@@ -1762,7 +1802,7 @@ char *_strdup(char *str)
  * or NULL if there is no match
  *
  */
-char *_strtok(char *str, const char *delim)
+char *stringTokenizeFunc(char *str, const char *delim)
 {
         const char *C_org = delim;
         int issEql = 1, issGetInto = 0;
@@ -1808,7 +1848,7 @@ char *_strtok(char *str, const char *delim)
 
 
 /**
- * _copydoublepDel - copies an array of strings (double pointer)
+ * cpyDoblePtrDel - copies an array of strings (double pointer)
  *
  * @p: double pointer to copy
  * @new_size: size of copy
@@ -1816,27 +1856,27 @@ char *_strtok(char *str, const char *delim)
  *
  * Return: Pointer malloec
  */
-char **_copydoublepDel(char **p, int new_size, int jump)
+char **cpyDoblePtrDel(char **p, int new_size, int jump)
 {
         char **copy;
-        int i, j, csize;
+        int i, j, copSize;
 
-        csize = new_size;
-        copy = malloc(sizeof(char *) * (csize + 1));
+        copSize = new_size;
+        copy = malloc(sizeof(char *) * (copSize + 1));
         if (copy == 0)
                 return (0);
 
-        for (i = 0, j = 0; j < csize; i++, j++)
+        for (i = 0, j = 0; j < copSize; i++, j++)
         {
                 if (i == jump)
                         i++;
-                copy[j] = _strdup(p[i]);
+                copy[j] = stringDuplicateFunc(p[i]);
                 if (copy[j] == 0)
                 {
                         j--;
                         for (; j >= 0; j--)
                                 free(copy[j]);
-                        free(copy);
+                        freeDobleCharPntrFoluke(copy);
                         return (0);
                 }
         }
@@ -1847,7 +1887,7 @@ char **_copydoublepDel(char **p, int new_size, int jump)
 }
 
 /**
- * _unsetenv - unsets an enviromental var1
+ * unSetEnviron - unsets an enviromental var1
  *
  * @env: array of env variables
  * @var1: env var1 to unset
@@ -1855,7 +1895,7 @@ char **_copydoublepDel(char **p, int new_size, int jump)
  *
  * Return: 0 on success, -1 on error
  */
-char **_unsetenv(char **env, char *var1, hshpack *shpack)
+char **unSetEnviron(char **env, char *var1, hshpack *shpack)
 {
         int i, j, check, l = 0, lenv = 0, found = 0;
         char **copy;
@@ -1863,15 +1903,15 @@ char **_unsetenv(char **env, char *var1, hshpack *shpack)
         shpack->unsetnull[0] = 0;
         if (!env)
                 return (write(2, "Environment is NULL\n", 20), NULL);
-        if (_strlen(var1) == 0 || var1 == 0)
-                return (_error(3, shpack, 1), NULL);
-        l = _strlen(var1), lenv = _strlendp(env);
+        if (stringLengthFunc(var1) == 0 || var1 == 0)
+                return (errorSetStr(3, shpack, 1), NULL);
+        l = stringLengthFunc(var1), lenv = strLenPtr(env);
         for (i = 0; env[i] != 0; i++)
         {
                 for (check = 0, j = 0; j < l && env[i][j] != 0; j++)
                 {
                         if (var1[j] == '=')
-                                return (_error(3, shpack, 2), NULL);
+                                return (errorSetStr(3, shpack, 2), NULL);
                         if (env[i][j] == var1[j])
                                 check++;
                 }
@@ -1881,13 +1921,13 @@ char **_unsetenv(char **env, char *var1, hshpack *shpack)
                         found = 1;
                         if ((lenv - 1) != 0)
                         {
-                                copy = _copydoublepDel(env, lenv - 1, i);
+                                copy = cpyDoblePtrDel(env, lenv - 1, i);
                          if (copy == 0)
-                                        return (_error(7, shpack, 1), NULL);
+                                        return (errorSetStr(7, shpack, 1), NULL);
                         }
                         else
                                 shpack->unsetnull[0] = 1, copy = NULL;
-                        freeDobleCharPntr(env), env = copy;
+                        freeDobleCharPntrFoluke(env), env = copy;
                         return (env);
                 }
         }
