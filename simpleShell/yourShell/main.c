@@ -18,7 +18,7 @@ int main(int ac, char **av, char **env)
 {
 	size_t bufsize = 0;
 	char **command, *pathCmd, *buffer = NULL;
-	hshpack *shpack;
+	shellDType *shellVar;
 	int errn = 0, exnum = 0, relation = 0, run_able = 0, sizeEnv, enul = 0;
 	ssize_t isBuiltIn;
 
@@ -27,34 +27,34 @@ int main(int ac, char **av, char **env)
 	signal(SIGINT, sigHandlr);
 	sizeEnv = strLenPtr(env);
 	env = cpyDoblePtr(env, sizeEnv, sizeEnv);
-	shpack = shellStructDef(av[0], &errn, &exnum, &relation, &run_able, &env, &enul);
+	shellVar = shellStructDef(av[0], &errn, &exnum, &relation, &run_able, &env, &enul);
 	while (1)
 	{
 		command = NULL;
-		command = chckInputFunc(ac, av, &bufsize, &buffer, shpack);
+		command = chckInputFunc(ac, av, &bufsize, &buffer, shellVar);
 		if (!command)
 			continue;
-		addComnd(shpack, buffer, command[0], command);
-		isBuiltIn = chckBuiltIn(shpack);
+		addComnd(shellVar, buffer, command[0], command);
+		isBuiltIn = chckBuiltIn(shellVar);
 		if (isBuiltIn == -1 || isBuiltIn == 1)
 			continue;
-		pathCmd = searchPath(command[0], env, shpack);
-		addPath2Comnd(shpack, pathCmd);
+		pathCmd = searchPath(command[0], env, shellVar);
+		addPath2Comnd(shellVar, pathCmd);
 		if (!pathCmd)
 		{
 			free(command);
-			shpack->errnum[0] += 1, errorSetStr(0, shpack, 127);
+			shellVar->errnum[0] += 1, errorSetStr(0, shellVar, 127);
 			continue;
 		}
 		else if (access(pathCmd, X_OK) == -1)
-			errorSetStr(1, shpack, 126);
+			errorSetStr(1, shellVar, 126);
 		else
-			excuteCmd(pathCmd, command, env, shpack);
+			excuteCmd(pathCmd, command, env, shellVar);
 		free(command);
 		free(pathCmd);
 
 	}
-	freeDobleCharPntrFoluke(*(shpack->envCpy)), free(shpack);
+	freeDobleCharPntrFoluke(*(shellVar->envCpy)), free(shellVar);
 	return (0);
 }
 /**
@@ -70,12 +70,12 @@ int main(int ac, char **av, char **env)
  * Return: Pointer to struct
  *
  */
-hshpack *shellStructDef(char *argv0, int *errn, int *exnum,
+shellDType *shellStructDef(char *argv0, int *errn, int *exnum,
 		    int *relation, int *run_able, char ***env, int *unsetnull)
 {
-	hshpack *shellpack;
+	shellDType *shellpack;
 
-	shellpack = malloc(sizeof(struct Hshpack));
+	shellpack = malloc(sizeof(struct shellDType));
 	if (shellpack == 0)
 		return (write(2, "Memory Error", 22), NULL);
 	shellpack->hshname = argv0;
@@ -94,28 +94,28 @@ hshpack *shellStructDef(char *argv0, int *errn, int *exnum,
 }
 /**
  * addComnd - adds values to shell struct
- * @shpack: shell struct
+ * @shellVar: shell struct
  * @buffer: string written after prompt
  * @command: command written after prompt
  * @parameters: parameters of command
  *
  * Return: No return
  */
-void addComnd(hshpack *shpack, char *buffer, char *command, char **parameters)
+void addComnd(shellDType *shellVar, char *buffer, char *command, char **parameters)
 {
-	shpack->buffer = buffer;
-	shpack->cmd = command;
-	shpack->options = parameters;
+	shellVar->buffer = buffer;
+	shellVar->cmd = command;
+	shellVar->options = parameters;
 }
 
 /**
  * addPath2Comnd - initializes path value of struct
- * @shpack: shell struct
+ * @shellVar: shell struct
  * @pathCmd: path of cmd written after propmpt
  *
  * Return: No Return
  */
-void addPath2Comnd(hshpack *shpack, char *pathCmd)
+void addPath2Comnd(shellDType *shellVar, char *pathCmd)
 {
-	shpack->path = pathCmd;
+	shellVar->path = pathCmd;
 }
