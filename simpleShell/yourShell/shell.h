@@ -106,16 +106,11 @@ char **setEnvironm(char **env, char *variable, char *value, hshpack *shpack);
 char **unSetEnviron(char **env, char *variable, hshpack *shpack);
 int isDigitFunc(int c);
 int isNumba(char *s);
-ssize_t cdComndFunc(hshpack *shpack);
 char *delComnt(char *str);
 
-ssize_t _help_cmd(hshpack *shpack);
+ssize_t hlpComnd(hshpack *shpack);
 void putsFunctn(char *s);
 void hlpUnSetEnviron(void);
-void cdHelp(void);
-void help_help(void);
-void help_alias(void);
-void printsHelp(void);
 
 void freeCharFoluke(char *temp);
 void freeDobleCharPntrFoluke(char **p);
@@ -123,7 +118,7 @@ void freeDobleCharPntrFoluke(char **p);
 void string_reverse(char *s);
 void string_reverseSub(char *s, char tmp, int x, int y);
 int lenBTen(unsigned long int n, unsigned long int base);
-char *_itoa(int n);
+char *intToAlp(int n);
 char *errorSub(int errn, char *concB, char *optn);
 ssize_t envCmd(hshpack *shpack);
 ssize_t setEnvironCmd(hshpack *shpack);
@@ -151,6 +146,8 @@ void hlpSetEnviron(void);
 void hlpSetEnvironFol(void);
 void hlpUnSetEnviron(void);
 void hlpUnSetEnvironFol(void);
+void cdHlp(void);
+void cdHlpFol(void);
 void hlpHlp(void);
 void hlpHlpFol(void);
 void hlpAlias(void);
@@ -162,4 +159,10 @@ char *stringCatenatorFol();
 char stringCatenatorFol2(char *sx, char *sy, int k);
 char stringCopyFol(char *destinatn, char *source, int i);
 
+
+
+ssize_t cdComndFunc(hshpack *shpack);
+void help_help(void);
+void help_alias(void);
+void printsHelp(void);
 #endif

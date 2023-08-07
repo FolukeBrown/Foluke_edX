@@ -62,12 +62,14 @@ int lenBTen(unsigned long int n, unsigned long int base)
         ret = x + negNum;
         return (ret);
 }
+
+
 /**
- * _itoa - converts
+ * intToAlp - converts
  * @n: number
  * Return: ptr
  */
-char *_itoa(int n)
+char *intToAlp(int n)
 {
         unsigned long int x = 0, base = 10;
         char *str;
@@ -130,7 +132,7 @@ int errorSetStr(int errn, hshpack *shpack, int exnum)
 
         }
 
-        nustr = _itoa(cnt);
+        nustr = intToAlp(cnt);
         if (!nustr)  /* number to string */
                 return (freeCharFoluke(concA), write(2, "Memory Error", 22), -1);
 
@@ -386,7 +388,7 @@ ssize_t chckBuiltIn(hshpack *shpack)
                 {"setenv", setEnvironCmd},
                 {"unsetenv", unSetEnvironComnd},
                 {"cd", cDirCmnd},
-                {"help", _help_cmd}
+                {"help", hlpComnd}
         };
 
         int x = 6, builtcheck; /* lenght of ops array */
@@ -1048,9 +1050,8 @@ char **fetchParam(char *raw_buffer, hshpack *shpack)
 /* ................................NUM 10 START..............................*/
 
 /**
- * pthChcker - check if current dire must be added
- * @path: path env var1
- *
+ * pthChcker - check current dir
+ * @path: path
  * Return: Pointer to adress of new PATH
  *
  */
@@ -1099,11 +1100,9 @@ char *pthChcker(char *path)
 }
 /* ................................NUM 10 BTW................................*/
 /**
- * pthChcker - check if current dire must be added
- * @path: path env var1
- *
- * Return: Pointer to adress of new PATH
- *
+ * pthChcker - check current dir
+ * @path: path
+ * Return: Pointer to adress of new PAT
  */
 
 char pthChckerFol(char *path, char *npath, int x, int y)
@@ -1115,13 +1114,11 @@ char pthChckerFol(char *path, char *npath, int x, int y)
 
 
 /**
- * searchPath - Searches for a cmd in PATH
- * @cmd: string contating env var1 PATH
+ * searchPath - Searches for a cmd
+ * @cmd: string
  * @env: current environment
- * @shpack: struct containing shell info
- *
- * Return: Pointer to adress of cmd in PATH or by itself
- *
+ * @shpack: stru
+ * Return: Point
  */
 
 char *searchPath(char *cmd, char **env, hshpack *shpack)
@@ -1172,9 +1169,7 @@ char *searchPath(char *cmd, char **env, hshpack *shpack)
 
 /**
  * putsFunctn - prints string to std output
- * @s: string (must be NULL terminated)
- *
- * Return: No Return
+ * @s: strin
  */
 void putsFunctn(char *s)
 {
@@ -1186,9 +1181,7 @@ void putsFunctn(char *s)
 
 /* ................................NUM 11 START..............................*/
 /**
- * hlpExitFunc - prints help of exit built in
- *
- * Return: No Return
+ * hlpExitFunc - prints hel
  */
 void hlpExitFunc(void)
 {
@@ -1196,9 +1189,7 @@ void hlpExitFunc(void)
 }
 /* ................................NUM 11 BTW................................*/
 /**
- * hlpExitFunc - prints help of exit built in
- *
- * Return: No Return
+ * hlpExitFunc - prints hel
  */
 void hlpExitFuncFol(void)
 {
@@ -1214,9 +1205,7 @@ void hlpExitFuncFol(void)
 
 /* ................................NUM 12 START..............................*/
 /**
- * hlpEnviron - prints help of env built in
- *
- * Return: No Return
+ * hlpEnviron - prints hel
  */
 void hlpEnviron(void)
 {
@@ -1224,9 +1213,7 @@ void hlpEnviron(void)
 }
 /* ................................NUM 12 BTW................................*/
 /**
- * hlpEnviron - prints help of env built in
- *
- * Return: No Return
+ * hlpEnviron - prints hel
  */
 void hlpEnvironFol(void)
 {
@@ -1241,9 +1228,7 @@ void hlpEnvironFol(void)
 
 /* ................................NUM 13 START..............................*/
 /**
- * hlpSetEnviron - prints help of setenv built in
- *
- * Return: No Return
+ * hlpSetEnviron - prints hel
  */
 void hlpSetEnviron(void)
 {
@@ -1251,9 +1236,7 @@ void hlpSetEnviron(void)
 }
 /* ................................NUM 13 BTW................................*/
 /**
- * hlpSetEnviron - prints help of setenv built in
- *
- * Return: No Return
+ * hlpSetEnviron - prints hel
  */
 void hlpSetEnvironFol(void)
 {
@@ -1268,12 +1251,11 @@ void hlpSetEnvironFol(void)
 
 
 /**
- * _help_cmd - help of built in commands
- * @shpack: struct containing shell info
- *
+ * hlpComnd - help of built-in commands
+ * @shpack: struc
  * Return: 1 if succesful, -1 if fail
  */
-ssize_t _help_cmd(hshpack *shpack)
+ssize_t hlpComnd(hshpack *shpack)
 {
         int check = 1, bcheck = 0;
         helps help[] = {
@@ -1281,7 +1263,7 @@ ssize_t _help_cmd(hshpack *shpack)
                 {"env", hlpEnviron},
                 {"setenv", hlpSetEnviron},
                 {"unsetenv", hlpUnSetEnviron},
-                {"cd", cdHelp},
+                {"cd", cdHlp},
                 {"help", hlpHlp},
                 {"alias", hlpAlias}
         };
@@ -1313,9 +1295,7 @@ ssize_t _help_cmd(hshpack *shpack)
 
 /* ................................NUM 14 START..............................*/
 /**
- * hlpUnSetEnviron - prints help of unsetenv built in
- *
- * Return: No Return
+ * hlpUnSetEnviron - prints hel
  */
 void hlpUnSetEnviron(void)
 {
@@ -1323,9 +1303,7 @@ void hlpUnSetEnviron(void)
 }
 /* ................................NUM 14 BTW................................*/
 /**
- * hlpUnSetEnviron - prints help of unsetenv built in
- *
- * Return: No Return
+ * hlpUnSetEnviron - prints hel
  */
 void hlpUnSetEnvironFol(void)
 {
@@ -1341,21 +1319,17 @@ void hlpUnSetEnvironFol(void)
 
 /* ................................NUM 15 START..............................*/
 /**
- * cdHelp - prints help of cd built in
- *
- * Return: No Return
+ * cdHlp - prints help of commandsd built-in
  */
-void cdHelp(void)
+void cdHlp(void)
 {
-        void cdHelpFol(void);
+        void cdHlpFol(void);
 }
 /* ................................NUM 15 BTW................................*/
 /**
- * cdHelp - prints help of cd built in
- *
- * Return: No Return
+ * cdHlp - prints hel
  */
-void cdHelpFol(void)
+void cdHlpFol(void)
 {
         putsFunctn("cd: cd [DIRECTORY]\n");
         putsFunctn("    Change the shell working directory.\n\n");
@@ -1379,9 +1353,7 @@ void cdHelpFol(void)
 
 /* ................................NUM 16 START..............................*/
 /**
- * hlpHlp - prints help of help built in
- *
- * Return: No Return
+ * hlpHlp - prints hel
  */
 void hlpHlp(void)
 {
@@ -1389,9 +1361,7 @@ void hlpHlp(void)
 }
 /* ................................NUM 16 BTW................................*/
 /**
- * hlpHlp - prints help of help built in
- *
- * Return: No Return
+ * hlpHlp - prints he
  */
 void hlpHlpFol(void)
 {
@@ -1412,9 +1382,7 @@ void hlpHlpFol(void)
 
 /* ................................NUM 17 START..............................*/
 /**
- * hlpAlias - prints help of alias built in
- *
- * Return: No Return
+ * hlpAlias - prints hel
  */
 void hlpAlias(void)
 {
@@ -1422,9 +1390,7 @@ void hlpAlias(void)
 }
 /* ................................NUM 17 BTW................................*/
 /**
- * hlpAlias - prints help of alias built in
- *
- * Return: No Return
+ * hlpAlias - prints hel
  */
 void hlpAliasFol(void)
 {
@@ -1448,9 +1414,7 @@ void hlpAliasFol(void)
 
 /* ................................NUM 18 START..............................*/
 /**
- * prntHlp - prints help of help built in
- *
- * Return: No Return
+ * prntHlp - prints hel
  */
 void prntHlp(void)
 {
@@ -1458,9 +1422,7 @@ void prntHlp(void)
 }
 /* ................................NUM 18 BTW................................*/
 /**
- * prntHlp - prints help of help built in
- *
- * Return: No Return
+ * prntHlp - prints hel
  */
 void prntHlpFol(void)
 {
@@ -1480,12 +1442,8 @@ void prntHlpFol(void)
 /* ................................NUM 18 END................................*/
 
 /**
- * freeDobleCharPntrFoluke - frees a double pointer array of strings
- * (must end in NULL)
- *
+ * freeDobleCharPntrFoluke - frees a double pointe
  * @p: double pointer to free
- *
- * Return: no return
  */
 void freeDobleCharPntrFoluke(char **p)
 {
@@ -1503,12 +1461,11 @@ void freeDobleCharPntrFoluke(char **p)
 
 
 /**
- * cpyDoblePtr - copies an array of strings (double pointer)
+ * cpyDoblePtr - copies an array of string
  *
- * @p: double pointer to copy
- * @old_size: original size of P
+ * @p: double pointe
+ * @old_size: original siz
  * @new_size: size of copy
- *
  * Return: Pointer malloec
  */
 char **cpyDoblePtr(char **p, int old_size, int new_size)
@@ -1554,11 +1511,9 @@ char **cpyDoblePtr(char **p, int old_size, int new_size)
 
 
 /**
- * strLenPtr - calculates length of double pointer (ending in NULL)
+ * strLenPtr - calculates length of double pointe
  * @s: double pointer
- *
  * Return: Length of double pointer
- *
  */
 int strLenPtr(char **s)
 {
@@ -1575,13 +1530,11 @@ int strLenPtr(char **s)
 
 
 /**
- * setEnvironm - overwrite an env var1 or creates it
- *
+ * setEnvironm - overwrite an en
  * @env: array of env variables
- * @var1: env var1 to set
- * @val1: val1 to set
- * @shpack: struct with shell info
- *
+ * @var1: env var
+ * @val1: val
+ * @shpack: struc
  * Return: 0 on success, -1 on error
  */
 char **setEnvironm(char **env, char *var1, char *val1, hshpack *shpack)
@@ -1628,10 +1581,8 @@ char **setEnvironm(char **env, char *var1, char *val1, hshpack *shpack)
 
 
 /**
- * sigHandlr - handles ctrl + c in runtime
- * @x: unused val1, just for betty
- *
- * Return: No return
+ * sigHandlr - handles ctrl + c during runtime
+ * @x: unused val
  */
 void sigHandlr(int x)
 {
@@ -1642,10 +1593,8 @@ void sigHandlr(int x)
 
 
 /**
- * sigHandlr2 - handles ctrl + c during cmd exec
- * @x: unused val1, just for betty
- *
- * Return: No return
+ * sigHandlr2 - handles ctrl + c during commd executn
+ * @x: unused val1
  */
 void sigHandlr2(int x)
 {
@@ -1656,10 +1605,9 @@ void sigHandlr2(int x)
 
 /* ................................NUM 19 START..............................*/
 /**
- * stringCatenator - concatenates two strings
- * @s1: string1
- * @s2: string2
- *
+ * stringCatenator - concatenates strings
+ * @s1: str
+ * @s2: strin
  * Return: Pointer
  */
 char *stringCatenator(char *s1, char *s2)
@@ -1694,9 +1642,9 @@ char *stringCatenator(char *s1, char *s2)
 }
 /* ................................NUM 19 BTW................................*/
 /**
- * stringCatenator - concatenates two strings
- * @s1: string1
- * @s2: string2
+ * stringCatenator - concatenates strings
+ * @s1: str
+ * @s2: strin
  * Return: Pointer
  */
 char *stringCatenatorFol()
@@ -1711,11 +1659,11 @@ char *stringCatenatorFol()
 
 /* ................................NUM 20 START..............................*/
 /**
- * stringCopy - copy a source input ont destinated input
- * @dest: target where will be stored the input
- * @src: source to copy from
- * Return: dest address
- * On error: -1 inapropiate entry
+ * stringCopy - copy source ont destinated
+ * @dest: target
+ * @src: source
+ * Return: dest
+ * On error: -1
  */
 char *stringCopy(char *dest, char *src)
 {
@@ -1732,11 +1680,11 @@ char *stringCopy(char *dest, char *src)
 }
 /* ................................NUM 20 BTW................................*/
 /**
- * stringCopy - copy a source input ont destinated input
- * @dest: target where will be stored the input
- * @src: source to copy from
- * Return: dest address
- * On error: -1 inapropiate entry
+ * stringCopy - copy source onto destinated
+ * @dest: target
+ * @src: source
+ * Return: dest
+ * On error: -1 
  */
 char stringCopyFol(char *destinatn, char *source, int i)
 {
@@ -1748,12 +1696,9 @@ char stringCopyFol(char *destinatn, char *source, int i)
 
 
 /**
- * stringLengthFunc - function that returns the length of a string
- * @s: string address
- *
- *
- * Return: nothing
- * On error: -1 inapropiate entry
+ * stringLengthFunc - function that returns the length of string
+ * @s: string
+ * Return: -1 inapropiate entr
  */
 
 int stringLengthFunc(char *s)
@@ -1763,13 +1708,11 @@ int stringLengthFunc(char *s)
 
 
 /**
- * stringDuplicateFunc - function that returns a pointer to a newly allocated space
- * in memory, which contains a copy of the string given as a parameter
- * @str: source to copy
- *
- *
- * Return: address where is stored the result
- * On error: -1 inapropiate entry
+ * stringDuplicateFunc - function that returns a pointer to a newly
+ * allocated memoty space
+ * @str: source 
+ * Return: address
+ * On error: -1 
  */
 
 char *stringDuplicateFunc(char *str)
@@ -1793,14 +1736,11 @@ char *stringDuplicateFunc(char *str)
 /* ................................NUM 21 BTW................................*/
 /* ................................NUM 21 END................................*/
 /**
- * stringTokenizeFunc - tokenizes a string based on a delimiter
+ * stringTokenizeFunc - tokenizes a string
  *
  * @str: string to operate
  * @delim: delimiter
- *
  * Return: pointer to string
- * or NULL if there is no match
- *
  */
 char *stringTokenizeFunc(char *str, const char *delim)
 {
@@ -1848,12 +1788,10 @@ char *stringTokenizeFunc(char *str, const char *delim)
 
 
 /**
- * cpyDoblePtrDel - copies an array of strings (double pointer)
- *
- * @p: double pointer to copy
- * @new_size: size of copy
- * @jump: val1 that must be skipped in copy
- *
+ * cpyDoblePtrDel - copies an array of string
+ * @p: double pointe
+ * @n_size: siz
+ * @jump: val to skip during operation
  * Return: Pointer malloec
  */
 char **cpyDoblePtrDel(char **p, int new_size, int jump)
@@ -1887,13 +1825,11 @@ char **cpyDoblePtrDel(char **p, int new_size, int jump)
 }
 
 /**
- * unSetEnviron - unsets an enviromental var1
- *
- * @env: array of env variables
- * @var1: env var1 to unset
- * @shpack: struct with shell info
- *
- * Return: 0 on success, -1 on error
+ * unSetEnviron - unsets an enviromenta
+ * @env: array of en
+ * @var1: env var
+ * @shpack: struc
+ * Return: 0 on success
  */
 char **unSetEnviron(char **env, char *var1, hshpack *shpack)
 {
