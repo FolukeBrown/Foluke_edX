@@ -18,13 +18,17 @@ mkdir -p $SDIR
 #...options display.................. #
 
 echo ""
-echo -e "[a] or [A] or [1] - to setup file checker(betty) command"
-echo -e "[b] or [B] or [2] - to setup push command"
-echo -e "[c] or [C] or [3] - to setup pull command"
-echo -e "[d] or [D] or [4] - to setup create repo command"
-echo -e "[e] or [E] or [5] - to setup clone repo command"
-echo -e "[f] or [F] or [6] - to setup compile command (including alx's common compile command with it's flags)"
-echo -e "[g] or [G] or [7] - to create a default C source file"
+echo -e "[a] or [A] - to setup file checker(betty) command"
+echo -e "[b] or [B] - to setup push command"
+echo -e "[c] or [C] - to setup pull command"
+echo -e "[d] or [D] - to setup create repo command"
+echo -e "[e] or [E] - to setup clone repo command"
+echo -e "[f] or [F] - to setup compile command (including alx's common compile command with it's flags)"
+echo -e "[g] or [G] - to create a default C source file"
+echo -e "[h] or [H] - to create a Guessing Game command"
+echo -e "[i] or [I] - to create a Rot13 Cipher command"
+echo -e "[j] or [J] - to create a Rot47 Cipher command"
+echo -e "[k] or [K] - to create a simple ASCII table command"
 echo ""
 
 echo -n "What do you want to do? [q] - quit >>> "
@@ -44,21 +48,41 @@ if [[ -z "$OPTION" || $OPTION =~ "q" ]]; then
 	exit 1
 
 else
-	if [[ $OPTION =~ "a" || $OPTION =~ "A" || $OPTION =~ "1" ]]; then
+	if [[ $OPTION =~ "a" || $OPTION =~ "A" ]]; then
+		FILETYPE="script"
 		echo -n "Enter your name(or the command name e.g betty) >>> "
 		read DFILENAME
-	elif [[ $OPTION =~ "b" || $OPTION =~ "B" || $OPTION =~ "2" ]]; then
+	elif [[ $OPTION =~ "b" || $OPTION =~ "B" ]]; then
+		FILETYPE="script"
 		DFILENAME="push"
-	elif [[ $OPTION =~ "c" || $OPTION =~ "C" || $OPTION =~ "3" ]]; then
+	elif [[ $OPTION =~ "c" || $OPTION =~ "C" ]]; then
+		FILETYPE="script"
 		DFILENAME="pull"
-	elif [[ $OPTION =~ "d" || $OPTION =~ "D" || $OPTION =~ "4" ]]; then
+	elif [[ $OPTION =~ "d" || $OPTION =~ "D" ]]; then
+		FILETYPE="script"
 		DFILENAME="createRepo"
-	elif [[ $OPTION =~ "e" || $OPTION =~ "E" || $OPTION =~ "5" ]]; then
+	elif [[ $OPTION =~ "e" || $OPTION =~ "E" ]]; then
+		FILETYPE="script"
 		DFILENAME="cloneRepo"
-	elif [[ $OPTION =~ "f" || $OPTION =~ "F" || $OPTION =~ "6" ]]; then
+	elif [[ $OPTION =~ "f" || $OPTION =~ "F" ]]; then
+		FILETYPE="script"
 		DFILENAME="mycompile"
-	elif [[ $OPTION =~ "g" || $OPTION =~ "G" || $OPTION =~ "7" ]]; then
+	elif [[ $OPTION =~ "g" || $OPTION =~ "G" ]]; then
+		FILETYPE="script"
 		DFILENAME="defaultCTemplate"
+
+	elif [[ $OPTION =~ "h" || $OPTION =~ "H" ]]; then
+		FILETYPE="c"
+		DFILENAME="guessGame"
+	elif [[ $OPTION =~ "i" || $OPTION =~ "I" ]]; then
+		FILETYPE="c"
+		DFILENAME="rot13"
+	elif [[ $OPTION =~ "j" || $OPTION =~ "J" ]]; then
+		FILETYPE="c"
+		DFILENAME="rot47"
+	elif [[ $OPTION =~ "k" || $OPTION =~ "K" ]]; then
+		FILETYPE="c"
+		DFILENAME="myascii"
 	else
 		echo -e "You can only choose from the options provided"
 		exit 1
@@ -69,22 +93,26 @@ else
 
 #...creating file, env var, and profile.................. #
 
-	echo -e "\n.....Creating $DFILENAME and setting permission script....."
+	echo -e "\n.....Creating $DFILENAME as a command....."
 
-	echo -e "PASTE THE SCRIPT YOU COPIED HERE" >  $SDIR/$DFILENAME
-	chmod 744 $SDIR/$DFILENAME
+	if [[ $DFILENAME =~ "script" ]]; then
+		echo -e "PASTE THE SCRIPT YOU COPIED HERE" >  $SDIR/$DFILENAME
+		chmod 744 $SDIR/$DFILENAME
+	elif [[ $DFILENAME =~ "c" ]]; then
+		echo -e "PASTE THE SCRIPT YOU COPIED HERE" >  $SDIR/$DFILENAME.c
+	fi
 
 	
 	if ! grep -q dafCom ~/.bashrc; then
-		echo -e "\n.....Creating $DFILENAME env variable....."
+		echo -e "\n.....Setting $DFILENAME as Env variable....."
   		echo 'export PATH="$PATH:~/dafCom"' >> ~/.bashrc
 	else
-		echo -e "\n.....env variable exists!....."
+		echo -e "\n.....Env variable exists!....."
 	fi
 
 	if ! grep -q  bashrc ~/.bash_profile; then
 
-		echo -e ".....Writing or Appending to bash profile.....\n"
+		echo -e ".....Creating/Appending to bash profile.....\n"
 		echo '[ -r ~/.bashrc ] && . ~/.bashrc ' >> ~/.bash_profile
 	else
 		echo -e ".....profile exists!.....\n"
@@ -95,8 +123,8 @@ else
 
 #...creating the command script.................. #
 
-	if [[ $OPTION =~ "a" || $OPTION =~ "A" || $OPTION =~ "1" ]]; then
-		echo -n "Is your device a phone? [y/N] ([n] - pc)>>> "
+	if [[ $OPTION =~ "a" || $OPTION =~ "A" ]]; then
+		echo -n "Is your device a phone? [y/N] ([n] - pc) >>> "
 		read PHONE
 
 		echo ""
@@ -111,22 +139,34 @@ else
 			cp "scpts/copyMe4Pc" "$SDIR/$DFILENAME"
 		fi
 		
-	elif [[ $OPTION =~ "b" || $OPTION =~ "B" || $OPTION =~ "2" ]]; then
+	elif [[ $OPTION =~ "b" || $OPTION =~ "B" ]]; then
 		cp "scpts/$DFILENAME" "$SDIR/$DFILENAME"
-	elif [[ $OPTION =~ "c" || $OPTION =~ "C" || $OPTION =~ "3" ]]; then
+	elif [[ $OPTION =~ "c" || $OPTION =~ "C" ]]; then
 		cp "scpts/$DFILENAME" "$SDIR/$DFILENAME"
-	elif [[ $OPTION =~ "d" || $OPTION =~ "D" || $OPTION =~ "4" ]]; then
+	elif [[ $OPTION =~ "d" || $OPTION =~ "D" ]]; then
 		cp "scpts/createRepoGeneral" "$SDIR/$DFILENAME"
-	elif [[ $OPTION =~ "e" || $OPTION =~ "E" || $OPTION =~ "5" ]]; then
+	elif [[ $OPTION =~ "e" || $OPTION =~ "E" ]]; then
 		cp "scpts/cloneRepoGeneral" "$SDIR/$DFILENAME"
-	elif [[ $OPTION =~ "f" || $OPTION =~ "F" || $OPTION =~ "6" ]]; then
+	elif [[ $OPTION =~ "f" || $OPTION =~ "F" ]]; then
 		cp "scpts/mycompile" "$SDIR/$DFILENAME"
-	elif [[ $OPTION =~ "g" || $OPTION =~ "G" || $OPTION =~ "7" ]]; then
+	elif [[ $OPTION =~ "g" || $OPTION =~ "G" ]]; then
 		echo -e "PASTE THE Source content YOU COPIED HERE" >  $SDIR/C_template.c
 		cp "scpts/C_template.c" "$SDIR/C_template.c"
 		cp "scpts/defaultCTemplate" "$SDIR/$DFILENAME"
+
+	elif [[ $OPTION =~ "h" || $OPTION =~ "H" ]]; then
+		cp "scpts/1_edxGuessGame.c" "$SDIR/$DFILENAME.c"
+	elif [[ $OPTION =~ "i" || $OPTION =~ "I" ]]; then
+		cp "scpts/1_my_rot13.c" "$SDIR/$DFILENAME.c"
+	elif [[ $OPTION =~ "j" || $OPTION =~ "J" ]]; then
+		cp "scpts/1_my_rot47.c" "$SDIR/$DFILENAME.c"
+	elif [[ $OPTION =~ "k" || $OPTION =~ "K" ]]; then
+		cp "scpts/1_my_ascii.c" "$SDIR/$DFILENAME.c"
 	fi
 
+	if [[ $FILETYPE =~ "c" ]]; then
+		make $SDIR/$DFILENAME
+	fi
 
 
 
@@ -134,20 +174,30 @@ else
 
 	echo ""
 	echo -e "Now, RESTART YOUR TERMINAL or START A NEW SESSION."
-	if [[ $OPTION =~ "a" || $OPTION =~ "A" || $OPTION =~ "1" ]]; then
-		echo -e "Now, you can check your file(s) by running ($ANYWHERE): $DFILENAME <filename>\n"
-	elif [[ $OPTION =~ "b" || $OPTION =~ "B" || $OPTION =~ "2" ]]; then
-		echo -e "Now, you can push to github. Simply run($ANYWHERE): $DFILENAME\n"
-	elif [[ $OPTION =~ "c" || $OPTION =~ "C" || $OPTION =~ "3" ]]; then
-		echo -e "Now, you can pull from github. Simply run($ANYWHERE): $DFILENAME\n"
-	elif [[ $OPTION =~ "d" || $OPTION =~ "D" || $OPTION =~ "4" ]]; then
-		echo -e "Now, you can create a repo without right from your terminal without visiting github. Simply run($ANYWHERE): $DFILENAME\n"
-	elif [[ $OPTION =~ "e" || $OPTION =~ "E" || $OPTION =~ "5" ]]; then
-		echo -e "Now, you can clone from github. Simply run($ANYWHERE): $DFILENAME\n"
-	elif [[ $OPTION =~ "f" || $OPTION =~ "F" || $OPTION =~ "6" ]]; then
-		echo -e "Now, you can compile your files effortlessly. Simply run($ANYWHERE): $DFILENAME <filename>\n"
-	elif [[ $OPTION =~ "g" || $OPTION =~ "G" || $OPTION =~ "7" ]]; then
-		echo -e "Now, you can create default C source files effortlessly. Simply run($ANYWHERE): $DFILENAME <filename>\n"
+
+	if [[ $OPTION =~ "a" || $OPTION =~ "A" ]]; then
+		echo -e "Now, you can check your file(s) by running ($ANYWHERE): $DFILENAME <filename>"
+	elif [[ $OPTION =~ "b" || $OPTION =~ "B" ]]; then
+		echo -e "Now, you can push to github. Simply run($ANYWHERE): $DFILENAME"
+	elif [[ $OPTION =~ "c" || $OPTION =~ "C" ]]; then
+		echo -e "Now, you can pull from github. Simply run($ANYWHERE): $DFILENAME"
+	elif [[ $OPTION =~ "d" || $OPTION =~ "D" ]]; then
+		echo -e "Now, you can create a repo without right from your terminal without visiting github. Simply run($ANYWHERE): $DFILENAME"
+	elif [[ $OPTION =~ "e" || $OPTION =~ "E" ]]; then
+		echo -e "Now, you can clone from github. Simply run($ANYWHERE): $DFILENAME"
+	elif [[ $OPTION =~ "f" || $OPTION =~ "F" ]]; then
+		echo -e "Now, you can compile your files effortlessly. Simply run($ANYWHERE): $DFILENAME <filename>"
+	elif [[ $OPTION =~ "g" || $OPTION =~ "G" ]]; then
+		echo -e "Now, you can create default C source files effortlessly. Simply run($ANYWHERE): $DFILENAME <filename>"
+	
+	elif [[ $OPTION =~ "h" || $OPTION =~ "H" ]]; then
+		echo -e "Now, you can play the guessing game effortlessly. Simply run($ANYWHERE): $DFILENAME"
+	elif [[ $OPTION =~ "i" || $OPTION =~ "I" ]]; then
+		echo -e "Now, you can code and decode your texts with Rot13 effortlessly. Simply run($ANYWHERE): $DFILENAME"
+	elif [[ $OPTION =~ "j" || $OPTION =~ "J" ]]; then
+		echo -e "Now, you can code and decode your texts with Rot47 effortlessly. Simply run($ANYWHERE): $DFILENAME"
+	elif [[ $OPTION =~ "k" || $OPTION =~ "K" ]]; then
+		echo -e "Now, you can check int-to-char conversions of the ASCII standard effortlessly. Simply run($ANYWHERE): $DFILENAME"
 	fi
 
 
@@ -155,7 +205,8 @@ else
 
 #...more instructions(how to configure).................. #
 
-	if [[ $OPTION =~ "d" || $OPTION =~ "D" || $OPTION =~ "4" || $OPTION =~ "e" || $OPTION =~ "E" || $OPTION =~ "5" ]]; then
+	if [[ $OPTION =~ "d" || $OPTION =~ "D" || $OPTION =~ "e" || $OPTION =~ "E" ]]; then
+		echo ""
 		echo "ONE more step. RUN: vi $TILDE$SHOW/$DFILENAME"
 		echo "When you open it you will replace <YOUR_GUTHUB_USERNAME> with your github username."
 		echo "You will also replace <YOUR_PERSONAL_ACCESS_TOKEN> with your classic token."

@@ -63,18 +63,18 @@ typedef struct builtIn_s
 } builtIn_s;
 
 /**
- * struct Helps - struct for built ins
+ * struct Helps_strct - struct for built ins
  * @built: built in command
  * @h: help function of built in
  *
  * Description: Struct for calling built in functions
  *
  */
-typedef struct Helps
+typedef struct Helps_strct
 {
 	char *built;
 	void (*h)(void);
-} helps;
+} helps_s;
 
 char *fetchEnviron(const char *name, char **env);
 char *searchPath(char *cmd, char **env, shellDType *shellVar);
@@ -158,6 +158,8 @@ char *stringCatenator(char *s1, char *s2);
 char *stringCatenatorFol();
 char stringCatenatorFol2(char *sx, char *sy, int k);
 char stringCopyFol(char *destinatn, char *source, int i);
+void printCmt(int chk);
+
 
 
 

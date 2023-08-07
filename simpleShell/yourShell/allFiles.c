@@ -1,5 +1,27 @@
 #include "shell.h"
 
+/* ................................NUM 22 START..............................*/
+/**
+ * string_reverse - Reverses string
+ * @s: str to rev
+ */
+void printCmt(int chk)
+{
+        switch (chk)
+        {
+                case 1:
+                        printCmt(1)
+;                        break;
+                case 2:
+                        write(2, "\n", 1);
+                        break;
+                case 3:
+                        write(2, "\n", 1);
+                        break;
+        }
+}
+/* ................................NUM 22 END................................*/
+
 /* ................................NUM 1 START..............................*/
 /**
  * string_reverse - Reverses string
@@ -116,17 +138,17 @@ int errorSetStr(int errn, shellDType *shellVar, int exnum)
 
         concA = stringCatenator(hshname, coluspc);
         if (!concA) /*hsh: */
-                return (write(2, "Memory Error", 22), -1);
+                return (printCmt(1), -1);
 
         if (errn == 7) /* Alloc Error */
         {
                 concB = stringCatenator(concA, err[errn]); /*hsh: cnt: error*/
                 if (!concB)
-                        return (freeCharFoluke(concA), write(2, "Memory Error", 22), -1);
+                        return (freeCharFoluke(concA), printCmt(1), -1);
                 freeCharFoluke(concA);
                 while (concB[z] != 0)
                         z++;
-                write(2, concB, z), write(2, "\n", 1);
+                write(2, concB, z), printCmt(2);
                 freeCharFoluke(concB);
                 return (0);
 
@@ -134,42 +156,42 @@ int errorSetStr(int errn, shellDType *shellVar, int exnum)
 
         nustr = intToAlp(cnt);
         if (!nustr)  /* number to string */
-                return (freeCharFoluke(concA), write(2, "Memory Error", 22), -1);
+                return (freeCharFoluke(concA), printCmt(1), -1);
 
         concB = stringCatenator(concA, nustr);
         if (!concB) /*hsh: cnt*/
         {
-                write(2, "Memory Error", 22);
+                printCmt(1);
                 return (freeCharFoluke(concA), freeCharFoluke(nustr),  -1);
         }
         freeCharFoluke(concA), freeCharFoluke(nustr);
 
         concA = stringCatenator(concB, coluspc);
         if (!concA) /*hsh: cnt: */
-                return (freeCharFoluke(concB), write(2, "Memory Error", 22), -1);
+                return (freeCharFoluke(concB), printCmt(1), -1);
 
         freeCharFoluke(concB);
         concB = stringCatenator(concA, cmd);
         if (!concB) /*hsh: cnt: cmd*/
-                return (freeCharFoluke(concA), write(2, "Memory Error", 22), -1);
+                return (freeCharFoluke(concA), printCmt(1), -1);
         freeCharFoluke(concA);
 
         concA = stringCatenator(concB, coluspc);
         if (!concA) /*hsh: cnt: cmd: */
-                return (freeCharFoluke(concB), write(2, "Memory Error", 22), -1);
+                return (freeCharFoluke(concB), printCmt(1), -1);
         freeCharFoluke(concB);
 
         concB = stringCatenator(concA, err[errn]);
         if (!concB) /*hsh: cnt: cmd: error*/
-                return (freeCharFoluke(concA), write(2, "Memory Error", 22), -1);
+                return (freeCharFoluke(concA), printCmt(1), -1);
         freeCharFoluke(concA);
 
         if (errn > 1 && errn < 6 && errn != 3)
                 concB = errorSub(errn, concB, optn[1]);
         if (concB == NULL)
         {
-                write(2, "Memory Error", 22);
-                return (-1);
+                printCmt(1)
+;                return (-1);
         }
 
         while (concB[z] != 0)
@@ -197,8 +219,8 @@ char *errorSub(int errn, char *concB, char *optn)
                 concA = stringCatenator(concB, coluspc);
                 if (!concA) /*hsh: cnt: cmd: error: */
                 {
-                        write(2, "Memory Error", 22);
-                        return (freeCharFoluke(concB), NULL);
+                        printCmt(1)
+;                        return (freeCharFoluke(concB), NULL);
                 }
                 freeCharFoluke(concB);
 
@@ -206,8 +228,8 @@ char *errorSub(int errn, char *concB, char *optn)
 
                 if (!concB) /*hsh: cnt: cmd: error: optn*/
                 {
-                        write(2, "Memory Error", 22);
-                        return (freeCharFoluke(concA), NULL);
+                        printCmt(1)
+;                        return (freeCharFoluke(concA), NULL);
                 }
                 freeCharFoluke(concA);
         }
@@ -216,8 +238,8 @@ char *errorSub(int errn, char *concB, char *optn)
                 concA = stringCatenator(concB, optn);
                 if (!concA) /*hsh: cnt: cmd: error optn*/
                 {
-                        write(2, "Memory Error", 22);
-                        return (freeCharFoluke(concB), NULL);
+                        printCmt(1)
+;                        return (freeCharFoluke(concB), NULL);
                 }
                 freeCharFoluke(concB);
                 return (concA);
@@ -962,7 +984,7 @@ int fetchLine(char **buffer, size_t *bufsize, int fd)
         {
                 buff = malloc(sizeof(char) * size);
                 if (!buff)
-                        return (write(2, "Memory Error", 22), 0);
+                        return (printCmt(1), 0);
                 *buffer = buff;
         }
         buff = memorySet(buff, '\0', size);
@@ -978,7 +1000,7 @@ int fetchLine(char **buffer, size_t *bufsize, int fd)
                         sizeold = size, size += BSIZE;
                         buff = reAllocateFunc(buff, sizeold, size);
                         if (!buff)
-                                return (write(2, "Memory Error", 22), 0);
+                                return (printCmt(1), 0);
                 }
                 for (; x < len; x++)
                 {
@@ -1258,7 +1280,7 @@ void hlpSetEnvironFol(void)
 ssize_t hlpComnd(shellDType *shellVar)
 {
         int check = 1, bchck = 0;
-        helps help[] = {
+        helps_s help[] = {
                 {"exit", hlpExitFunc},
                 {"env", hlpEnviron},
                 {"setenv", hlpSetEnviron},
@@ -1732,9 +1754,7 @@ char *stringDuplicateFunc(char *str)
         return (arr);
 }
 
-/* ................................NUM 21 START..............................*/
-/* ................................NUM 21 BTW................................*/
-/* ................................NUM 21 END................................*/
+
 /**
  * stringTokenizeFunc - tokenizes a string
  *
