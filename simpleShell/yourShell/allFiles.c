@@ -9,16 +9,16 @@
  */
 void string_reverse(char *s)
 {
-        int x = 0, y = 0, z;
-        char tempVar = 'A';
+	int x = 0, y = 0, z;
+	char tempVar = 'A';
 
-        while (s[x])
-                x++;
-        z = x / 2, x = x - 1;
-        while (x >= z)
-        {
-                string_reverseSub(s, tempVar, x, y);
-        }
+	while (s[x])
+		x++;
+	z = x / 2, x = x - 1;
+	while (x >= z)
+	{
+		string_reverseSub(s, tempVar, x, y);
+	}
 }
 
 /* ................................NUM 1 BTW................................*/
@@ -28,10 +28,10 @@ void string_reverse(char *s)
  */
 void string_reverseSub(char *s, char tempVar, int x, int y)
 {
-        tempVar  = s[y];
-        s[y] = s[x];
-        s[x] = tempVar;
-        x--, y++;
+	tempVar  = s[y];
+	s[y] = s[x];
+	s[x] = tempVar;
+	x--, y++;
 }
 /* ................................NUM 1 END................................*/
 
@@ -43,7 +43,7 @@ void string_reverseSub(char *s, char tempVar, int x, int y)
 
 void freeCharFoluke(char *temp)
 {
-        free(temp);
+	free(temp);
 }
 /* ................................NUM 2 END................................*/
 
@@ -57,12 +57,12 @@ void freeCharFoluke(char *temp)
  */
 int lenBTen(unsigned long int n, unsigned long int base)
 {
-        unsigned long int x, negNum = 0, ret;
+	unsigned long int x, negNum = 0, ret;
 
-        for (x = 0; n > 0; x++)
-                n = n / base;
-        ret = x + negNum;
-        return (ret);
+	for (x = 0; n > 0; x++)
+		n = n / base;
+	ret = x + negNum;
+	return (ret);
 }
 
 
@@ -73,28 +73,29 @@ int lenBTen(unsigned long int n, unsigned long int base)
  */
 char *intToAlp(int n)
 {
-        unsigned long int x = 0, base = 10;
-        char *str;
+	unsigned long int x = 0, base = 10;
+	char *str;
 
-        if (n != 0)
-                str = malloc(lenBTen(n, base) + 1);
-        else
-                str = malloc(2), str[x] = '0', x++;
+	if (n != 0)
+		str = malloc(lenBTen(n, base) + 1);
+	else
+		str = malloc(2), str[x] = '0', x++;
 
-        if (str == 0)
-                return (0);
+	if (str == 0)
+		return (0);
 
-        for (; n > 0; x++)
-        {
-                str[x] = (n % base) + '0';
-                n = n / base;
-        }
-        str[x] = '\0';
-        string_reverse(str);
-        return (str);
+	for (; n > 0; x++)
+	{
+		str[x] = (n % base) + '0';
+		n = n / base;
+	}
+	str[x] = '\0';
+	string_reverse(str);
+	return (str);
 }
 
 
+/* ................................NUM 24 START..............................*/
 /**
  * errorSetStr - creates str
  * @errn: numb
@@ -104,84 +105,127 @@ char *intToAlp(int n)
  */
 int errorSetStr(int errn, shellDType *shellVar, int exnum)
 {
-        int cnt = shellVar->errnum[0], z = 0;
-        char *cmd = shellVar->cmd, **optn = shellVar->options;
-        char *hshname = shellVar->hshname;
-        char *nustr, *concA, *concB, *coluspc = ": ";
-        char *err[] = {
-                "not found", "Permission denied", "Invalid number",
-                "name is NULL, points to string of length 0, or has an '=' chararacter",
-                "can't cd(change dire) to ", "Invalid optn ", "Help command error",
-                "Error allocating memory", "Wrong Alias",
-                NULL
-        };
+	int cnt = shellVar->errnum[0], z = 0;
+	char *cmd = shellVar->cmd, **optn = shellVar->options;
+	char *hshname = shellVar->hshname;
+	char *nustr = "brown", *concA = "folu", *concB = "foluke", *coluspc = ": ";
+	char *err[] = {
+		"not found", "Permission denied", "Invalid number",
+		"name is NULL, points to string of length 0, or has an '=' chararacter",
+		"can't cd(change dire) to ", "Invalid optn ", "Help command error",
+		"Error allocating memory", "Wrong Alias", NULL
+	};
 
-        concA = stringCatenator(hshname, coluspc);
-        if (!concA) /*hsh: */
-                return (printCmt(1), -1);
+	errorSetStrFolu1(errn, cnt,  z, hshname, nustr,
+				concA, concB, coluspc, err);
 
-        if (errn == 7) /* Alloc Error */
-        {
-                concB = stringCatenator(concA, err[errn]); /*hsh: cnt: error*/
-                if (!concB)
-                        return (freeCharFoluke(concA), printCmt(1), -1);
-                freeCharFoluke(concA);
-                while (concB[z] != 0)
-                        z++;
-                write(2, concB, z), printCmt(2);
-                freeCharFoluke(concB);
-                return (0);
+	errorSetStrFolu2(errn, concA, concB, coluspc, err, cmd);
 
-        }
+	if (errn > 1 && errn < 6 && errn != 3)
+		concB = errorSub(errn, concB, optn[1]);
+	if (concB == NULL)
+	{
+		printCmt(1);
+		return (-1);
+	}
 
-        nustr = intToAlp(cnt);
-        if (!nustr)  /* number to string */
-                return (freeCharFoluke(concA), printCmt(1), -1);
-
-        concB = stringCatenator(concA, nustr);
-        if (!concB) /*hsh: cnt*/
-        {
-                printCmt(1);
-                return (freeCharFoluke(concA), freeCharFoluke(nustr),  -1);
-        }
-        freeCharFoluke(concA), freeCharFoluke(nustr);
-
-        concA = stringCatenator(concB, coluspc);
-        if (!concA) /*hsh: cnt: */
-                return (freeCharFoluke(concB), printCmt(1), -1);
-
-        freeCharFoluke(concB);
-        concB = stringCatenator(concA, cmd);
-        if (!concB) /*hsh: cnt: cmd*/
-                return (freeCharFoluke(concA), printCmt(1), -1);
-        freeCharFoluke(concA);
-
-        concA = stringCatenator(concB, coluspc);
-        if (!concA) /*hsh: cnt: cmd: */
-                return (freeCharFoluke(concB), printCmt(1), -1);
-        freeCharFoluke(concB);
-
-        concB = stringCatenator(concA, err[errn]);
-        if (!concB) /*hsh: cnt: cmd: error*/
-                return (freeCharFoluke(concA), printCmt(1), -1);
-        freeCharFoluke(concA);
-
-        if (errn > 1 && errn < 6 && errn != 3)
-                concB = errorSub(errn, concB, optn[1]);
-        if (concB == NULL)
-        {
-                printCmt(1);
-                return (-1);
-        }
-
-        while (concB[z] != 0)
-                z++;
-        write(2, concB, z), printCmt(2);
-        freeCharFoluke(concB);
-        shellVar->exitnum[0] = exnum;
-        return (0);
-
+	while (concB[z] != 0)
+		z++;
+	write(2, concB, z), printCmt(2);
+	freeCharFoluke(concB);
+	shellVar->exitnum[0] = exnum;
+	return (0);
 }
+
+/* ................................NUM 24 BTW................................*/
+/**
+ * errorSetStr - creates str
+ * @errn: numb
+ * @shellVar: struct
+ * @exnum: val
+ * Return: 0
+ */
+int errorSetStrFolu2(int errn, char *concA, char *concB,
+						char *coluspc, char *err[], char *cmd)
+{
+	freeCharFoluke(concB);
+	concB = stringCatenator(concA, cmd);
+	if (!concB) /*hsh: cnt: cmd*/
+		return (freeCharFoluke(concA), printCmt(1), -1);
+	freeCharFoluke(concA);
+
+	concA = stringCatenator(concB, coluspc);
+	if (!concA) /*hsh: cnt: cmd: */
+		return (freeCharFoluke(concB), printCmt(1), -1);
+	freeCharFoluke(concB);
+
+	concB = stringCatenator(concA, err[errn]);
+	if (!concB) /*hsh: cnt: cmd: error*/
+		return (freeCharFoluke(concA), printCmt(1), -1);
+	freeCharFoluke(concA);
+	return (0);
+}
+
+/* ................................NUM 24 BTW................................*/
+/**
+ * errorSetStr - creates str
+ * @errn: numb
+ * @shellVar: struct
+ * @exnum: val
+ * Return: 0
+ */
+int errorSetStrFolu1(int errn, int cnt, int  z, char *hshname, char *nustr,
+				char *concA, char *concB, char *coluspc, char *err[])
+{
+	concA = stringCatenator(hshname, coluspc);
+	if (!concA) /*hsh: */
+		return (printCmt(1), -1);
+
+	if (errn == 7) /* Alloc Error */
+		errorSetStrFolu(errn, z, concA, concB, err);
+
+	nustr = intToAlp(cnt);
+	if (!nustr)  /* number to string */
+		return (freeCharFoluke(concA), printCmt(1), -1);
+
+	concB = stringCatenator(concA, nustr);
+	if (!concB) /*hsh: cnt*/
+	{
+		printCmt(1);
+		return (freeCharFoluke(concA), freeCharFoluke(nustr),  -1);
+	}
+	freeCharFoluke(concA), freeCharFoluke(nustr);
+
+	concA = stringCatenator(concB, coluspc);
+	if (!concA) /*hsh: cnt: */
+		return (freeCharFoluke(concB), printCmt(1), -1);
+	return (0);
+}
+
+
+/* ................................NUM 24 BTW................................*/
+/**
+ * errorSetStr - creates str
+ * @errn: numb
+ * @shellVar: struct
+ * @exnum: val
+ * Return: 0
+ */
+int errorSetStrFolu(int errn, int z, char *concA, char *concB, char *err[])
+{
+		concB = stringCatenator(concA, err[errn]); /*hsh: cnt: error*/
+		if (!concB)
+			return (freeCharFoluke(concA), printCmt(1), -1);
+		freeCharFoluke(concA);
+		while (concB[z] != 0)
+			z++;
+		write(2, concB, z), printCmt(2);
+		freeCharFoluke(concB);
+		return (0);
+}
+/* ................................NUM 24 END................................*/
+
+
 /**
  * errorSub - extra modes
  * @errn: number
@@ -191,40 +235,40 @@ int errorSetStr(int errn, shellDType *shellVar, int exnum)
  */
 char *errorSub(int errn, char *concB, char *optn)
 {
-        char *concA, *coluspc = ": ";
+	char *concA, *coluspc = ": ";
 
-        if (errn == 2) /* exit error */
-        {
+	if (errn == 2) /* exit error */
+	{
 
-                concA = stringCatenator(concB, coluspc);
-                if (!concA) /*hsh: cnt: cmd: error: */
-                {
-                        printCmt(1);
-                        return (freeCharFoluke(concB), NULL);
-                }
-                freeCharFoluke(concB);
+		concA = stringCatenator(concB, coluspc);
+		if (!concA) /*hsh: cnt: cmd: error: */
+		{
+			printCmt(1);
+			return (freeCharFoluke(concB), NULL);
+		}
+		freeCharFoluke(concB);
 
-                concB = stringCatenator(concA, optn);
+		concB = stringCatenator(concA, optn);
 
-                if (!concB) /*hsh: cnt: cmd: error: optn*/
-                {
-                        printCmt(1);
-                        return (freeCharFoluke(concA), NULL);
-                }
-                freeCharFoluke(concA);
-        }
-        if (errn > 3) /* Errors with options at end */
-        {
-                concA = stringCatenator(concB, optn);
-                if (!concA) /*hsh: cnt: cmd: error optn*/
-                {
-                        printCmt(1);
-                        return (freeCharFoluke(concB), NULL);
-                }
-                freeCharFoluke(concB);
-                return (concA);
-        }
-        return (concB);
+		if (!concB) /*hsh: cnt: cmd: error: optn*/
+		{
+			printCmt(1);
+			return (freeCharFoluke(concA), NULL);
+		}
+		freeCharFoluke(concA);
+	}
+	if (errn > 3) /* Errors with options at end */
+	{
+		concA = stringCatenator(concB, optn);
+		if (!concA) /*hsh: cnt: cmd: error optn*/
+		{
+			printCmt(1);
+			return (freeCharFoluke(concB), NULL);
+		}
+		freeCharFoluke(concB);
+		return (concA);
+	}
+	return (concB);
 }
 
 
@@ -235,67 +279,67 @@ char *errorSub(int errn, char *concB, char *optn)
  */
 ssize_t exitCmdFunc(shellDType *shellVar)
 {
-        long exit_value;
+	long exit_value;
 
-        if (shellVar->options[1] == NULL || isNumba(shellVar->options[1]))
-        {
-                exit_value = atoiFol(shellVar->options[1]);
+	if (shellVar->options[1] == NULL || isNumba(shellVar->options[1]))
+	{
+		exit_value = atoiFol(shellVar->options[1]);
 
-                if (exit_value >= 0 && exit_value < INT_MAX)
-                {
-                        if (exit_value > 255)
-                                exit_value %= 256;
-                        if (shellVar->options[1] == NULL)
-                                exit_value = shellVar->exitnum[0];
-                        free(*(shellVar->options));
-                        free(shellVar->options);
-                        if (*(shellVar->envCpy))
-                                freeDobleCharPntrFoluke(*(shellVar->envCpy));
-                        free(shellVar);
-                        exit(exit_value);
-                }
-        }
-        errorSetStr(2, shellVar, 2);
-        free(shellVar->options);
-        return (-1);
+		if (exit_value >= 0 && exit_value < INT_MAX)
+		{
+			if (exit_value > 255)
+				exit_value %= 256;
+			if (shellVar->options[1] == NULL)
+				exit_value = shellVar->exitnum[0];
+			free(*(shellVar->options));
+			free(shellVar->options);
+			if (*(shellVar->envCpy))
+				freeDobleCharPntrFoluke(*(shellVar->envCpy));
+			free(shellVar);
+			exit(exit_value);
+		}
+	}
+	errorSetStr(2, shellVar, 2);
+	free(shellVar->options);
+	return (-1);
 }
 
 /**
  * envCmd - env command
  * @shellVar: struct
- * Return: 1 
+ * Return: 1
  */
 ssize_t envCmd(shellDType *shellVar)
 {
-        char **str;
-        int chckr = 1;
+	char **str;
+	int chckr = 1;
 
-        if (*(shellVar->envCpy) == NULL)
-        {
-                printCmt(3);
-                shellVar->exitnum[0] = 2;
-                free(shellVar->options);
-                return (-1);
-        }
+	if (*(shellVar->envCpy) == NULL)
+	{
+		printCmt(3);
+		shellVar->exitnum[0] = 2;
+		free(shellVar->options);
+		return (-1);
+	}
 
-        str = *(shellVar->envCpy);
+	str = *(shellVar->envCpy);
 
-        if (shellVar->options[1] == NULL)
-        {
-                for (; str && *str; str++)
-                {
-                        write(1, *str, stringLengthFunc(*str));
-                        printCmt(2);
-                }
-        }
-        else
-        {
-                errorSetStr(0, shellVar, 2);
-                chckr = -1;
-        }
+	if (shellVar->options[1] == NULL)
+	{
+		for (; str && *str; str++)
+		{
+			write(1, *str, stringLengthFunc(*str));
+			printCmt(2);
+		}
+	}
+	else
+	{
+		errorSetStr(0, shellVar, 2);
+		chckr = -1;
+	}
 
-        free(shellVar->options);
-        return (chckr);
+	free(shellVar->options);
+	return (chckr);
 }
 /**
  * setEnvironCmd - setenv command
@@ -304,40 +348,40 @@ ssize_t envCmd(shellDType *shellVar)
  */
 ssize_t setEnvironCmd(shellDType *shellVar)
 {
-        char **nenviron, *var1 = NULL, *val1 = NULL;
+	char **nenviron, *var1 = NULL, *val1 = NULL;
 
-        if (shellVar->options[1])
-        {
-                var1 = shellVar->options[1];
-                if (!shellVar->options[2])
-                {
-                        printCmt(4);
-                        shellVar->exitnum[0] = 2;
-                        free(shellVar->options);
-                        return (-1);
-                }
-                else
-                        val1 = shellVar->options[2];
-        }
-        if (var1 == 0)
-        {
-                printCmt(5);
-                shellVar->exitnum[0] = 2;
-                free(shellVar->options);
-                return (-1);
-        }
+	if (shellVar->options[1])
+	{
+		var1 = shellVar->options[1];
+		if (!shellVar->options[2])
+		{
+			printCmt(4);
+			shellVar->exitnum[0] = 2;
+			free(shellVar->options);
+			return (-1);
+		}
+		else
+			val1 = shellVar->options[2];
+	}
+	if (var1 == 0)
+	{
+		printCmt(5);
+		shellVar->exitnum[0] = 2;
+		free(shellVar->options);
+		return (-1);
+	}
 
-        nenviron = setEnvironm(*(shellVar->envCpy), var1, val1, shellVar);
+	nenviron = setEnvironm(*(shellVar->envCpy), var1, val1, shellVar);
 
-        if (nenviron == 0)
-        {
-                free(shellVar->options);
-                return (-1);
-        }
+	if (nenviron == 0)
+	{
+		free(shellVar->options);
+		return (-1);
+	}
 
-        *(shellVar->envCpy) = nenviron;
-        free(shellVar->options);
-        return (1);
+	*(shellVar->envCpy) = nenviron;
+	free(shellVar->options);
+	return (1);
 }
 /**
  * unSetEnvironComnd - unsetenv command
@@ -346,35 +390,35 @@ ssize_t setEnvironCmd(shellDType *shellVar)
  */
 ssize_t unSetEnvironComnd(shellDType *shellVar)
 {
-        char **nenviron, *var1 = NULL;
+	char **nenviron, *var1 = NULL;
 
-        if (shellVar->options[1])
-                var1 = shellVar->options[1];
-        else
-        {
-                shellVar->exitnum[0] = 2;
-                printCmt(6);
-                return (free(shellVar->options), -1);
-        }
+	if (shellVar->options[1])
+		var1 = shellVar->options[1];
+	else
+	{
+		shellVar->exitnum[0] = 2;
+		printCmt(6);
+		return (free(shellVar->options), -1);
+	}
 
-        if (var1 == 0)
-        {
-                free(shellVar->options);
-                return (1);
-        }
+	if (var1 == 0)
+	{
+		free(shellVar->options);
+		return (1);
+	}
 
-        nenviron = unSetEnviron(*(shellVar->envCpy), var1, shellVar);
+	nenviron = unSetEnviron(*(shellVar->envCpy), var1, shellVar);
 
-        if (nenviron == 0 && shellVar->unsetnull[0] == 0)
-        {
-                free(shellVar->options);
-                shellVar->exitnum[0] = 2;
-                return (-1);
-        }
+	if (nenviron == 0 && shellVar->unsetnull[0] == 0)
+	{
+		free(shellVar->options);
+		shellVar->exitnum[0] = 2;
+		return (-1);
+	}
 
-        *(shellVar->envCpy) = nenviron;
-        free(shellVar->options);
-        return (1);
+	*(shellVar->envCpy) = nenviron;
+	free(shellVar->options);
+	return (1);
 }
 
 /**
@@ -384,28 +428,28 @@ ssize_t unSetEnvironComnd(shellDType *shellVar)
  */
 ssize_t chckBuiltIn(shellDType *shellVar)
 {
-        builtIn_s ops[] = {
-                {"exit", exitCmdFunc},
-                {"env", envCmd},
-                {"setenv", setEnvironCmd},
-                {"unsetenv", unSetEnvironComnd},
-                {"cd", cDirCmnd},
-                {"help", hlpComnd}
-        };
+	builtIn_s ops[] = {
+		{"exit", exitCmdFunc},
+		{"env", envCmd},
+		{"setenv", setEnvironCmd},
+		{"unsetenv", unSetEnvironComnd},
+		{"cd", cDirCmnd},
+		{"help", hlpComnd}
+	};
 
-        int x = 6, builtcheck; /* lenght of ops array */
+	int x = 6, builtcheck; /* lenght of ops array */
 
-        while (x--)
-                if (!stringCompare(shellVar->cmd, ops[x].cmd))
-                {
-                        shellVar->errnum[0] += 1;
-                        builtcheck = ops[x].f(shellVar);
-                        if (builtcheck == 1)
-                                shellVar->exitnum[0] = 0;
-                        return (builtcheck);
-                }
+	while (x--)
+		if (!stringCompare(shellVar->cmd, ops[x].cmd))
+		{
+			shellVar->errnum[0] += 1;
+			builtcheck = ops[x].f(shellVar);
+			if (builtcheck == 1)
+				shellVar->exitnum[0] = 0;
+			return (builtcheck);
+		}
 
-        return (0);
+	return (0);
 }
 
 
@@ -419,14 +463,14 @@ ssize_t chckBuiltIn(shellDType *shellVar)
  */
 char *secAuxCd(shellDType *shellVar, char *curDir)
 {
-        char *home, *dire = NULL;
+	char *home, *dire = NULL;
 
-        (void) curDir;
-        home = fetchEnviron("HOME", *(shellVar->envCpy));
-        if (home)
-                dire = secAuxCdFol(home, dire);
+	(void) curDir;
+	home = fetchEnviron("HOME", *(shellVar->envCpy));
+	if (home)
+		dire = secAuxCdFol(home, dire);
 
-        return (dire);
+	return (dire);
 }
 /* ................................NUM 3 BTW................................*/
 /**
@@ -437,8 +481,8 @@ char *secAuxCd(shellDType *shellVar, char *curDir)
  */
 char *secAuxCdFol(char *home, char *dire)
 {
-        dire = home + 5;
-        return (dire);
+	dire = home + 5;
+	return (dire);
 }
 /* ................................NUM 3 END................................*/
 
@@ -451,30 +495,30 @@ char *secAuxCdFol(char *home, char *dire)
  */
 char *firstAuxCd(shellDType *shellVar, char *curDir)
 {
-        char *oldpwd2 = NULL, *oldpwDir = NULL, *dire = NULL;
+	char *oldpwd2 = NULL, *oldpwDir = NULL, *dire = NULL;
 
-        if (shellVar->options[1] && shellVar->options[2])
-        {
-                printCmt(7);
-                shellVar->exitnum[0] = 2;
-                free(shellVar->options);
-                freeCharFoluke(curDir);
-                return (dire);
-        }
+	if (shellVar->options[1] && shellVar->options[2])
+	{
+		printCmt(7);
+		shellVar->exitnum[0] = 2;
+		free(shellVar->options);
+		freeCharFoluke(curDir);
+		return (dire);
+	}
 
-        oldpwd2 = stringDuplicateFunc(fetchEnviron("OLDPWD", *(shellVar->envCpy)));
-        if (oldpwd2)
-                oldpwDir = stringDuplicateFunc(oldpwd2 + 7), free(oldpwd2);
-        if (!oldpwd2)
-        {
-                oldpwDir = stringDuplicateFunc(curDir);
-                /* free(oldpwDir), free(shellVar->options), free(curDir); */
-                /* return (shellVar->exitnum[0] = 2, NULL); */
-        }
+	oldpwd2 = stringDuplicateFunc(fetchEnviron("OLDPWD", *(shellVar->envCpy)));
+	if (oldpwd2)
+		oldpwDir = stringDuplicateFunc(oldpwd2 + 7), free(oldpwd2);
+	if (!oldpwd2)
+	{
+		oldpwDir = stringDuplicateFunc(curDir);
+		/* free(oldpwDir), free(shellVar->options), free(curDir); */
+		/* return (shellVar->exitnum[0] = 2, NULL); */
+	}
 
-        dire = oldpwDir;
+	dire = oldpwDir;
 
-        return (dire);
+	return (dire);
 }
 
 /**
@@ -484,46 +528,46 @@ char *firstAuxCd(shellDType *shellVar, char *curDir)
  */
 ssize_t cDirCmnd(shellDType *shellVar)
 {
-        char *curDir = NULL, *dire = NULL, **nenviron, *oldpwDir = NULL;
-        int exit = 1, chckr = 1, checkerSubtrctn = 0;
+	char *curDir = NULL, *dire = NULL, **nenviron, *oldpwDir = NULL;
+	int exit = 1, chckr = 1, checkerSubtrctn = 0;
 
-        curDir = getcwd(NULL, 4096);
-        if (!curDir)
-                return (errorSetStr(4, shellVar, 2), free(shellVar->options), -1);
-        if (!shellVar->options[1] ||
-                        (shellVar->options[1] && (!stringCompare(shellVar->options[1], "~"))))
-        {
-                dire = secAuxCd(shellVar, curDir);
-                if (!dire)
-                        return (free(shellVar->options), freeCharFoluke(curDir), 1);
-        }
-        else
-                if (!stringCompare(shellVar->options[1], "-"))
-                {
-                        dire = firstAuxCd(shellVar, curDir);
-                        if (!dire)
-                                return (free(shellVar->options), freeCharFoluke(curDir), 1);
-                        checkerSubtrctn = 1;
-                }
-                else
-                        dire = shellVar->options[1];
-        if (dire)
-                chckr = chdir(dire);
-        if (chckr == 0 && checkerSubtrctn == 1)
-                write(1, dire, stringLengthFunc(dire)), printCmt(2);
-        if (chckr != 0)
-                errorSetStr(4, shellVar, 2), exit = -1;
-        else
-        {
-                nenviron = setEnvironm(*(shellVar->envCpy), "PWD", dire, shellVar);
-                *(shellVar->envCpy) = nenviron;
-                nenviron = setEnvironm(*(shellVar->envCpy), "OLDPWD", curDir, shellVar);
-                *(shellVar->envCpy) = nenviron;
-        }
-        free(shellVar->options), freeCharFoluke(curDir), freeCharFoluke(oldpwDir);
-        if (checkerSubtrctn == 1)
-                freeCharFoluke(dire);
-        return (exit);
+	curDir = getcwd(NULL, 4096);
+	if (!curDir)
+		return (errorSetStr(4, shellVar, 2), free(shellVar->options), -1);
+	if (!shellVar->options[1] ||
+			(shellVar->options[1] && (!stringCompare(shellVar->options[1], "~"))))
+	{
+		dire = secAuxCd(shellVar, curDir);
+		if (!dire)
+			return (free(shellVar->options), freeCharFoluke(curDir), 1);
+	}
+	else
+		if (!stringCompare(shellVar->options[1], "-"))
+		{
+			dire = firstAuxCd(shellVar, curDir);
+			if (!dire)
+				return (free(shellVar->options), freeCharFoluke(curDir), 1);
+			checkerSubtrctn = 1;
+		}
+		else
+			dire = shellVar->options[1];
+	if (dire)
+		chckr = chdir(dire);
+	if (chckr == 0 && checkerSubtrctn == 1)
+		write(1, dire, stringLengthFunc(dire)), printCmt(2);
+	if (chckr != 0)
+		errorSetStr(4, shellVar, 2), exit = -1;
+	else
+	{
+		nenviron = setEnvironm(*(shellVar->envCpy), "PWD", dire, shellVar);
+		*(shellVar->envCpy) = nenviron;
+		nenviron = setEnvironm(*(shellVar->envCpy), "OLDPWD", curDir, shellVar);
+		*(shellVar->envCpy) = nenviron;
+	}
+	free(shellVar->options), freeCharFoluke(curDir), freeCharFoluke(oldpwDir);
+	if (checkerSubtrctn == 1)
+		freeCharFoluke(dire);
+	return (exit);
 }
 
 /* ................................500..............................*/
@@ -541,12 +585,12 @@ ssize_t cDirCmnd(shellDType *shellVar)
  */
 long powerFunc(long base, long pot)
 {
-        long x = 0, res = 1;
+	long x = 0, res = 1;
 
-        for (x = 0; x < pot; x++)
-                powerFuncFol(base, res);
+	for (x = 0; x < pot; x++)
+		powerFuncFol(base, res);
 
-        return (res);
+	return (res);
 }
 
 /* ................................NUM 4 BTW................................*/
@@ -558,8 +602,8 @@ long powerFunc(long base, long pot)
  */
 long powerFuncFol(long base, long res)
 {
-        res *= base;
-        return (res);
+	res *= base;
+	return (res);
 }
 /* ................................NUM 4 END................................*/
 
@@ -574,30 +618,30 @@ long powerFuncFol(long base, long res)
 
 long atoiFol(char *s)
 {
-        long x = 0, k = 0, len = 0, toRet = 0, subtracn = 0, offset = 48;                                       
-        unsigned long result = 0;
-        
+	long x = 0, k = 0, len = 0, toRet = 0, subtracn = 0, offset = 48;
+	unsigned long result = 0;
 
-        if (!s)
-                return (0);
 
-        for (x = 0; *(s + x) != '\0'; x++)
-        {
-                if (*(s + x) >= 48 && *(s + x) <= 57)
-                        len++;
-                else if (len != 0)
-                        break;
+	if (!s)
+		return (0);
 
-                if (*(s + x) == '-')
-                        subtracn = atoiFolFol(subtracn);
-        }
+	for (x = 0; *(s + x) != '\0'; x++)
+	{
+		if (*(s + x) >= 48 && *(s + x) <= 57)
+			len++;
+		else if (len != 0)
+			break;
 
-        for (x--; len > 0; x--, k++, len--)
-                result +=  (*(s + x) - offset) * powerFunc(10, k);
+		if (*(s + x) == '-')
+			subtracn = atoiFolFol(subtracn);
+	}
 
-        toRet = (subtracn % 2 != 0) ? result * (-1) : result;
+	for (x--; len > 0; x--, k++, len--)
+		result +=  (*(s + x) - offset) * powerFunc(10, k);
 
-        return (toRet);
+	toRet = (subtracn % 2 != 0) ? result * (-1) : result;
+
+	return (toRet);
 }
 
 /* ................................NUM 5 BTW................................*/
@@ -609,7 +653,7 @@ long atoiFol(char *s)
 
 long atoiFolFol(long subtracn)
 {
-       return (subtracn++);
+	return (subtracn++);
 }
 /* ................................NUM 5 END................................*/
 
@@ -624,13 +668,13 @@ long atoiFolFol(long subtracn)
  */
 int stringCompare(char *s1, char *s2)
 {
-        int x = 0, eql = 0;
+	int x = 0, eql = 0;
 
-        for (x = 0; (*(s1 + x) || *(s2 + x)) && !eql; x++)
-                if (*(s1 + x) != *(s2 + x))
-                        eql = stringCompareFol(s1, s2, x);
+	for (x = 0; (*(s1 + x) || *(s2 + x)) && !eql; x++)
+		if (*(s1 + x) != *(s2 + x))
+			eql = stringCompareFol(s1, s2, x);
 
-        return (eql);
+	return (eql);
 }
 /* ................................NUM 6 BTW................................*/
 /**
@@ -642,10 +686,10 @@ int stringCompare(char *s1, char *s2)
  */
 int stringCompareFol(char *s1, char *s2, int x)
 {
-        int eql;
-        
-        eql = *(s1 + x) - *(s2 + x);
-        return (eql);
+	int eql;
+
+	eql = *(s1 + x) - *(s2 + x);
+	return (eql);
 }
 /* ................................NUM 6 END................................*/
 
@@ -657,20 +701,20 @@ int stringCompareFol(char *s1, char *s2, int x)
  */
 int isDigitFunc(int c)
 {
-        return ((c >= 48 && c <= 57) ? 1 : 0);
+	return ((c >= 48 && c <= 57) ? 1 : 0);
 }
 
 /**
  * isNumba - checks if a str has numbers
  * @s: str
- * Return: 1 
+ * Return: 1
  */
 int isNumba(char *s)
 {
-        for (; *s; s++)
-                if (!isDigitFunc(*s))
-                        return (0);
-        return (1);
+	for (; *s; s++)
+		if (!isDigitFunc(*s))
+			return (0);
+	return (1);
 }
 
 
@@ -684,48 +728,48 @@ int isNumba(char *s)
  * Return: On success 1.
  */
 char **chckInputFunc(int ac, char **av, size_t *bufsize,
-                   char **buffer, shellDType *shellVar)
+		   char **buffer, shellDType *shellVar)
 {
-        ssize_t charctrs;
-        char **command;
-        int exitnum;
+	ssize_t charctrs;
+	char **command;
+	int exitnum;
 
-        if (ac == 1)
-        {
-                if (isatty(STDIN_FILENO))
-                        printCmt(8);
-                charctrs = getline(buffer, bufsize, stdin);
+	if (ac == 1)
+	{
+		if (isatty(STDIN_FILENO))
+			printCmt(8);
+		charctrs = getline(buffer, bufsize, stdin);
 
-                if (charctrs == -1)
-                {
-                        exitnum = shellVar->exitnum[0];
-                        freeCharFoluke(*buffer);
-                        if (*(shellVar->envCpy))
-                                freeDobleCharPntrFoluke(*(shellVar->envCpy));
-                        free(shellVar);
-                        if (isatty(STDIN_FILENO))
-                                printCmt(2);
-                        exit(exitnum);
-                }
-                if (**buffer == '#' || !charctrs || **buffer == '\n')
-                        return (NULL);
-                *buffer = delComnt(*buffer);
-                command = fetchParam(*buffer, shellVar);
-        }
-        else
-        {
-                command = malloc(sizeof(char *) * (ac - 1));
-                if (!command)
-                {
-                        errorSetStr(7, shellVar, 1);
-                        return (NULL);
-                }
+		if (charctrs == -1)
+		{
+			exitnum = shellVar->exitnum[0];
+			freeCharFoluke(*buffer);
+			if (*(shellVar->envCpy))
+				freeDobleCharPntrFoluke(*(shellVar->envCpy));
+			free(shellVar);
+			if (isatty(STDIN_FILENO))
+				printCmt(2);
+			exit(exitnum);
+		}
+		if (**buffer == '#' || !charctrs || **buffer == '\n')
+			return (NULL);
+		*buffer = delComnt(*buffer);
+		command = fetchParam(*buffer, shellVar);
+	}
+	else
+	{
+		command = malloc(sizeof(char *) * (ac - 1));
+		if (!command)
+		{
+			errorSetStr(7, shellVar, 1);
+			return (NULL);
+		}
 
-                command[ac - 1] = '\0';
-                while (ac--)
-                        command[ac - 1] = av[ac];
-        }
-        return (command);
+		command[ac - 1] = '\0';
+		while (ac--)
+			command[ac - 1] = av[ac];
+	}
+	return (command);
 }
 
 
@@ -738,16 +782,16 @@ char **chckInputFunc(int ac, char **av, size_t *bufsize,
  */
 char *delComnt(char *str)
 {
-        char *C_org = str;
+	char *C_org = str;
 
-        for (; str && *str; str++)
-                if (*str == '#' && *(str - 1) == ' ')
-                {
-                        *str = delComntFol(*str);
-                        break;
-                }
+	for (; str && *str; str++)
+		if (*str == '#' && *(str - 1) == ' ')
+		{
+			*str = delComntFol(*str);
+			break;
+		}
 
-        return (C_org);
+	return (C_org);
 }
 /* ................................NUM 7 BTW................................*/
 /**
@@ -757,8 +801,8 @@ char *delComnt(char *str)
  */
 char delComntFol(char str)
 {
-        str = '\0';
-        return (str);
+	str = '\0';
+	return (str);
 }
 /* ................................NUM 7 END................................*/
 
@@ -773,39 +817,39 @@ char delComntFol(char str)
  */
 int excuteCmd(char *program, char *command[], char **env, shellDType *shellVar)
 {
-        pid_t prcss, sttus;
-        int execSts = 0, wait1_Sts = 0;
+	pid_t prcss, sttus;
+	int execSts = 0, wait1_Sts = 0;
 
-        prcss = fork();
-        signal(SIGINT, sigHandlr2);
-        if (prcss == -1)
-        {
-                printCmt(9);
-                exit(-1);
-        }
-        if (prcss == 0)
-        {
+	prcss = fork();
+	signal(SIGINT, sigHandlr2);
+	if (prcss == -1)
+	{
+		printCmt(9);
+		exit(-1);
+	}
+	if (prcss == 0)
+	{
 
-                execSts = execve(program, command, env);
-                if (execSts == -1)
-                {
-                        _exit(-1);
-                }
-        }
-        else
-        {
-                wait1_Sts = wait(&sttus);
-                signal(SIGINT, sigHandlr);
-                if (wait1_Sts == -1)
-                        exit(-1);
-                if (WEXITSTATUS(sttus) == 0)
-                        shellVar->exitnum[0] = 0;
-                else
-                        shellVar->exitnum[0] = 2;
-        }
+		execSts = execve(program, command, env);
+		if (execSts == -1)
+		{
+			_exit(-1);
+		}
+	}
+	else
+	{
+		wait1_Sts = wait(&sttus);
+		signal(SIGINT, sigHandlr);
+		if (wait1_Sts == -1)
+			exit(-1);
+		if (WEXITSTATUS(sttus) == 0)
+			shellVar->exitnum[0] = 0;
+		else
+			shellVar->exitnum[0] = 2;
+	}
 
-        shellVar->errnum[0] += 1;
-        return (0);
+	shellVar->errnum[0] += 1;
+	return (0);
 }
 
 
@@ -818,24 +862,24 @@ int excuteCmd(char *program, char *command[], char **env, shellDType *shellVar)
  */
 char *fetchEnviron(const char *name, char **env)
 {
-        int x, y, check, z = 0;
+	int x, y, check, z = 0;
 
-        if (!env)
-                return (NULL);
+	if (!env)
+		return (NULL);
 
-        while (name[z] != 0)
-                z++;
+	while (name[z] != 0)
+		z++;
 
-        for (x = 0; env[x] != 0; x++)
-        {
-                for (check = 0, y = 0; y < z && env[x][y] != 0; y++)
-                        if (env[x][y] == name[y])
-                                check++;
-                if (check == z && env[x][check] == '=')
-                        return (env[x]);
-        }
+	for (x = 0; env[x] != 0; x++)
+	{
+		for (check = 0, y = 0; y < z && env[x][y] != 0; y++)
+			if (env[x][y] == name[y])
+				check++;
+		if (check == z && env[x][check] == '=')
+			return (env[x]);
+	}
 
-        return (NULL);
+	return (NULL);
 }
 
 
@@ -849,11 +893,11 @@ char *fetchEnviron(const char *name, char **env)
  */
 char *memorySet(char *s, char b, unsigned int n)
 {
-        unsigned int x;
+	unsigned int x;
 
-        for (x = 0; x < n; x++)
-                s[x] = memorySetFol(s, b, x);
-        return (s);
+	for (x = 0; x < n; x++)
+		s[x] = memorySetFol(s, b, x);
+	return (s);
 }
 /* ................................NUM 8 BTW................................*/
 /**
@@ -865,8 +909,8 @@ char *memorySet(char *s, char b, unsigned int n)
  */
 char memorySetFol(char *s, char b, unsigned int x)
 {
-        s[x] = b;
-        return (s[x]);
+	s[x] = b;
+	return (s[x]);
 }
 /* ................................NUM 8 END................................*/
 
@@ -882,11 +926,11 @@ char memorySetFol(char *s, char b, unsigned int x)
  */
 char *memoryCopy(char *dest, char *src, unsigned int n)
 {
-        unsigned int x;
+	unsigned int x;
 
-        for (x = 0; x < n; x++)
-                dest[x] = memoryCopyFol(dest, src, x);
-        return (dest);
+	for (x = 0; x < n; x++)
+		dest[x] = memoryCopyFol(dest, src, x);
+	return (dest);
 }
 /* ................................NUM 9 BTW................................*/
 /**
@@ -899,8 +943,8 @@ char *memoryCopy(char *dest, char *src, unsigned int n)
  */
 char memoryCopyFol(char *dest, char *src, unsigned int x)
 {
-        dest[x] = src[x];
-        return (dest[x]);
+	dest[x] = src[x];
+	return (dest[x]);
 }
 /* ................................NUM 9 END................................*/
 
@@ -913,36 +957,36 @@ char memoryCopyFol(char *dest, char *src, unsigned int x)
  */
 void *reAllocateFunc(void *ptr, unsigned int oldSize, unsigned int nwSize)
 {
-        void *pointr3;
+	void *pointr3;
 
-        if (oldSize == nwSize)
-                return (ptr);
+	if (oldSize == nwSize)
+		return (ptr);
 
-        if (ptr == NULL)
-        {
-                pointr3 = malloc(nwSize);
-                if (pointr3 == 0)
-                        return (0);
-                freeCharFoluke(ptr);
-                return (pointr3);
-        }
+	if (ptr == NULL)
+	{
+		pointr3 = malloc(nwSize);
+		if (pointr3 == 0)
+			return (0);
+		freeCharFoluke(ptr);
+		return (pointr3);
+	}
 
-        if (nwSize == 0 && ptr != NULL)
-        {
-                freeCharFoluke(ptr);
-                return (0);
-        }
+	if (nwSize == 0 && ptr != NULL)
+	{
+		freeCharFoluke(ptr);
+		return (0);
+	}
 
-        pointr3 = malloc(nwSize);
+	pointr3 = malloc(nwSize);
 
-        if (pointr3 == 0)
-                return (0);
+	if (pointr3 == 0)
+		return (0);
 
-        pointr3 = memorySet(pointr3, '\0', nwSize);
+	pointr3 = memorySet(pointr3, '\0', nwSize);
 
-        memoryCopy(pointr3, ptr, oldSize);
-        freeCharFoluke(ptr);
-        return (pointr3);
+	memoryCopy(pointr3, ptr, oldSize);
+	freeCharFoluke(ptr);
+	return (pointr3);
 }
 /**
  * fetchLine - read string/line from an input stream
@@ -953,46 +997,46 @@ void *reAllocateFunc(void *ptr, unsigned int oldSize, unsigned int nwSize)
  */
 int fetchLine(char **buffer, size_t *bufsize, int fd)
 {
-        static char *buff;
-        static size_t size;
-        unsigned int len = 0, x = 0, sizeold;
-        int r;
+	static char *buff;
+	static size_t size;
+	unsigned int len = 0, x = 0, sizeold;
+	int r;
 
-        if (*bufsize == 0)
-                size = BSIZE;
-        if (*buffer == 0)
-        {
-                buff = malloc(sizeof(char) * size);
-                if (!buff)
-                        return (printCmt(1), 0);
-                *buffer = buff;
-        }
-        buff = memorySet(buff, '\0', size);
-        do {
+	if (*bufsize == 0)
+		size = BSIZE;
+	if (*buffer == 0)
+	{
+		buff = malloc(sizeof(char) * size);
+		if (!buff)
+			return (printCmt(1), 0);
+		*buffer = buff;
+	}
+	buff = memorySet(buff, '\0', size);
+	do {
 
-                r = read(fd, buff + len, BSIZE);
-                if (r >= 0)
-                        x = len, len += r;
-                if (r == -1 || r == 0)
-                        return (-1);
-                if  (len >= size)
-                {
-                        sizeold = size, size += BSIZE;
-                        buff = reAllocateFunc(buff, sizeold, size);
-                        if (!buff)
-                                return (printCmt(1), 0);
-                }
-                for (; x < len; x++)
-                {
-                        if (buff[x] == '\n')
-                        {
-                                *buffer = buff, *bufsize = size;
-                                return (len);
-                        }
-                }
+		r = read(fd, buff + len, BSIZE);
+		if (r >= 0)
+			x = len, len += r;
+		if (r == -1 || r == 0)
+			return (-1);
+		if  (len >= size)
+		{
+			sizeold = size, size += BSIZE;
+			buff = reAllocateFunc(buff, sizeold, size);
+			if (!buff)
+				return (printCmt(1), 0);
+		}
+		for (; x < len; x++)
+		{
+			if (buff[x] == '\n')
+			{
+				*buffer = buff, *bufsize = size;
+				return (len);
+			}
+		}
 
-        } while (1);
-        return (len);
+	} while (1);
+	return (len);
 }
 
 /**
@@ -1003,45 +1047,45 @@ int fetchLine(char **buffer, size_t *bufsize, int fd)
  */
 char **fetchParam(char *raw_buffer, shellDType *shellVar)
 {
-        char **buffer, *cp_raw_buffer;
-        ssize_t cnt = 0, i = 0;
+	char **buffer, *cp_raw_buffer;
+	ssize_t cnt = 0, i = 0;
 
-        cp_raw_buffer = stringDuplicateFunc(raw_buffer);
-        if (!cp_raw_buffer)
-        {
-                errorSetStr(7, shellVar, 1);
-                exit(-1);
-        }
+	cp_raw_buffer = stringDuplicateFunc(raw_buffer);
+	if (!cp_raw_buffer)
+	{
+		errorSetStr(7, shellVar, 1);
+		exit(-1);
+	}
 
-        if (stringTokenizeFunc(cp_raw_buffer, " \n"))
-                cnt++;
-        else
-        {
-                free(cp_raw_buffer);
-                return (NULL);
-        }
-        while (stringTokenizeFunc(NULL, " \n"))
-                cnt++;
+	if (stringTokenizeFunc(cp_raw_buffer, " \n"))
+		cnt++;
+	else
+	{
+		free(cp_raw_buffer);
+		return (NULL);
+	}
+	while (stringTokenizeFunc(NULL, " \n"))
+		cnt++;
 
-        free(cp_raw_buffer);
-        buffer = malloc(sizeof(char *) * (cnt + 1));
-        if (!buffer)
-        {
-                errorSetStr(7, shellVar, 1);
-                exit(-1);
-        }
-        buffer[0] = stringTokenizeFunc(raw_buffer, " \n");
-        for (i = 1; i < cnt && buffer[i - 1]; i++)
-                buffer[i] = stringTokenizeFunc(NULL, " \n");
+	free(cp_raw_buffer);
+	buffer = malloc(sizeof(char *) * (cnt + 1));
+	if (!buffer)
+	{
+		errorSetStr(7, shellVar, 1);
+		exit(-1);
+	}
+	buffer[0] = stringTokenizeFunc(raw_buffer, " \n");
+	for (i = 1; i < cnt && buffer[i - 1]; i++)
+		buffer[i] = stringTokenizeFunc(NULL, " \n");
 
-        if (!buffer[i - 1])
-        {
-                freeDobleCharPntrFoluke(buffer);
-                return (NULL);
-        }
+	if (!buffer[i - 1])
+	{
+		freeDobleCharPntrFoluke(buffer);
+		return (NULL);
+	}
 
-        buffer[i] = NULL;
-        return (buffer);
+	buffer[i] = NULL;
+	return (buffer);
 }
 
 /* ................................1000..............................*/
@@ -1060,45 +1104,45 @@ char **fetchParam(char *raw_buffer, shellDType *shellVar)
 
 char *pthChcker(char *path)
 {
-        char *nwpath;
-        int x, y, nwsize, cnt = 0;
+	char *nwpath;
+	int x, y, nwsize, cnt = 0;
 
-        for (x = 0; path[x]; x++)
-        {
+	for (x = 0; path[x]; x++)
+	{
 
-                if (path[x] == '=' && path[x + 1] == ':')
-                        cnt++;
-                if (path[x] == ':' && path[x + 1] == ':')
-                        cnt++;
-                if (path[x] == ':' && path[x + 1] == '\0')
-                        cnt++;
-        }
-        if (cnt == 0)
-                return (0);
-        nwsize = stringLengthFunc(path) + 1 + cnt;
-        nwpath = malloc(sizeof(char) * nwsize);
+		if (path[x] == '=' && path[x + 1] == ':')
+			cnt++;
+		if (path[x] == ':' && path[x + 1] == ':')
+			cnt++;
+		if (path[x] == ':' && path[x + 1] == '\0')
+			cnt++;
+	}
+	if (cnt == 0)
+		return (0);
+	nwsize = stringLengthFunc(path) + 1 + cnt;
+	nwpath = malloc(sizeof(char) * nwsize);
 
-        for (x = 0, y = 0; x < nwsize; x++, y++)
-        {
-                if (path[y] == '=' && path[y + 1] == ':')
-                {
-                        nwpath[x] = pthChckerFol(path, nwpath, x, y);
-                        continue;
-                }
-                if (path[y] == ':' && path[y + 1] == ':')
-                {
-                        nwpath[x] = pthChckerFol(path, nwpath, x, y);
-                        continue;
-                }
-                if (path[y] == ':' && path[y + 1] == '\0')
-                {
-                        nwpath[x] = pthChckerFol(path, nwpath, x, y);
-                        continue;
-                }
-                nwpath[x] = path[y];
-        }
-        freeCharFoluke(path);
-        return (nwpath);
+	for (x = 0, y = 0; x < nwsize; x++, y++)
+	{
+		if (path[y] == '=' && path[y + 1] == ':')
+		{
+			nwpath[x] = pthChckerFol(path, nwpath, x, y);
+			continue;
+		}
+		if (path[y] == ':' && path[y + 1] == ':')
+		{
+			nwpath[x] = pthChckerFol(path, nwpath, x, y);
+			continue;
+		}
+		if (path[y] == ':' && path[y + 1] == '\0')
+		{
+			nwpath[x] = pthChckerFol(path, nwpath, x, y);
+			continue;
+		}
+		nwpath[x] = path[y];
+	}
+	freeCharFoluke(path);
+	return (nwpath);
 }
 
 
@@ -1109,45 +1153,45 @@ char *pthChcker(char *path)
  */
 void printCmt(int chk)
 {
-        switch (chk)
-        {
-                case 1:
-                        write(2, "Memory Error", 22);
-;                        break;
-                case 2:
-                        write(2, "\n", 1);
-                        break;
-                case 3:
-                        write(2, "Environment is Null\n", 36);
-                        break;
-                case 4:
-                        write(2, "Invalid VALUE\n", 14);
-                        break;
-                case 5:
-                        write(2, "Invalid VARIABLE\n", 17);
-                        break;
-                case 6:
-                       write(2, "Please provide an argument\n", 27);
-                        break;
-                case 7:
-                       write(2, "cd: too many arguments\n", 23);
-                        break;
-                case 8:
-                       write(1, "prompt by foluke $ ", 19);
-                        break;
-                case 9:
-                       write(2, "Fork Error", 10);
-                        break;
-                case 10:
-                       write(1, "\nprompt by foluke $ ", 20);
-                       break;
-                case 11:
-                       write(1, "\n", 1);
-                       break;
-                case 12:
-                       write(2, "VARIABLE not found\n", 19);
-                       break;
-        }
+	switch (chk)
+	{
+		case 1:
+			write(2, "Memory Error", 22);
+			break;
+		case 2:
+			write(2, "\n", 1);
+			break;
+		case 3:
+			write(2, "Environment is Null\n", 36);
+			break;
+		case 4:
+			write(2, "Invalid VALUE\n", 14);
+			break;
+		case 5:
+			write(2, "Invalid VARIABLE\n", 17);
+			break;
+		case 6:
+		    write(2, "Please provide an argument\n", 27);
+			break;
+		case 7:
+		    write(2, "cd: too many arguments\n", 23);
+			break;
+		case 8:
+		    write(1, "prompt by foluke $ ", 19);
+			break;
+		case 9:
+		    write(2, "Fork Error", 10);
+			break;
+		case 10:
+			write(1, "\nprompt by foluke $ ", 20);
+			break;
+		case 11:
+			write(1, "\n", 1);
+			break;
+		case 12:
+			write(2, "VARIABLE not found\n", 19);
+			break;
+	}
 }
 /* ................................NUM 22 END................................*/
 
@@ -1162,8 +1206,8 @@ void printCmt(int chk)
 
 char pthChckerFol(char *path, char *nwpath, int x, int y)
 {
-        nwpath[x] = path[y], nwpath[x + 1] = '.', x++;
-        return (nwpath[x]);
+	nwpath[x] = path[y], nwpath[x + 1] = '.', x++;
+	return (nwpath[x]);
 }
 /* ................................NUM 10 END................................*/
 
@@ -1178,45 +1222,46 @@ char pthChckerFol(char *path, char *nwpath, int x, int y)
 
 char *searchPath(char *cmd, char **env, shellDType *shellVar)
 {
-        char *path, *path2;
-        struct stat st;
-        char *token, *concat, *concatenat2, *pathChck, *delim = ":=";
-        int x;
+	char *path, *path2;
+	struct stat st;
+	char *token, *concat, *concatenat2, *pathChck, *delim = ":=";
+	int x;
 
-        for (x = 0; cmd[x]; x++)
-                if (cmd[x] == '/')
-                {
-                        if (stat(cmd, &st) == 0)
-                                return (concat = stringCatenator(cmd, '\0'));
-                        else
-                                return (0);
-                }
+	for (x = 0; cmd[x]; x++)
+		if (cmd[x] == '/')
+		{
+			if (stat(cmd, &st) == 0)
+				return (concat = stringCatenator(cmd, '\0'));
+			else
+				return (0);
+		}
 
-        path2 = fetchEnviron("PATH", env);
-        (void) shellVar;
-        if (!path2)
-                return (0);
-        path = stringDuplicateFunc(path2);
-        pathChck = pthChcker(path);
-        if (pathChck)
-                path = pathChck;
-        token = stringTokenizeFunc(path, delim);
-        for (token = stringTokenizeFunc(0, delim); token; token = stringTokenizeFunc(0, delim))
-        {
-                concat = stringCatenator(token, "/");
-                concatenat2 = stringCatenator(concat, cmd);
-                freeCharFoluke(concat);
-                if (stat(concatenat2, &st) == 0)
-                {
-                        /*Found the command in PATH*/
-                        free(path);
-                        return (concatenat2);
-                }
-                freeCharFoluke(concatenat2);
-        }
+	path2 = fetchEnviron("PATH", env);
+	(void) shellVar;
+	if (!path2)
+		return (0);
+	path = stringDuplicateFunc(path2);
+	pathChck = pthChcker(path);
+	if (pathChck)
+		path = pathChck;
+	token = stringTokenizeFunc(path, delim);
+	for (token = stringTokenizeFunc(0, delim);
+		token; token = stringTokenizeFunc(0, delim))
+	{
+		concat = stringCatenator(token, "/");
+		concatenat2 = stringCatenator(concat, cmd);
+		freeCharFoluke(concat);
+		if (stat(concatenat2, &st) == 0)
+		{
+			/*Found the command in PATH*/
+			free(path);
+			return (concatenat2);
+		}
+		freeCharFoluke(concatenat2);
+	}
 
-        freeCharFoluke(path);
-        return (0);
+	freeCharFoluke(path);
+	return (0);
 }
 
 
@@ -1228,7 +1273,7 @@ char *searchPath(char *cmd, char **env, shellDType *shellVar)
  */
 void putsFunctn(char *s)
 {
-        write(1, s, stringLengthFunc(s));
+	write(1, s, stringLengthFunc(s));
 }
 
 
@@ -1240,7 +1285,7 @@ void putsFunctn(char *s)
  */
 void hlpExitFunc(void)
 {
-        hlpExitFuncFol();
+	hlpExitFuncFol();
 }
 /* ................................NUM 11 BTW................................*/
 /**
@@ -1248,11 +1293,11 @@ void hlpExitFunc(void)
  */
 void hlpExitFuncFol(void)
 {
-        putsFunctn("exit: exit [n]\n");
-        putsFunctn("    Exit the shell.\n\n");
-        putsFunctn("    Exits the shell with a sttus of N.  ");
-        putsFunctn("    If N is omitted, the exit sttus\n");
-        putsFunctn("    is that of the last command executed.\n");
+	putsFunctn("exit: exit [n]\n");
+	putsFunctn("    Exit the shell.\n\n");
+	putsFunctn("    Exits the shell with a sttus of N.  ");
+	putsFunctn("    If N is omitted, the exit sttus\n");
+	putsFunctn("    is that of the last command executed.\n");
 }
 /* ................................NUM 11 END................................*/
 
@@ -1264,7 +1309,7 @@ void hlpExitFuncFol(void)
  */
 void hlpEnviron(void)
 {
-        hlpEnvironFol();
+	hlpEnvironFol();
 }
 /* ................................NUM 12 BTW................................*/
 /**
@@ -1272,9 +1317,9 @@ void hlpEnviron(void)
  */
 void hlpEnvironFol(void)
 {
-        putsFunctn("env: env\n");
-        putsFunctn("    prints the current environment.\n\n");
-        putsFunctn("    Has no options\n");
+	putsFunctn("env: env\n");
+	putsFunctn("    prints the current environment.\n\n");
+	putsFunctn("    Has no options\n");
 }
 /* ................................NUM 12 END................................*/
 
@@ -1287,7 +1332,7 @@ void hlpEnvironFol(void)
  */
 void hlpSetEnviron(void)
 {
-        hlpSetEnvironFol();
+	hlpSetEnvironFol();
 }
 /* ................................NUM 13 BTW................................*/
 /**
@@ -1295,12 +1340,12 @@ void hlpSetEnviron(void)
  */
 void hlpSetEnvironFol(void)
 {
-        putsFunctn("setenv: setenv [VARIABLE] [VALUE]\n");
-        putsFunctn("    Initializes a new environment var1, ");
-        putsFunctn("    or modifies an existing one.\n\n");
-        putsFunctn("    VARIABLE must not have the character '='.\n");
-        putsFunctn("    If no arguments are given, setenv prints ");
-        putsFunctn("    the current environment.\n");
+	putsFunctn("setenv: setenv [VARIABLE] [VALUE]\n");
+	putsFunctn("    Initializes a new environment var1, ");
+	putsFunctn("    or modifies an existing one.\n\n");
+	putsFunctn("    VARIABLE must not have the character '='.\n");
+	putsFunctn("    If no arguments are given, setenv prints ");
+	putsFunctn("    the current environment.\n");
 }
 /* ................................NUM 13 END................................*/
 
@@ -1312,39 +1357,39 @@ void hlpSetEnvironFol(void)
  */
 ssize_t hlpComnd(shellDType *shellVar)
 {
-        int check = 1, bchck = 0;
-        helps_s help[] = {
-                {"exit", hlpExitFunc},
-                {"env", hlpEnviron},
-                {"setenv", hlpSetEnviron},
-                {"unsetenv", hlpUnSetEnviron},
-                {"cd", cdHlp},
-                {"help", hlpHlp},
-                {"alias", hlpAlias}
-        };
+	int check = 1, bchck = 0;
+	helps_s help[] = {
+		{"exit", hlpExitFunc},
+		{"env", hlpEnviron},
+		{"setenv", hlpSetEnviron},
+		{"unsetenv", hlpUnSetEnviron},
+		{"cd", cdHlp},
+		{"help", hlpHlp},
+		{"alias", hlpAlias}
+	};
 
-        int i = 7;
-        int p = 1;
+	int i = 7;
+	int p = 1;
 
-        for (; shellVar->options[p]; p++, i = 7)
-        {
-                while (i--)
-                        if (!stringCompare(shellVar->options[p], help[i].built))
-                                help[i].h(), bchck = 1;
-        }
-        if (shellVar->options[1] == NULL)
-        {
-                prntHlp();
-                bchck = 1;
-        }
-        if (bchck == 0)
-        {
-                check = -1;
-                errorSetStr(6, shellVar, 2);
-        }
+	for (; shellVar->options[p]; p++, i = 7)
+	{
+		while (i--)
+			if (!stringCompare(shellVar->options[p], help[i].built))
+				help[i].h(), bchck = 1;
+	}
+	if (shellVar->options[1] == NULL)
+	{
+		prntHlp();
+		bchck = 1;
+	}
+	if (bchck == 0)
+	{
+		check = -1;
+		errorSetStr(6, shellVar, 2);
+	}
 
-        free(shellVar->options);
-        return (check);
+	free(shellVar->options);
+	return (check);
 }
 
 
@@ -1354,7 +1399,7 @@ ssize_t hlpComnd(shellDType *shellVar)
  */
 void hlpUnSetEnviron(void)
 {
-        hlpUnSetEnvironFol();
+	hlpUnSetEnvironFol();
 }
 /* ................................NUM 14 BTW................................*/
 /**
@@ -1362,12 +1407,12 @@ void hlpUnSetEnviron(void)
  */
 void hlpUnSetEnvironFol(void)
 {
-        putsFunctn("unsetenv: unsetenv [VARIABLE]\n");
-        putsFunctn("    Initializes a new environment var1, or ");
-        putsFunctn("    modifies an existing one.\n\n");
-        putsFunctn("    VARIABLE must not have the character '='.\n");
-        putsFunctn("    If no arguments are given, setenv prints the current ");
-        putsFunctn("    environment.\n");
+	putsFunctn("unsetenv: unsetenv [VARIABLE]\n");
+	putsFunctn("    Initializes a new environment var1, or ");
+	putsFunctn("    modifies an existing one.\n\n");
+	putsFunctn("    VARIABLE must not have the character '='.\n");
+	putsFunctn("    If no arguments are given, setenv prints the current ");
+	putsFunctn("    environment.\n");
 }
 /* ................................NUM 14 END................................*/
 
@@ -1378,7 +1423,7 @@ void hlpUnSetEnvironFol(void)
  */
 void cdHlp(void)
 {
-        void cdHlpFol(void);
+	void cdHlpFol(void);
 }
 /* ................................NUM 15 BTW................................*/
 /**
@@ -1386,21 +1431,21 @@ void cdHlp(void)
  */
 void cdHlpFol(void)
 {
-        putsFunctn("cd: cd [DIRECTORY]\n");
-        putsFunctn("    Change the shell working directory.\n\n");
-        putsFunctn("    Change the current directory to DIR.  ");
-        putsFunctn("    The default DIR is the val1 of the\n");
-        putsFunctn("    HOME shell var1.\n\n");
-        putsFunctn("    Options:\n");
-        putsFunctn("    -  If a subtracn signed is used instead a directory, ");
-        putsFunctn("    cd will change to the\n");
-        putsFunctn("       previous used directory\n\n");
-        putsFunctn("    Each time cd runs successfuly, the env var1 ");
-        putsFunctn("    PWD is updated\n\n");
-        putsFunctn("    Exit Status:\n");
-        putsFunctn("    Returns 1 if the directory is changed, and if $PWD is set ");
-        putsFunctn("    successfully when\n");
-        putsFunctn("    is used; -1 otherwise.\n");
+	putsFunctn("cd: cd [DIRECTORY]\n");
+	putsFunctn("    Change the shell working directory.\n\n");
+	putsFunctn("    Change the current directory to DIR.  ");
+	putsFunctn("    The default DIR is the val1 of the\n");
+	putsFunctn("    HOME shell var1.\n\n");
+	putsFunctn("    Options:\n");
+	putsFunctn("    -  If a subtracn signed is used instead a directory, ");
+	putsFunctn("    cd will change to the\n");
+	putsFunctn("       previous used directory\n\n");
+	putsFunctn("    Each time cd runs successfuly, the env var1 ");
+	putsFunctn("    PWD is updated\n\n");
+	putsFunctn("    Exit Status:\n");
+	putsFunctn("    Returns 1 if the directory is changed, and if $PWD is set ");
+	putsFunctn("    successfully when\n");
+	putsFunctn("    is used; -1 otherwise.\n");
 }
 /* ................................NUM 15 END................................*/
 
@@ -1412,7 +1457,7 @@ void cdHlpFol(void)
  */
 void hlpHlp(void)
 {
-        hlpHlpFol();
+	hlpHlpFol();
 }
 /* ................................NUM 16 BTW................................*/
 /**
@@ -1420,17 +1465,17 @@ void hlpHlp(void)
  */
 void hlpHlpFol(void)
 {
-        putsFunctn("help: help [BUILTIN ...]\n");
-        putsFunctn("    Display information about builtin commands.\n\n");
-        putsFunctn("    Displays brief summaries of builtin commands.  If BUILTIN is\n");
-        putsFunctn("    specified, gives detailed help on all commands ");
-        putsFunctn("    matching BUILTIN,\n");
-        putsFunctn("    otherwise the list of help topics is printed.\n\n");
-        putsFunctn("    Arguments:\n");
-        putsFunctn("      BUILTIN   Builtin specifying a help topic\n\n");
-        putsFunctn("    Exit Status:\n");
-        putsFunctn("    Returns success unless PATTERN is not found or an invalid ");
-        putsFunctn("    optn is given.\n");
+	putsFunctn("help: help [BUILTIN ...]\n");
+	putsFunctn("    Display information about builtin commands.\n\n");
+	putsFunctn("    Displays brief summaries of builtin commands.If BUILTINs\n");
+	putsFunctn("    specified, gives detailed help on all commands ");
+	putsFunctn("    matching BUILTIN,\n");
+	putsFunctn("    otherwise the list of help topics is printed.\n\n");
+	putsFunctn("    Arguments:\n");
+	putsFunctn("      BUILTIN   Builtin specifying a help topic\n\n");
+	putsFunctn("    Exit Status:\n");
+	putsFunctn("    Returns success unless PATTERN is not found or an invalid ");
+	putsFunctn("    optn is given.\n");
 }
 /* ................................NUM 16 END................................*/
 
@@ -1441,7 +1486,7 @@ void hlpHlpFol(void)
  */
 void hlpAlias(void)
 {
-        hlpAliasFol();
+	hlpAliasFol();
 }
 /* ................................NUM 17 BTW................................*/
 /**
@@ -1449,20 +1494,20 @@ void hlpAlias(void)
  */
 void hlpAliasFol(void)
 {
-        putsFunctn("alias: alias alias [name[='val1'] ...]\n");
-        putsFunctn("    Define or display aliases.\n\n");
-        putsFunctn("    Without arguments, `alias' prints the list of aliases ");
-        putsFunctn("    in the reusable\n");
-        putsFunctn("    form `alias NAME=VALUE' on standard output.\n\n");
-        putsFunctn("     Otherwise, an alias is defined for each NAME whose ");
-        putsFunctn("    VALUE is given.\n");
-        putsFunctn("    A trailing space in VALUE causes the next word to ");
-        putsFunctn("    be checked for\n");
-        putsFunctn("    alias substitution when the alias is expanded.\n\n");
-        putsFunctn("    Exit Status:\n");
-        putsFunctn("    alias returns true unless a NAME is supplied for which ");
-        putsFunctn("    no alias has been\n");
-        putsFunctn("    defined.\n");
+	putsFunctn("alias: alias alias [name[='val1'] ...]\n");
+	putsFunctn("    Define or display aliases.\n\n");
+	putsFunctn("    Without arguments, `alias' prints the list of aliases ");
+	putsFunctn("    in the reusable\n");
+	putsFunctn("    form `alias NAME=VALUE' on standard output.\n\n");
+	putsFunctn("     Otherwise, an alias is defined for each NAME whose ");
+	putsFunctn("    VALUE is given.\n");
+	putsFunctn("    A trailing space in VALUE causes the next word to ");
+	putsFunctn("    be checked for\n");
+	putsFunctn("    alias substitution when the alias is expanded.\n\n");
+	putsFunctn("    Exit Status:\n");
+	putsFunctn("    alias returns true unless a NAME is supplied for which ");
+	putsFunctn("    no alias has been\n");
+	putsFunctn("    defined.\n");
 }
 /* ................................NUM 17 END................................*/
 
@@ -1473,7 +1518,7 @@ void hlpAliasFol(void)
  */
 void prntHlp(void)
 {
-        prntHlpFol();
+	prntHlpFol();
 }
 /* ................................NUM 18 BTW................................*/
 /**
@@ -1481,18 +1526,18 @@ void prntHlp(void)
  */
 void prntHlpFol(void)
 {
-        putsFunctn("Shell HSH, version 1.0(1)-release (x86_64-pc-linux-gnu)\n");
-        putsFunctn("These shell commands are defined internally.\n");
-        putsFunctn("Type `help' to see this list.\n");
-        putsFunctn("Type help  'BUILTIN'' to find out more about ");
-        putsFunctn("the function 'BUILTIN'.\n\n");
-        putsFunctn(" exit [n]\n");
-        putsFunctn(" env\n");
-        putsFunctn(" setenv [VARIABLE] [VALUE]\n");
-        putsFunctn(" unsetenv [VARIABLE]\n");
-        putsFunctn(" cd [DIRECTORY]\n");
-        putsFunctn(" help [BUILTIN ...]\n");
-        putsFunctn(" alias [name[='val1'] ...]\n");
+	putsFunctn("Shell HSH, version 1.0(1)-release (x86_64-pc-linux-gnu)\n");
+	putsFunctn("These shell commands are defined internally.\n");
+	putsFunctn("Type `help' to see this list.\n");
+	putsFunctn("Type help  'BUILTIN'' to find out more about ");
+	putsFunctn("the function 'BUILTIN'.\n\n");
+	putsFunctn(" exit [n]\n");
+	putsFunctn(" env\n");
+	putsFunctn(" setenv [VARIABLE] [VALUE]\n");
+	putsFunctn(" unsetenv [VARIABLE]\n");
+	putsFunctn(" cd [DIRECTORY]\n");
+	putsFunctn(" help [BUILTIN ...]\n");
+	putsFunctn(" alias [name[='val1'] ...]\n");
 }
 /* ................................NUM 18 END................................*/
 
@@ -1502,16 +1547,16 @@ void prntHlpFol(void)
  */
 void freeDobleCharPntrFoluke(char **p)
 {
-        int x, z = 0;
+	int x, z = 0;
 
-        while (p[z] != 0)
-                z++;
+	while (p[z] != 0)
+		z++;
 
-        for (x = 0; x < z; x++)
-        {
-                freeCharFoluke(p[x]);
-        }
-        free(p);
+	for (x = 0; x < z; x++)
+	{
+		freeCharFoluke(p[x]);
+	}
+	free(p);
 }
 
 
@@ -1525,42 +1570,42 @@ void freeDobleCharPntrFoluke(char **p)
  */
 char **cpyDoblePtr(char **p, int oldSize, int nwSize)
 {
-        char **copy;
-        int x, copSize;
+	char **copy;
+	int x, copSize;
 
-        if (!p && (oldSize == nwSize))
-                return (NULL);
+	if (!p && (oldSize == nwSize))
+		return (NULL);
 
-        if (nwSize < oldSize)
-        {
-                copSize = nwSize;
-                copy = malloc(sizeof(char *) * (copSize + 1));
-        }
-        else
-        {
-                copSize = oldSize;
-                copy = malloc(sizeof(char *) * (nwSize + 1));
-        }
-        if (copy == 0)
-                return (0);
+	if (nwSize < oldSize)
+	{
+		copSize = nwSize;
+		copy = malloc(sizeof(char *) * (copSize + 1));
+	}
+	else
+	{
+		copSize = oldSize;
+		copy = malloc(sizeof(char *) * (nwSize + 1));
+	}
+	if (copy == 0)
+		return (0);
 
-        if (p)
-                for (x = 0; x < copSize; x++)
-                {
-                        copy[x] = stringDuplicateFunc(p[x]);
-                        if (copy[x] == 0)
-                        {
-                                x--;
-                                for (; x >= 0; x--)
-                                        freeCharFoluke(copy[x]);
-                                freeDobleCharPntrFoluke(copy);
-                                return (0);
-                        }
-                }
-        /* Add Null in the end */
-        copy[nwSize] = '\0';
+	if (p)
+		for (x = 0; x < copSize; x++)
+		{
+			copy[x] = stringDuplicateFunc(p[x]);
+			if (copy[x] == 0)
+			{
+				x--;
+				for (; x >= 0; x--)
+					freeCharFoluke(copy[x]);
+				freeDobleCharPntrFoluke(copy);
+				return (0);
+			}
+		}
+	/* Add Null in the end */
+	copy[nwSize] = '\0';
 
-        return (copy);
+	return (copy);
 }
 
 
@@ -1572,14 +1617,14 @@ char **cpyDoblePtr(char **p, int oldSize, int nwSize)
  */
 int strLenPtr(char **s)
 {
-        int x = 0;
+	int x = 0;
 
-        if (!s)
-                return (0);
+	if (!s)
+		return (0);
 
-        while (s[x] != NULL)
-                x++;
-        return (x);
+	while (s[x] != NULL)
+		x++;
+	return (x);
 }
 
 
@@ -1594,44 +1639,44 @@ int strLenPtr(char **s)
  */
 char **setEnvironm(char **env, char *var1, char *val1, shellDType *shellVar)
 {
-        int x, y, check, z = 0, env6 = 0;
-        char *catEnvs1, *catEnvs2, *DupCp, **copy;
+	int x, y, check, z = 0, env6 = 0;
+	char *catEnvs1, *catEnvs2, *DupCp, **copy;
 
-        if (stringLengthFunc(var1) == 0 || var1 == 0)
-                return (errorSetStr(3, shellVar, 1), NULL);
-        catEnvs2 = stringCatenator(var1, "=");
-        if (catEnvs2 == 0)
-                return (errorSetStr(3, shellVar, 1), NULL);
-        catEnvs1 = stringCatenator(catEnvs2, val1), free(catEnvs2);
-        if (catEnvs1 == 0)
-                return (errorSetStr(3, shellVar, 1), NULL);
-        z = stringLengthFunc(var1), env6 = strLenPtr(env);
-        for (x = 0; env && env[x] != 0; x++)
-        {
-                for (check = 0, y = 0; y < z && env[x][y] != 0; y++)
-                {
-                        if (var1[y] == '=')
-                                return (free(catEnvs1), errorSetStr(3, shellVar, 2), NULL);
-                        if (env[x][y] == var1[y])
-                                check++;
-                }
-                if (check == z && env[x][check] == '=')
-                {
-                        free(env[x]), DupCp = stringDuplicateFunc(catEnvs1), free(catEnvs1);
-                        if (DupCp == 0)
-                                return (errorSetStr(3, shellVar, 1), NULL);
-                        return (env[x] = DupCp, env);
-                }
-        }
-        copy = cpyDoblePtr(env, env6, env6 + 1);
-        if (env)
-                freeDobleCharPntrFoluke(env);
-        if (copy == 0)
-                return (free(catEnvs1), errorSetStr(3, shellVar, 1), NULL);
-        env = copy, DupCp = stringDuplicateFunc(catEnvs1), free(catEnvs1);
-        if (DupCp == 0)
-                return (errorSetStr(3, shellVar, 1), NULL);
-        return (env[env6] = DupCp, env);
+	if (stringLengthFunc(var1) == 0 || var1 == 0)
+		return (errorSetStr(3, shellVar, 1), NULL);
+	catEnvs2 = stringCatenator(var1, "=");
+	if (catEnvs2 == 0)
+		return (errorSetStr(3, shellVar, 1), NULL);
+	catEnvs1 = stringCatenator(catEnvs2, val1), free(catEnvs2);
+	if (catEnvs1 == 0)
+		return (errorSetStr(3, shellVar, 1), NULL);
+	z = stringLengthFunc(var1), env6 = strLenPtr(env);
+	for (x = 0; env && env[x] != 0; x++)
+	{
+		for (check = 0, y = 0; y < z && env[x][y] != 0; y++)
+		{
+			if (var1[y] == '=')
+				return (free(catEnvs1), errorSetStr(3, shellVar, 2), NULL);
+			if (env[x][y] == var1[y])
+				check++;
+		}
+		if (check == z && env[x][check] == '=')
+		{
+			free(env[x]), DupCp = stringDuplicateFunc(catEnvs1), free(catEnvs1);
+			if (DupCp == 0)
+				return (errorSetStr(3, shellVar, 1), NULL);
+			return (env[x] = DupCp, env);
+		}
+	}
+	copy = cpyDoblePtr(env, env6, env6 + 1);
+	if (env)
+		freeDobleCharPntrFoluke(env);
+	if (copy == 0)
+		return (free(catEnvs1), errorSetStr(3, shellVar, 1), NULL);
+	env = copy, DupCp = stringDuplicateFunc(catEnvs1), free(catEnvs1);
+	if (DupCp == 0)
+		return (errorSetStr(3, shellVar, 1), NULL);
+	return (env[env6] = DupCp, env);
 }
 
 
@@ -1641,8 +1686,8 @@ char **setEnvironm(char **env, char *var1, char *val1, shellDType *shellVar)
  */
 void sigHandlr(int x)
 {
-        (void) x;
-        printCmt(10);
+	(void) x;
+	printCmt(10);
 }
 
 
@@ -1653,8 +1698,8 @@ void sigHandlr(int x)
  */
 void sigHandlr2(int x)
 {
-        (void) x;
-        printCmt(11);
+	(void) x;
+	printCmt(11);
 }
 
 
@@ -1667,33 +1712,33 @@ void sigHandlr2(int x)
  */
 char *stringCatenator(char *s1, char *s2)
 {
-        int l1, l2, i, j;
-        char *s;
-        /* char *nul = ""; */
+	int l1, l2, i, j;
+	char *s;
+	/* char *nul = ""; */
 
-        if (s1 == NULL)
-                s1 = stringCatenatorFol();
-        if (s2 == NULL)
-                s2 = stringCatenatorFol();
+	if (s1 == NULL)
+		s1 = stringCatenatorFol();
+	if (s2 == NULL)
+		s2 = stringCatenatorFol();
 
-        l1 = 0, l2 = 0;
-        while (*(s1 + l1))
-                l1++;
-        while (*(s2 + l2))
-                l2++;
+	l1 = 0, l2 = 0;
+	while (*(s1 + l1))
+		l1++;
+	while (*(s2 + l2))
+		l2++;
 
-        s = malloc(sizeof(char) * (l1 + l2 + 1));
+	s = malloc(sizeof(char) * (l1 + l2 + 1));
 
-        if (s == 0)
-                return (0);
+	if (s == 0)
+		return (0);
 
-        for (i = 0; i < l1; i++)
-                *(s + i) = *(s1 + i);
+	for (i = 0; i < l1; i++)
+		*(s + i) = *(s1 + i);
 
-        for (i = 0, j = l1; i <= l2; j++, i++)
-                *(s + j) = *(s2 + i);
+	for (i = 0, j = l1; i <= l2; j++, i++)
+		*(s + j) = *(s2 + i);
 
-        return (s);
+	return (s);
 }
 /* ................................NUM 19 BTW................................*/
 /**
@@ -1704,9 +1749,9 @@ char *stringCatenator(char *s1, char *s2)
  */
 char *stringCatenatorFol()
 {
-        char *sx;
+	char *sx;
 
-        return (sx = "");
+	return (sx = "");
 }
 
 /* ................................NUM 19 END................................*/
@@ -1722,16 +1767,16 @@ char *stringCatenatorFol()
  */
 char *stringCopy(char *dest, char *src)
 {
-        int i = 0;
+	int i = 0;
 
-        for (i = 0; *(src + i) != '\0'; i++)
-                stringCopyFol(dest, src, i);
-                /* *(dest + i) = *(src + i); */
-        
-        stringCopyFol(dest, src, i);
-        /* *(dest + i) = *(src + i); */ /* adding '\0' character */
+	for (i = 0; *(src + i) != '\0'; i++)
+		stringCopyFol(dest, src, i);
+		/* *(dest + i) = *(src + i); */
 
-        return (dest);
+	stringCopyFol(dest, src, i);
+	/* *(dest + i) = *(src + i); */ /* adding '\0' character */
+
+	return (dest);
 }
 /* ................................NUM 20 BTW................................*/
 /**
@@ -1739,12 +1784,12 @@ char *stringCopy(char *dest, char *src)
  * @dest: target
  * @src: source
  * Return: dest
- * On error: -1 
+ * On error: -1
  */
 char stringCopyFol(char *destinatn, char *source, int i)
 {
-        *(destinatn + i) = *(source + i);
-        return (*(destinatn + i));
+	*(destinatn + i) = *(source + i);
+	return (*(destinatn + i));
 }
 /* ................................NUM 20 END................................*/
 
@@ -1758,33 +1803,33 @@ char stringCopyFol(char *destinatn, char *source, int i)
 
 int stringLengthFunc(char *s)
 {
-        return ((!*s) ? 0 : 1 + stringLengthFunc(s + 1));
+	return ((!*s) ? 0 : 1 + stringLengthFunc(s + 1));
 }
 
 
 /**
  * stringDuplicateFunc - function that returns a pointer to a newly
  * allocated memoty space
- * @str: source 
+ * @str: source
  * Return: address
- * On error: -1 
+ * On error: -1
  */
 
 char *stringDuplicateFunc(char *str)
 {
-        char *arr;
+	char *arr;
 
-        if (!str)
-                return (NULL);
+	if (!str)
+		return (NULL);
 
-        arr = malloc((stringLengthFunc(str) * sizeof(*arr)) + 1);
+	arr = malloc((stringLengthFunc(str) * sizeof(*arr)) + 1);
 
-        if (!arr)
-                return (NULL);
+	if (!arr)
+		return (NULL);
 
-        stringCopy(arr, str);
+	stringCopy(arr, str);
 
-        return (arr);
+	return (arr);
 }
 
 
@@ -1797,46 +1842,46 @@ char *stringDuplicateFunc(char *str)
  */
 char *stringTokenizeFunc(char *str, const char *delim)
 {
-        const char *C_org = delim;
-        int issEql = 1, issGetInto = 0;
-        static char *step, *stepNull;
-        static int isEnd;
+	const char *C_org = delim;
+	int issEql = 1, issGetInto = 0;
+	static char *step, *stepNull;
+	static int isEnd;
 
-        if (str)
-                isEnd = 0;
-        if (isEnd)
-                return (NULL);
-        step = (str) ? str : (stepNull + 1);
-        if (str)
-                stepNull = str;
-        else
-                str = step;
-        while (*str && issEql)
-        {
-                issEql = 0;
-                for (delim = C_org; *delim; delim++)
-                        if (*str == *delim)
-                                issEql = 1;
-                str = (!issEql) ? str : str + 1;
-                isEnd = (*str) ? 0 : 1;
-                if (isEnd)
-                        return (NULL);
-        }
-        step = str;
-        while (*str && !issEql)
-        {
-                issEql = 0;
-                for (delim = C_org; *delim; delim++)
-                        if (*str == *delim)
-                        {
-                                issGetInto = 1, issEql = 1;
-                                isEnd = (*(str + 1)) ? 0 : 1, *str = '\0';
-                        }
-                str = (issEql) ? str : str + 1;
-                if (!issGetInto && !*str)
-                        isEnd = 1;
-        }
-        return (stepNull = str, step);
+	if (str)
+		isEnd = 0;
+	if (isEnd)
+		return (NULL);
+	step = (str) ? str : (stepNull + 1);
+	if (str)
+		stepNull = str;
+	else
+		str = step;
+	while (*str && issEql)
+	{
+		issEql = 0;
+		for (delim = C_org; *delim; delim++)
+			if (*str == *delim)
+				issEql = 1;
+		str = (!issEql) ? str : str + 1;
+		isEnd = (*str) ? 0 : 1;
+		if (isEnd)
+			return (NULL);
+	}
+	step = str;
+	while (*str && !issEql)
+	{
+		issEql = 0;
+		for (delim = C_org; *delim; delim++)
+			if (*str == *delim)
+			{
+				issGetInto = 1, issEql = 1;
+				isEnd = (*(str + 1)) ? 0 : 1, *str = '\0';
+			}
+		str = (issEql) ? str : str + 1;
+		if (!issGetInto && !*str)
+			isEnd = 1;
+	}
+	return (stepNull = str, step);
 }
 
 
@@ -1849,32 +1894,32 @@ char *stringTokenizeFunc(char *str, const char *delim)
  */
 char **cpyDoblePtrDel(char **p, int nwSize, int jump)
 {
-        char **copy;
-        int i, j, copSize;
+	char **copy;
+	int i, j, copSize;
 
-        copSize = nwSize;
-        copy = malloc(sizeof(char *) * (copSize + 1));
-        if (copy == 0)
-                return (0);
+	copSize = nwSize;
+	copy = malloc(sizeof(char *) * (copSize + 1));
+	if (copy == 0)
+		return (0);
 
-        for (i = 0, j = 0; j < copSize; i++, j++)
-        {
-                if (i == jump)
-                        i++;
-                copy[j] = stringDuplicateFunc(p[i]);
-                if (copy[j] == 0)
-                {
-                        j--;
-                        for (; j >= 0; j--)
-                                free(copy[j]);
-                        freeDobleCharPntrFoluke(copy);
-                        return (0);
-                }
-        }
+	for (i = 0, j = 0; j < copSize; i++, j++)
+	{
+		if (i == jump)
+			i++;
+		copy[j] = stringDuplicateFunc(p[i]);
+		if (copy[j] == 0)
+		{
+			j--;
+			for (; j >= 0; j--)
+				free(copy[j]);
+			freeDobleCharPntrFoluke(copy);
+			return (0);
+		}
+	}
 
-        copy[nwSize] = '\0';
+	copy[nwSize] = '\0';
 
-        return (copy);
+	return (copy);
 }
 
 /**
@@ -1886,41 +1931,42 @@ char **cpyDoblePtrDel(char **p, int nwSize, int jump)
  */
 char **unSetEnviron(char **env, char *var1, shellDType *shellVar)
 {
-        int i, j, check, l = 0, lenv = 0, found = 0;
-        char **copy;
+	int i, j, check, l = 0, lenv = 0, found = 0;
+	char **copy;
 
-        shellVar->unsetnull[0] = 0;
-        if (!env)
-                return (printCmt(3), NULL);
-        if (stringLengthFunc(var1) == 0 || var1 == 0)
-                return (errorSetStr(3, shellVar, 1), NULL);
-        l = stringLengthFunc(var1), lenv = strLenPtr(env);
-        for (i = 0; env[i] != 0; i++)
-        {
-                for (check = 0, j = 0; j < l && env[i][j] != 0; j++)
-                {
-                        if (var1[j] == '=')
-                                return (errorSetStr(3, shellVar, 2), NULL);
-                        if (env[i][j] == var1[j])
-                                check++;
-                }
-                if (check == l && env[i][check] == '=')
-                {
-                        /* Found env to erase */
-                        found = 1;
-                        if ((lenv - 1) != 0)
-                        {
-                                copy = cpyDoblePtrDel(env, lenv - 1, i);
-                         if (copy == 0)
-                                        return (errorSetStr(7, shellVar, 1), NULL);
-                        }
-                        else
-                                shellVar->unsetnull[0] = 1, copy = NULL;
-                        freeDobleCharPntrFoluke(env), env = copy;
-                        return (env);
-                }
-        }
-        if (found == 0)
-                return (printCmt(12), NULL);
-        return (env);
+	shellVar->unsetnull[0] = 0;
+	if (!env)
+		return (printCmt(3), NULL);
+	if (stringLengthFunc(var1) == 0 || var1 == 0)
+		return (errorSetStr(3, shellVar, 1), NULL);
+	l = stringLengthFunc(var1), lenv = strLenPtr(env);
+	for (i = 0; env[i] != 0; i++)
+	{
+		for (check = 0, j = 0; j < l && env[i][j] != 0; j++)
+		{
+			if (var1[j] == '=')
+				return (errorSetStr(3, shellVar, 2), NULL);
+			if (env[i][j] == var1[j])
+				check++;
+		}
+		if (check == l && env[i][check] == '=')
+		{
+			/* Found env to erase */
+			found = 1;
+			if ((lenv - 1) != 0)
+			{
+				copy = cpyDoblePtrDel(env, lenv - 1, i);
+				if (copy == 0)
+					return (errorSetStr(7, shellVar, 1), NULL);
+			}
+			else
+				shellVar->unsetnull[0] = 1, copy = NULL;
+			freeDobleCharPntrFoluke(env), env = copy;
+			return (env);
+		}
+	}
+	if (found == 0)
+		return (printCmt(12), NULL);
+	return (env);
+
 }

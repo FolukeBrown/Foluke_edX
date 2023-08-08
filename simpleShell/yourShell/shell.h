@@ -158,7 +158,13 @@ char *stringCatenator(char *s1, char *s2);
 char *stringCatenatorFol();
 char stringCatenatorFol2(char *sx, char *sy, int k);
 char stringCopyFol(char *destinatn, char *source, int i);
+int errorSetStrFolu(int errn, int z, char *concA, char *concB, char *err[]);
+int errorSetStrFolu1(int errn, int cnt, int  z, char *hshname, char *nustr,
+				char *concA, char *concB, char *coluspc, char *err[]);
+int errorSetStrFolu2(int errn, char *concA, char *concB,
+						char *coluspc, char *err[], char *cmd);
 void printCmt(int chk);
+
 
 
 
