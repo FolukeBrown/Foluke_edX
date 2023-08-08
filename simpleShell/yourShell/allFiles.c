@@ -10,35 +10,38 @@
 void string_reverse(char *s)
 {
 	int x = 0, y = 0, z;
-	char tempVar = 'A';
+	char temp_var = 'A';
 
 	while (s[x])
 		x++;
 	z = x / 2, x = x - 1;
 	while (x >= z)
 	{
-		string_reverseSub(s, tempVar, x, y);
+		string_reverseSub(s, temp_var, x, y);
 	}
 }
 
 /* ................................NUM 1 BTW................................*/
 /**
- * string_reverse - R
+ * string_reverseSub - R
  * @s: str
+ * @temp_var: str
+ * @x: str
+ * @y: str
  */
-void string_reverseSub(char *s, char tempVar, int x, int y)
+void string_reverseSub(char *s, char temp_var, int x, int y)
 {
-	tempVar  = s[y];
+	temp_var  = s[y];
 	s[y] = s[x];
-	s[x] = tempVar;
+	s[x] = temp_var;
 	x--, y++;
 }
 /* ................................NUM 1 END................................*/
 
 /* ................................NUM 2 START..............................*/
 /**
- * empty_dif_list - frees
- * @head: head
+ * freeCharFoluke - frees
+ * @temp: head
  */
 
 void freeCharFoluke(char *temp)
@@ -99,16 +102,16 @@ char *intToAlp(int n)
 /**
  * errorSetStr - creates str
  * @errn: numb
- * @shellVar: struct
+ * @shell_var: struct
  * @exnum: val
  * Return: 0
  */
-int errorSetStr(int errn, shellDType *shellVar, int exnum)
+int errorSetStr(int errn, shellDType *shell_var, int exnum)
 {
-	int cnt = shellVar->errnum[0], z = 0;
-	char *cmd = shellVar->cmd, **optn = shellVar->options;
-	char *hshname = shellVar->hshname;
-	char *nustr = "brown", *concA = "folu", *concB = "foluke", *coluspc = ": ";
+	int cnt = shell_var->errnum[0], z = 0;
+	char *cmd = shell_var->cmd, **optn = shell_var->options;
+	char *hshname = shell_var->hshname;
+	char *nustr = "brown", *conc_a = "folu", *conc_b = "foluke", *coluspc = ": ";
 	char *err[] = {
 		"not found", "Permission denied", "Invalid number",
 		"name is NULL, points to string of length 0, or has an '=' chararacter",
@@ -117,110 +120,121 @@ int errorSetStr(int errn, shellDType *shellVar, int exnum)
 	};
 
 	errorSetStrFolu1(errn, cnt,  z, hshname, nustr,
-				concA, concB, coluspc, err);
+				conc_a, conc_b, coluspc, err);
 
-	errorSetStrFolu2(errn, concA, concB, coluspc, err, cmd);
+	errorSetStrFolu2(errn, conc_a, conc_b, coluspc, err, cmd);
 
 	if (errn > 1 && errn < 6 && errn != 3)
-		concB = errorSub(errn, concB, optn[1]);
-	if (concB == NULL)
+		conc_b = errorSub(errn, conc_b, optn[1]);
+	if (conc_b == NULL)
 	{
 		printCmt(1);
 		return (-1);
 	}
 
-	while (concB[z] != 0)
+	while (conc_b[z] != 0)
 		z++;
-	write(2, concB, z), printCmt(2);
-	freeCharFoluke(concB);
-	shellVar->exitnum[0] = exnum;
+	write(2, conc_b, z), printCmt(2);
+	freeCharFoluke(conc_b);
+	shell_var->exitnum[0] = exnum;
 	return (0);
 }
 
 /* ................................NUM 24 BTW................................*/
 /**
- * errorSetStr - creates str
+ * errorSetStrFolu2 - creates str
  * @errn: numb
- * @shellVar: struct
- * @exnum: val
+ * @conc_a: struct
+ * @conc_b: val
+ * @coluspc: val
+ * @err: val
+ * @cmd: val
  * Return: 0
  */
-int errorSetStrFolu2(int errn, char *concA, char *concB,
+int errorSetStrFolu2(int errn, char *conc_a, char *conc_b,
 						char *coluspc, char *err[], char *cmd)
 {
-	freeCharFoluke(concB);
-	concB = stringCatenator(concA, cmd);
-	if (!concB) /*hsh: cnt: cmd*/
-		return (freeCharFoluke(concA), printCmt(1), -1);
-	freeCharFoluke(concA);
+	freeCharFoluke(conc_b);
+	conc_b = stringCatenator(conc_a, cmd);
+	if (!conc_b) /*hsh: cnt: cmd*/
+		return (freeCharFoluke(conc_a), printCmt(1), -1);
+	freeCharFoluke(conc_a);
 
-	concA = stringCatenator(concB, coluspc);
-	if (!concA) /*hsh: cnt: cmd: */
-		return (freeCharFoluke(concB), printCmt(1), -1);
-	freeCharFoluke(concB);
+	conc_a = stringCatenator(conc_b, coluspc);
+	if (!conc_a) /*hsh: cnt: cmd: */
+		return (freeCharFoluke(conc_b), printCmt(1), -1);
+	freeCharFoluke(conc_b);
 
-	concB = stringCatenator(concA, err[errn]);
-	if (!concB) /*hsh: cnt: cmd: error*/
-		return (freeCharFoluke(concA), printCmt(1), -1);
-	freeCharFoluke(concA);
+	conc_b = stringCatenator(conc_a, err[errn]);
+	if (!conc_b) /*hsh: cnt: cmd: error*/
+		return (freeCharFoluke(conc_a), printCmt(1), -1);
+	freeCharFoluke(conc_a);
 	return (0);
 }
 
 /* ................................NUM 24 BTW................................*/
 /**
- * errorSetStr - creates str
+ * errorSetStrFolu1 - creates str
  * @errn: numb
- * @shellVar: struct
- * @exnum: val
+ * @cnt: struct
+ * @z: val
+ * @hshname: val
+ * @nustr: val
+ * @conc_a: val
+ * @conc_b: val
+ * @coluspc: val
+ * @err: val
  * Return: 0
  */
 int errorSetStrFolu1(int errn, int cnt, int  z, char *hshname, char *nustr,
-				char *concA, char *concB, char *coluspc, char *err[])
+				char *conc_a, char *conc_b, char *coluspc, char *err[])
 {
-	concA = stringCatenator(hshname, coluspc);
-	if (!concA) /*hsh: */
+	conc_a = stringCatenator(hshname, coluspc);
+	if (!conc_a) /*hsh: */
 		return (printCmt(1), -1);
 
 	if (errn == 7) /* Alloc Error */
-		errorSetStrFolu(errn, z, concA, concB, err);
+		errorSetStrFolu(errn, z, conc_a, conc_b, err);
 
 	nustr = intToAlp(cnt);
 	if (!nustr)  /* number to string */
-		return (freeCharFoluke(concA), printCmt(1), -1);
+		return (freeCharFoluke(conc_a), printCmt(1), -1);
 
-	concB = stringCatenator(concA, nustr);
-	if (!concB) /*hsh: cnt*/
+	conc_b = stringCatenator(conc_a, nustr);
+	if (!conc_b) /*hsh: cnt*/
 	{
 		printCmt(1);
-		return (freeCharFoluke(concA), freeCharFoluke(nustr),  -1);
+		return (freeCharFoluke(conc_a), freeCharFoluke(nustr),  -1);
 	}
-	freeCharFoluke(concA), freeCharFoluke(nustr);
+	freeCharFoluke(conc_a), freeCharFoluke(nustr);
 
-	concA = stringCatenator(concB, coluspc);
-	if (!concA) /*hsh: cnt: */
-		return (freeCharFoluke(concB), printCmt(1), -1);
+	conc_a = stringCatenator(conc_b, coluspc);
+	if (!conc_a) /*hsh: cnt: */
+		return (freeCharFoluke(conc_b), printCmt(1), -1);
 	return (0);
 }
 
 
 /* ................................NUM 24 BTW................................*/
 /**
- * errorSetStr - creates str
+ * errorSetStrFolu - creates str
  * @errn: numb
- * @shellVar: struct
- * @exnum: val
+ * @z: struct
+ * @conc_a: val
+ * @conc_b: val
+ * @err: val
  * Return: 0
  */
-int errorSetStrFolu(int errn, int z, char *concA, char *concB, char *err[])
+int errorSetStrFolu(int errn, int z, char *conc_a, char *conc_b, char *err[])
 {
-		concB = stringCatenator(concA, err[errn]); /*hsh: cnt: error*/
-		if (!concB)
-			return (freeCharFoluke(concA), printCmt(1), -1);
-		freeCharFoluke(concA);
-		while (concB[z] != 0)
+		conc_b = stringCatenator(conc_a, err[errn]); /*hsh: cnt: error*/
+		if (!conc_b)
+			return (freeCharFoluke(conc_a), printCmt(1), -1);
+		freeCharFoluke(conc_a);
+		while (conc_b[z] != 0)
 			z++;
-		write(2, concB, z), printCmt(2);
-		freeCharFoluke(concB);
+		write(2, conc_b, z), printCmt(2);
+		freeCharFoluke(conc_b);
 		return (0);
 }
 /* ................................NUM 24 END................................*/
@@ -229,102 +243,102 @@ int errorSetStrFolu(int errn, int z, char *concA, char *concB, char *err[])
 /**
  * errorSub - extra modes
  * @errn: number
- * @concB: error
+ * @conc_b: error
  * @optn: cmd
  * Return: pointer
  */
-char *errorSub(int errn, char *concB, char *optn)
+char *errorSub(int errn, char *conc_b, char *optn)
 {
-	char *concA, *coluspc = ": ";
+	char *conc_a, *coluspc = ": ";
 
 	if (errn == 2) /* exit error */
 	{
 
-		concA = stringCatenator(concB, coluspc);
-		if (!concA) /*hsh: cnt: cmd: error: */
+		conc_a = stringCatenator(conc_b, coluspc);
+		if (!conc_a) /*hsh: cnt: cmd: error: */
 		{
 			printCmt(1);
-			return (freeCharFoluke(concB), NULL);
+			return (freeCharFoluke(conc_b), NULL);
 		}
-		freeCharFoluke(concB);
+		freeCharFoluke(conc_b);
 
-		concB = stringCatenator(concA, optn);
+		conc_b = stringCatenator(conc_a, optn);
 
-		if (!concB) /*hsh: cnt: cmd: error: optn*/
+		if (!conc_b) /*hsh: cnt: cmd: error: optn*/
 		{
 			printCmt(1);
-			return (freeCharFoluke(concA), NULL);
+			return (freeCharFoluke(conc_a), NULL);
 		}
-		freeCharFoluke(concA);
+		freeCharFoluke(conc_a);
 	}
 	if (errn > 3) /* Errors with options at end */
 	{
-		concA = stringCatenator(concB, optn);
-		if (!concA) /*hsh: cnt: cmd: error optn*/
+		conc_a = stringCatenator(conc_b, optn);
+		if (!conc_a) /*hsh: cnt: cmd: error optn*/
 		{
 			printCmt(1);
-			return (freeCharFoluke(concB), NULL);
+			return (freeCharFoluke(conc_b), NULL);
 		}
-		freeCharFoluke(concB);
-		return (concA);
+		freeCharFoluke(conc_b);
+		return (conc_a);
 	}
-	return (concB);
+	return (conc_b);
 }
 
 
 /**
  * exitCmdFunc - exit command
- * @shellVar: struct
+ * @shell_var: struct
  * Return: -1 if error
  */
-ssize_t exitCmdFunc(shellDType *shellVar)
+ssize_t exitCmdFunc(shellDType *shell_var)
 {
 	long exit_value;
 
-	if (shellVar->options[1] == NULL || isNumba(shellVar->options[1]))
+	if (shell_var->options[1] == NULL || isNumba(shell_var->options[1]))
 	{
-		exit_value = atoiFol(shellVar->options[1]);
+		exit_value = atoiFol(shell_var->options[1]);
 
 		if (exit_value >= 0 && exit_value < INT_MAX)
 		{
 			if (exit_value > 255)
 				exit_value %= 256;
-			if (shellVar->options[1] == NULL)
-				exit_value = shellVar->exitnum[0];
-			free(*(shellVar->options));
-			free(shellVar->options);
-			if (*(shellVar->envCpy))
-				freeDobleCharPntrFoluke(*(shellVar->envCpy));
-			free(shellVar);
+			if (shell_var->options[1] == NULL)
+				exit_value = shell_var->exitnum[0];
+			free(*(shell_var->options));
+			free(shell_var->options);
+			if (*(shell_var->envCpy))
+				freeDobleCharPntrFoluke(*(shell_var->envCpy));
+			free(shell_var);
 			exit(exit_value);
 		}
 	}
-	errorSetStr(2, shellVar, 2);
-	free(shellVar->options);
+	errorSetStr(2, shell_var, 2);
+	free(shell_var->options);
 	return (-1);
 }
 
 /**
  * envCmd - env command
- * @shellVar: struct
+ * @shell_var: struct
  * Return: 1
  */
-ssize_t envCmd(shellDType *shellVar)
+ssize_t envCmd(shellDType *shell_var)
 {
 	char **str;
 	int chckr = 1;
 
-	if (*(shellVar->envCpy) == NULL)
+	if (*(shell_var->envCpy) == NULL)
 	{
 		printCmt(3);
-		shellVar->exitnum[0] = 2;
-		free(shellVar->options);
+		shell_var->exitnum[0] = 2;
+		free(shell_var->options);
 		return (-1);
 	}
 
-	str = *(shellVar->envCpy);
+	str = *(shell_var->envCpy);
 
-	if (shellVar->options[1] == NULL)
+	if (shell_var->options[1] == NULL)
 	{
 		for (; str && *str; str++)
 		{
@@ -334,99 +348,99 @@ ssize_t envCmd(shellDType *shellVar)
 	}
 	else
 	{
-		errorSetStr(0, shellVar, 2);
+		errorSetStr(0, shell_var, 2);
 		chckr = -1;
 	}
 
-	free(shellVar->options);
+	free(shell_var->options);
 	return (chckr);
 }
 /**
  * setEnvironCmd - setenv command
- * @shellVar: struct
+ * @shell_var: struct
  * Return: 1
  */
-ssize_t setEnvironCmd(shellDType *shellVar)
+ssize_t setEnvironCmd(shellDType *shell_var)
 {
 	char **nenviron, *var1 = NULL, *val1 = NULL;
 
-	if (shellVar->options[1])
+	if (shell_var->options[1])
 	{
-		var1 = shellVar->options[1];
-		if (!shellVar->options[2])
+		var1 = shell_var->options[1];
+		if (!shell_var->options[2])
 		{
 			printCmt(4);
-			shellVar->exitnum[0] = 2;
-			free(shellVar->options);
+			shell_var->exitnum[0] = 2;
+			free(shell_var->options);
 			return (-1);
 		}
 		else
-			val1 = shellVar->options[2];
+			val1 = shell_var->options[2];
 	}
 	if (var1 == 0)
 	{
 		printCmt(5);
-		shellVar->exitnum[0] = 2;
-		free(shellVar->options);
+		shell_var->exitnum[0] = 2;
+		free(shell_var->options);
 		return (-1);
 	}
 
-	nenviron = setEnvironm(*(shellVar->envCpy), var1, val1, shellVar);
+	nenviron = setEnvironm(*(shell_var->envCpy), var1, val1, shell_var);
 
 	if (nenviron == 0)
 	{
-		free(shellVar->options);
+		free(shell_var->options);
 		return (-1);
 	}
 
-	*(shellVar->envCpy) = nenviron;
-	free(shellVar->options);
+	*(shell_var->envCpy) = nenviron;
+	free(shell_var->options);
 	return (1);
 }
 /**
  * unSetEnvironComnd - unsetenv command
- * @shellVar: struct
+ * @shell_var: struct
  * Return: 1
  */
-ssize_t unSetEnvironComnd(shellDType *shellVar)
+ssize_t unSetEnvironComnd(shellDType *shell_var)
 {
 	char **nenviron, *var1 = NULL;
 
-	if (shellVar->options[1])
-		var1 = shellVar->options[1];
+	if (shell_var->options[1])
+		var1 = shell_var->options[1];
 	else
 	{
-		shellVar->exitnum[0] = 2;
+		shell_var->exitnum[0] = 2;
 		printCmt(6);
-		return (free(shellVar->options), -1);
+		return (free(shell_var->options), -1);
 	}
 
 	if (var1 == 0)
 	{
-		free(shellVar->options);
+		free(shell_var->options);
 		return (1);
 	}
 
-	nenviron = unSetEnviron(*(shellVar->envCpy), var1, shellVar);
+	nenviron = unSetEnviron(*(shell_var->envCpy), var1, shell_var);
 
-	if (nenviron == 0 && shellVar->unsetnull[0] == 0)
+	if (nenviron == 0 && shell_var->unsetnull[0] == 0)
 	{
-		free(shellVar->options);
-		shellVar->exitnum[0] = 2;
+		free(shell_var->options);
+		shell_var->exitnum[0] = 2;
 		return (-1);
 	}
 
-	*(shellVar->envCpy) = nenviron;
-	free(shellVar->options);
+	*(shell_var->envCpy) = nenviron;
+	free(shell_var->options);
 	return (1);
 }
 
 /**
  * chckBuiltIn - checks if the command is built in
- * @shellVar: struct
+ * @shell_var: struct
  * Return: On fail 0
  */
-ssize_t chckBuiltIn(shellDType *shellVar)
+ssize_t chckBuiltIn(shellDType *shell_var)
 {
 	builtIn_s ops[] = {
 		{"exit", exitCmdFunc},
@@ -440,12 +454,12 @@ ssize_t chckBuiltIn(shellDType *shellVar)
 	int x = 6, builtcheck; /* lenght of ops array */
 
 	while (x--)
-		if (!stringCompare(shellVar->cmd, ops[x].cmd))
+		if (!stringCompare(shell_var->cmd, ops[x].cmd))
 		{
-			shellVar->errnum[0] += 1;
-			builtcheck = ops[x].f(shellVar);
+			shell_var->errnum[0] += 1;
+			builtcheck = ops[x].f(shell_var);
 			if (builtcheck == 1)
-				shellVar->exitnum[0] = 0;
+				shell_var->exitnum[0] = 0;
 			return (builtcheck);
 		}
 
@@ -457,16 +471,16 @@ ssize_t chckBuiltIn(shellDType *shellVar)
 
 /**
  * secAuxCd - auxiliary built in func of cd
- * @shellVar: struct
- * @curDir: current dir
+ * @shell_var: struct
+ * @cur_dir: current dir
  * Return: pointer
  */
-char *secAuxCd(shellDType *shellVar, char *curDir)
+char *secAuxCd(shellDType *shell_var, char *cur_dir)
 {
 	char *home, *dire = NULL;
 
-	(void) curDir;
-	home = fetchEnviron("HOME", *(shellVar->envCpy));
+	(void) cur_dir;
+	home = fetchEnviron("HOME", *(shell_var->envCpy));
 	if (home)
 		dire = secAuxCdFol(home, dire);
 
@@ -474,9 +488,9 @@ char *secAuxCd(shellDType *shellVar, char *curDir)
 }
 /* ................................NUM 3 BTW................................*/
 /**
- * secAuxCd - auxiliary built in func of cd
- * @shellVar: struct
- * @curDir: current dir
+ * secAuxCdFol - auxiliary built in func of cd
+ * @home: struct
+ * @dire: current dir
  * Return: pointer
  */
 char *secAuxCdFol(char *home, char *dire)
@@ -488,32 +502,32 @@ char *secAuxCdFol(char *home, char *dire)
 
 
 /**
- * secAuxCd - auxiliary built in func of cd
- * @shellVar: struct
- * @curDir: current dir
+ * firstAuxCd - auxiliary built in func of cd
+ * @shell_var: struct
+ * @cur_dir: current dir
  * Return: Pointe
  */
-char *firstAuxCd(shellDType *shellVar, char *curDir)
+char *firstAuxCd(shellDType *shell_var, char *cur_dir)
 {
 	char *oldpwd2 = NULL, *oldpwDir = NULL, *dire = NULL;
 
-	if (shellVar->options[1] && shellVar->options[2])
+	if (shell_var->options[1] && shell_var->options[2])
 	{
 		printCmt(7);
-		shellVar->exitnum[0] = 2;
-		free(shellVar->options);
-		freeCharFoluke(curDir);
+		shell_var->exitnum[0] = 2;
+		free(shell_var->options);
+		freeCharFoluke(cur_dir);
 		return (dire);
 	}
 
-	oldpwd2 = stringDuplicateFunc(fetchEnviron("OLDPWD", *(shellVar->envCpy)));
+	oldpwd2 = stringDuplicateFunc(fetchEnviron("OLDPWD", *(shell_var->envCpy)));
 	if (oldpwd2)
 		oldpwDir = stringDuplicateFunc(oldpwd2 + 7), free(oldpwd2);
 	if (!oldpwd2)
 	{
-		oldpwDir = stringDuplicateFunc(curDir);
-		/* free(oldpwDir), free(shellVar->options), free(curDir); */
-		/* return (shellVar->exitnum[0] = 2, NULL); */
+		oldpwDir = stringDuplicateFunc(cur_dir);
+		/* free(oldpwDir), free(shell_var->options), free(cur_dir); */
+		/* return (shell_var->exitnum[0] = 2, NULL); */
 	}
 
 	dire = oldpwDir;
@@ -523,48 +537,48 @@ char *firstAuxCd(shellDType *shellVar, char *curDir)
 
 /**
  * cDirCmnd - built in command for cd
- * @shellVar: struct
+ * @shell_var: struct
  * Return: 1
  */
-ssize_t cDirCmnd(shellDType *shellVar)
+ssize_t cDirCmnd(shellDType *shell_var)
 {
-	char *curDir = NULL, *dire = NULL, **nenviron, *oldpwDir = NULL;
+	char *cur_dir = NULL, *dire = NULL, **nenviron, *oldpwDir = NULL;
 	int exit = 1, chckr = 1, checkerSubtrctn = 0;
 
-	curDir = getcwd(NULL, 4096);
-	if (!curDir)
-		return (errorSetStr(4, shellVar, 2), free(shellVar->options), -1);
-	if (!shellVar->options[1] ||
-			(shellVar->options[1] && (!stringCompare(shellVar->options[1], "~"))))
+	cur_dir = getcwd(NULL, 4096);
+	if (!cur_dir)
+		return (errorSetStr(4, shell_var, 2), free(shell_var->options), -1);
+	if (!shell_var->options[1] ||
+			(shell_var->options[1] && (!stringCompare(shell_var->options[1], "~"))))
 	{
-		dire = secAuxCd(shellVar, curDir);
+		dire = secAuxCd(shell_var, cur_dir);
 		if (!dire)
-			return (free(shellVar->options), freeCharFoluke(curDir), 1);
+			return (free(shell_var->options), freeCharFoluke(cur_dir), 1);
 	}
 	else
-		if (!stringCompare(shellVar->options[1], "-"))
+		if (!stringCompare(shell_var->options[1], "-"))
 		{
-			dire = firstAuxCd(shellVar, curDir);
+			dire = firstAuxCd(shell_var, cur_dir);
 			if (!dire)
-				return (free(shellVar->options), freeCharFoluke(curDir), 1);
+				return (free(shell_var->options), freeCharFoluke(cur_dir), 1);
 			checkerSubtrctn = 1;
 		}
 		else
-			dire = shellVar->options[1];
+			dire = shell_var->options[1];
 	if (dire)
 		chckr = chdir(dire);
 	if (chckr == 0 && checkerSubtrctn == 1)
 		write(1, dire, stringLengthFunc(dire)), printCmt(2);
 	if (chckr != 0)
-		errorSetStr(4, shellVar, 2), exit = -1;
+		errorSetStr(4, shell_var, 2), exit = -1;
 	else
 	{
-		nenviron = setEnvironm(*(shellVar->envCpy), "PWD", dire, shellVar);
-		*(shellVar->envCpy) = nenviron;
-		nenviron = setEnvironm(*(shellVar->envCpy), "OLDPWD", curDir, shellVar);
-		*(shellVar->envCpy) = nenviron;
+		nenviron = setEnvironm(*(shell_var->envCpy), "PWD", dire, shell_var);
+		*(shell_var->envCpy) = nenviron;
+		nenviron = setEnvironm(*(shell_var->envCpy), "OLDPWD", cur_dir, shell_var);
+		*(shell_var->envCpy) = nenviron;
 	}
-	free(shellVar->options), freeCharFoluke(curDir), freeCharFoluke(oldpwDir);
+	free(shell_var->options), freeCharFoluke(cur_dir), freeCharFoluke(oldpwDir);
 	if (checkerSubtrctn == 1)
 		freeCharFoluke(dire);
 	return (exit);
@@ -595,9 +609,9 @@ long powerFunc(long base, long pot)
 
 /* ................................NUM 4 BTW................................*/
 /**
- * powerFunc - gets the result of base to ower
+ * powerFuncFol - gets the result of base to ower
  * @base: base
- * @pot: power
+ * @res: power
  * Return: result
  */
 long powerFuncFol(long base, long res)
@@ -646,8 +660,8 @@ long atoiFol(char *s)
 
 /* ................................NUM 5 BTW................................*/
 /**
- * atoiFol - convert char to int
- * @s: char
+ * atoiFolFol - convert char to int
+ * @subtracn: char
  * Return: input
  */
 
@@ -662,33 +676,34 @@ long atoiFolFol(long subtracn)
 
 /**
  * stringCompare - compares two strings
- * @s1: str1
- * @s2: str
+ * @s_one: str1
+ * @s_two: str
  * Return: 0 if strings are eql or another val1 if not
  */
-int stringCompare(char *s1, char *s2)
+int stringCompare(char *s_one, char *s_two)
 {
 	int x = 0, eql = 0;
 
-	for (x = 0; (*(s1 + x) || *(s2 + x)) && !eql; x++)
-		if (*(s1 + x) != *(s2 + x))
-			eql = stringCompareFol(s1, s2, x);
+	for (x = 0; (*(s_one + x) || *(s_two + x)) && !eql; x++)
+		if (*(s_one + x) != *(s_two + x))
+			eql = stringCompareFol(s_one, s_two, x);
 
 	return (eql);
 }
 /* ................................NUM 6 BTW................................*/
 /**
- * stringCompare - compares two strings
- * @s1: str1
- * @s2: str
+ * stringCompareFol - compares two strings
+ * @s_one: str1
+ * @s_two: str
+ * @x: str
  * Return: 0 if strings are eql or another val1 if not
  *
  */
-int stringCompareFol(char *s1, char *s2, int x)
+int stringCompareFol(char *s_one, char *s_two, int x)
 {
 	int eql;
 
-	eql = *(s1 + x) - *(s2 + x);
+	eql = *(s_one + x) - *(s_two + x);
 	return (eql);
 }
 /* ................................NUM 6 END................................*/
@@ -724,11 +739,11 @@ int isNumba(char *s)
  * @av: main arg
  * @bufsize: size of buffer
  * @buffer: buffer
- * @shellVar: struct of shell info
+ * @shell_var: struct of shell info
  * Return: On success 1.
  */
 char **chckInputFunc(int ac, char **av, size_t *bufsize,
-		   char **buffer, shellDType *shellVar)
+		   char **buffer, shellDType *shell_var)
 {
 	ssize_t charctrs;
 	char **command;
@@ -742,11 +757,11 @@ char **chckInputFunc(int ac, char **av, size_t *bufsize,
 
 		if (charctrs == -1)
 		{
-			exitnum = shellVar->exitnum[0];
+			exitnum = shell_var->exitnum[0];
 			freeCharFoluke(*buffer);
-			if (*(shellVar->envCpy))
-				freeDobleCharPntrFoluke(*(shellVar->envCpy));
-			free(shellVar);
+			if (*(shell_var->envCpy))
+				freeDobleCharPntrFoluke(*(shell_var->envCpy));
+			free(shell_var);
 			if (isatty(STDIN_FILENO))
 				printCmt(2);
 			exit(exitnum);
@@ -754,14 +769,14 @@ char **chckInputFunc(int ac, char **av, size_t *bufsize,
 		if (**buffer == '#' || !charctrs || **buffer == '\n')
 			return (NULL);
 		*buffer = delComnt(*buffer);
-		command = fetchParam(*buffer, shellVar);
+		command = fetchParam(*buffer, shell_var);
 	}
 	else
 	{
 		command = malloc(sizeof(char *) * (ac - 1));
 		if (!command)
 		{
-			errorSetStr(7, shellVar, 1);
+			errorSetStr(7, shell_var, 1);
 			return (NULL);
 		}
 
@@ -795,7 +810,7 @@ char *delComnt(char *str)
 }
 /* ................................NUM 7 BTW................................*/
 /**
- * delComnt - deletes a commnet
+ * delComntFol - deletes a commnet
  * @str: str
  * Return: pointer
  */
@@ -812,10 +827,11 @@ char delComntFol(char str)
  * @program: command
  * @command: arg
  * @env: curr env
- * @shellVar: struct
+ * @shell_var: struct
  * Return: pointer
  */
-int excuteCmd(char *program, char *command[], char **env, shellDType *shellVar)
+int excuteCmd(char *program, char *command[], char **env,
+			shellDType *shell_var)
 {
 	pid_t prcss, sttus;
 	int execSts = 0, wait1_Sts = 0;
@@ -843,12 +859,12 @@ int excuteCmd(char *program, char *command[], char **env, shellDType *shellVar)
 		if (wait1_Sts == -1)
 			exit(-1);
 		if (WEXITSTATUS(sttus) == 0)
-			shellVar->exitnum[0] = 0;
+			shell_var->exitnum[0] = 0;
 		else
-			shellVar->exitnum[0] = 2;
+			shell_var->exitnum[0] = 2;
 	}
 
-	shellVar->errnum[0] += 1;
+	shell_var->errnum[0] += 1;
 	return (0);
 }
 
@@ -901,10 +917,10 @@ char *memorySet(char *s, char b, unsigned int n)
 }
 /* ................................NUM 8 BTW................................*/
 /**
- * memorySet - fills memory
+ * memorySetFol - fills memory
  * @s: memory
  * @b: constant
- * @n: first n byte
+ * @x: first n byte
  * Return: On success 1.
  */
 char memorySetFol(char *s, char b, unsigned int x)
@@ -934,10 +950,10 @@ char *memoryCopy(char *dest, char *src, unsigned int n)
 }
 /* ................................NUM 9 BTW................................*/
 /**
- * memoryCopy - copies mem
+ * memoryCopyFol - copies mem
  * @dest: destination
  * @src: source
- * @n: size of memory
+ * @x: size of memory
  *
  * Return: Returns memory copied
  */
@@ -952,37 +968,37 @@ char memoryCopyFol(char *dest, char *src, unsigned int x)
  * reAllocateFunc - reallocates a memory block
  * @ptr: pointer
  * @oldSize: current size
- * @nwSize: size of memory
+ * @nw_size: size of memory
  * Return: Pointer
  */
-void *reAllocateFunc(void *ptr, unsigned int oldSize, unsigned int nwSize)
+void *reAllocateFunc(void *ptr, unsigned int oldSize, unsigned int nw_size)
 {
 	void *pointr3;
 
-	if (oldSize == nwSize)
+	if (oldSize == nw_size)
 		return (ptr);
 
 	if (ptr == NULL)
 	{
-		pointr3 = malloc(nwSize);
+		pointr3 = malloc(nw_size);
 		if (pointr3 == 0)
 			return (0);
 		freeCharFoluke(ptr);
 		return (pointr3);
 	}
 
-	if (nwSize == 0 && ptr != NULL)
+	if (nw_size == 0 && ptr != NULL)
 	{
 		freeCharFoluke(ptr);
 		return (0);
 	}
 
-	pointr3 = malloc(nwSize);
+	pointr3 = malloc(nw_size);
 
 	if (pointr3 == 0)
 		return (0);
 
-	pointr3 = memorySet(pointr3, '\0', nwSize);
+	pointr3 = memorySet(pointr3, '\0', nw_size);
 
 	memoryCopy(pointr3, ptr, oldSize);
 	freeCharFoluke(ptr);
@@ -1042,10 +1058,10 @@ int fetchLine(char **buffer, size_t *bufsize, int fd)
 /**
  * fetchParam - obtains parameters
  * @raw_buffer: Rbuffer
- * @shellVar: struct of shell info
+ * @shell_var: struct of shell info
  * Return: On success 1.
  */
-char **fetchParam(char *raw_buffer, shellDType *shellVar)
+char **fetchParam(char *raw_buffer, shellDType *shell_var)
 {
 	char **buffer, *cp_raw_buffer;
 	ssize_t cnt = 0, i = 0;
@@ -1053,7 +1069,7 @@ char **fetchParam(char *raw_buffer, shellDType *shellVar)
 	cp_raw_buffer = stringDuplicateFunc(raw_buffer);
 	if (!cp_raw_buffer)
 	{
-		errorSetStr(7, shellVar, 1);
+		errorSetStr(7, shell_var, 1);
 		exit(-1);
 	}
 
@@ -1071,7 +1087,7 @@ char **fetchParam(char *raw_buffer, shellDType *shellVar)
 	buffer = malloc(sizeof(char *) * (cnt + 1));
 	if (!buffer)
 	{
-		errorSetStr(7, shellVar, 1);
+		errorSetStr(7, shell_var, 1);
 		exit(-1);
 	}
 	buffer[0] = stringTokenizeFunc(raw_buffer, " \n");
@@ -1148,8 +1164,8 @@ char *pthChcker(char *path)
 
 /* ................................NUM 22 START..............................*/
 /**
- * string_reverse - Reverses string
- * @s: str to rev
+ * printCmt - Reverses string
+ * @chk: str to rev
  */
 void printCmt(int chk)
 {
@@ -1199,8 +1215,11 @@ void printCmt(int chk)
 
 /* ................................NUM 10 BTW................................*/
 /**
- * pthChcker - check current dir
+ * pthChckerFol - check current dir
  * @path: path
+ * @nwpath: path
+ * @x: path
+ * @y: path
  * Return: Pointer to adress of new PAT
  */
 
@@ -1216,11 +1235,11 @@ char pthChckerFol(char *path, char *nwpath, int x, int y)
  * searchPath - Searches for a cmd
  * @cmd: string
  * @env: current environment
- * @shellVar: stru
+ * @shell_var: stru
  * Return: Point
  */
 
-char *searchPath(char *cmd, char **env, shellDType *shellVar)
+char *searchPath(char *cmd, char **env, shellDType *shell_var)
 {
 	char *path, *path2;
 	struct stat st;
@@ -1237,7 +1256,7 @@ char *searchPath(char *cmd, char **env, shellDType *shellVar)
 		}
 
 	path2 = fetchEnviron("PATH", env);
-	(void) shellVar;
+	(void) shell_var;
 	if (!path2)
 		return (0);
 	path = stringDuplicateFunc(path2);
@@ -1289,7 +1308,7 @@ void hlpExitFunc(void)
 }
 /* ................................NUM 11 BTW................................*/
 /**
- * hlpExitFunc - prints hel
+ * hlpExitFuncFol - prints hel
  */
 void hlpExitFuncFol(void)
 {
@@ -1313,7 +1332,7 @@ void hlpEnviron(void)
 }
 /* ................................NUM 12 BTW................................*/
 /**
- * hlpEnviron - prints hel
+ * hlpEnvironFol - prints hel
  */
 void hlpEnvironFol(void)
 {
@@ -1336,7 +1355,7 @@ void hlpSetEnviron(void)
 }
 /* ................................NUM 13 BTW................................*/
 /**
- * hlpSetEnviron - prints hel
+ * hlpSetEnvironFol - prints hel
  */
 void hlpSetEnvironFol(void)
 {
@@ -1352,10 +1371,10 @@ void hlpSetEnvironFol(void)
 
 /**
  * hlpComnd - help of built-in commands
- * @shellVar: struc
+ * @shell_var: struc
  * Return: 1 if succesful, -1 if fail
  */
-ssize_t hlpComnd(shellDType *shellVar)
+ssize_t hlpComnd(shellDType *shell_var)
 {
 	int check = 1, bchck = 0;
 	helps_s help[] = {
@@ -1371,13 +1390,13 @@ ssize_t hlpComnd(shellDType *shellVar)
 	int i = 7;
 	int p = 1;
 
-	for (; shellVar->options[p]; p++, i = 7)
+	for (; shell_var->options[p]; p++, i = 7)
 	{
 		while (i--)
-			if (!stringCompare(shellVar->options[p], help[i].built))
+			if (!stringCompare(shell_var->options[p], help[i].built))
 				help[i].h(), bchck = 1;
 	}
-	if (shellVar->options[1] == NULL)
+	if (shell_var->options[1] == NULL)
 	{
 		prntHlp();
 		bchck = 1;
@@ -1385,10 +1404,10 @@ ssize_t hlpComnd(shellDType *shellVar)
 	if (bchck == 0)
 	{
 		check = -1;
-		errorSetStr(6, shellVar, 2);
+		errorSetStr(6, shell_var, 2);
 	}
 
-	free(shellVar->options);
+	free(shell_var->options);
 	return (check);
 }
 
@@ -1403,7 +1422,7 @@ void hlpUnSetEnviron(void)
 }
 /* ................................NUM 14 BTW................................*/
 /**
- * hlpUnSetEnviron - prints hel
+ * hlpUnSetEnvironFol - prints hel
  */
 void hlpUnSetEnvironFol(void)
 {
@@ -1427,7 +1446,7 @@ void cdHlp(void)
 }
 /* ................................NUM 15 BTW................................*/
 /**
- * cdHlp - prints hel
+ * cdHlpFol - prints hel
  */
 void cdHlpFol(void)
 {
@@ -1461,7 +1480,7 @@ void hlpHlp(void)
 }
 /* ................................NUM 16 BTW................................*/
 /**
- * hlpHlp - prints he
+ * hlpHlpFol - prints he
  */
 void hlpHlpFol(void)
 {
@@ -1490,7 +1509,7 @@ void hlpAlias(void)
 }
 /* ................................NUM 17 BTW................................*/
 /**
- * hlpAlias - prints hel
+ * hlpAliasFol - prints hel
  */
 void hlpAliasFol(void)
 {
@@ -1522,7 +1541,7 @@ void prntHlp(void)
 }
 /* ................................NUM 18 BTW................................*/
 /**
- * prntHlp - prints hel
+ * prntHlpFol - prints hel
  */
 void prntHlpFol(void)
 {
@@ -1565,26 +1584,26 @@ void freeDobleCharPntrFoluke(char **p)
  *
  * @p: double pointe
  * @oldSize: original siz
- * @nwSize: size of copy
+ * @nw_size: size of copy
  * Return: Pointer malloec
  */
-char **cpyDoblePtr(char **p, int oldSize, int nwSize)
+char **cpyDoblePtr(char **p, int oldSize, int nw_size)
 {
 	char **copy;
 	int x, copSize;
 
-	if (!p && (oldSize == nwSize))
+	if (!p && (oldSize == nw_size))
 		return (NULL);
 
-	if (nwSize < oldSize)
+	if (nw_size < oldSize)
 	{
-		copSize = nwSize;
+		copSize = nw_size;
 		copy = malloc(sizeof(char *) * (copSize + 1));
 	}
 	else
 	{
 		copSize = oldSize;
-		copy = malloc(sizeof(char *) * (nwSize + 1));
+		copy = malloc(sizeof(char *) * (nw_size + 1));
 	}
 	if (copy == 0)
 		return (0);
@@ -1603,7 +1622,7 @@ char **cpyDoblePtr(char **p, int oldSize, int nwSize)
 			}
 		}
 	/* Add Null in the end */
-	copy[nwSize] = '\0';
+	copy[nw_size] = '\0';
 
 	return (copy);
 }
@@ -1634,29 +1653,29 @@ int strLenPtr(char **s)
  * @env: array of env variables
  * @var1: env var
  * @val1: val
- * @shellVar: struc
+ * @shell_var: struc
  * Return: 0 on success, -1 on error
  */
-char **setEnvironm(char **env, char *var1, char *val1, shellDType *shellVar)
+char **setEnvironm(char **env, char *var1, char *val1, shellDType *shell_var)
 {
 	int x, y, check, z = 0, env6 = 0;
 	char *catEnvs1, *catEnvs2, *DupCp, **copy;
 
 	if (stringLengthFunc(var1) == 0 || var1 == 0)
-		return (errorSetStr(3, shellVar, 1), NULL);
+		return (errorSetStr(3, shell_var, 1), NULL);
 	catEnvs2 = stringCatenator(var1, "=");
 	if (catEnvs2 == 0)
-		return (errorSetStr(3, shellVar, 1), NULL);
+		return (errorSetStr(3, shell_var, 1), NULL);
 	catEnvs1 = stringCatenator(catEnvs2, val1), free(catEnvs2);
 	if (catEnvs1 == 0)
-		return (errorSetStr(3, shellVar, 1), NULL);
+		return (errorSetStr(3, shell_var, 1), NULL);
 	z = stringLengthFunc(var1), env6 = strLenPtr(env);
 	for (x = 0; env && env[x] != 0; x++)
 	{
 		for (check = 0, y = 0; y < z && env[x][y] != 0; y++)
 		{
 			if (var1[y] == '=')
-				return (free(catEnvs1), errorSetStr(3, shellVar, 2), NULL);
+				return (free(catEnvs1), errorSetStr(3, shell_var, 2), NULL);
 			if (env[x][y] == var1[y])
 				check++;
 		}
@@ -1664,7 +1683,7 @@ char **setEnvironm(char **env, char *var1, char *val1, shellDType *shellVar)
 		{
 			free(env[x]), DupCp = stringDuplicateFunc(catEnvs1), free(catEnvs1);
 			if (DupCp == 0)
-				return (errorSetStr(3, shellVar, 1), NULL);
+				return (errorSetStr(3, shell_var, 1), NULL);
 			return (env[x] = DupCp, env);
 		}
 	}
@@ -1672,10 +1691,10 @@ char **setEnvironm(char **env, char *var1, char *val1, shellDType *shellVar)
 	if (env)
 		freeDobleCharPntrFoluke(env);
 	if (copy == 0)
-		return (free(catEnvs1), errorSetStr(3, shellVar, 1), NULL);
+		return (free(catEnvs1), errorSetStr(3, shell_var, 1), NULL);
 	env = copy, DupCp = stringDuplicateFunc(catEnvs1), free(catEnvs1);
 	if (DupCp == 0)
-		return (errorSetStr(3, shellVar, 1), NULL);
+		return (errorSetStr(3, shell_var, 1), NULL);
 	return (env[env6] = DupCp, env);
 }
 
@@ -1706,25 +1725,25 @@ void sigHandlr2(int x)
 /* ................................NUM 19 START..............................*/
 /**
  * stringCatenator - concatenates strings
- * @s1: str
- * @s2: strin
+ * @s_one: str
+ * @s_two: strin
  * Return: Pointer
  */
-char *stringCatenator(char *s1, char *s2)
+char *stringCatenator(char *s_one, char *s_two)
 {
 	int l1, l2, i, j;
 	char *s;
 	/* char *nul = ""; */
 
-	if (s1 == NULL)
-		s1 = stringCatenatorFol();
-	if (s2 == NULL)
-		s2 = stringCatenatorFol();
+	if (s_one == NULL)
+		s_one = stringCatenatorFol();
+	if (s_two == NULL)
+		s_two = stringCatenatorFol();
 
 	l1 = 0, l2 = 0;
-	while (*(s1 + l1))
+	while (*(s_one + l1))
 		l1++;
-	while (*(s2 + l2))
+	while (*(s_two + l2))
 		l2++;
 
 	s = malloc(sizeof(char) * (l1 + l2 + 1));
@@ -1733,18 +1752,16 @@ char *stringCatenator(char *s1, char *s2)
 		return (0);
 
 	for (i = 0; i < l1; i++)
-		*(s + i) = *(s1 + i);
+		*(s + i) = *(s_one + i);
 
 	for (i = 0, j = l1; i <= l2; j++, i++)
-		*(s + j) = *(s2 + i);
+		*(s + j) = *(s_two + i);
 
 	return (s);
 }
 /* ................................NUM 19 BTW................................*/
 /**
- * stringCatenator - concatenates strings
- * @s1: str
- * @s2: strin
+ * stringCatenatorFol - concatenates strings
  * Return: Pointer
  */
 char *stringCatenatorFol()
@@ -1780,11 +1797,11 @@ char *stringCopy(char *dest, char *src)
 }
 /* ................................NUM 20 BTW................................*/
 /**
- * stringCopy - copy source onto destinated
- * @dest: target
- * @src: source
+ * stringCopyFol - copy source onto destinated
+ * @destinatn: target
+ * @source: source
+ * @i: source
  * Return: dest
- * On error: -1
  */
 char stringCopyFol(char *destinatn, char *source, int i)
 {
@@ -1888,16 +1905,16 @@ char *stringTokenizeFunc(char *str, const char *delim)
 /**
  * cpyDoblePtrDel - copies an array of string
  * @p: double pointe
- * @n_size: siz
+ * @nw_size: siz
  * @jump: val to skip during operation
  * Return: Pointer malloec
  */
-char **cpyDoblePtrDel(char **p, int nwSize, int jump)
+char **cpyDoblePtrDel(char **p, int nw_size, int jump)
 {
 	char **copy;
 	int i, j, copSize;
 
-	copSize = nwSize;
+	copSize = nw_size;
 	copy = malloc(sizeof(char *) * (copSize + 1));
 	if (copy == 0)
 		return (0);
@@ -1917,7 +1934,7 @@ char **cpyDoblePtrDel(char **p, int nwSize, int jump)
 		}
 	}
 
-	copy[nwSize] = '\0';
+	copy[nw_size] = '\0';
 
 	return (copy);
 }
@@ -1926,26 +1943,26 @@ char **cpyDoblePtrDel(char **p, int nwSize, int jump)
  * unSetEnviron - unsets an enviromenta
  * @env: array of en
  * @var1: env var
- * @shellVar: struc
+ * @shell_var: struc
  * Return: 0 on success
  */
-char **unSetEnviron(char **env, char *var1, shellDType *shellVar)
+char **unSetEnviron(char **env, char *var1, shellDType *shell_var)
 {
 	int i, j, check, l = 0, lenv = 0, found = 0;
 	char **copy;
 
-	shellVar->unsetnull[0] = 0;
+	shell_var->unsetnull[0] = 0;
 	if (!env)
 		return (printCmt(3), NULL);
 	if (stringLengthFunc(var1) == 0 || var1 == 0)
-		return (errorSetStr(3, shellVar, 1), NULL);
+		return (errorSetStr(3, shell_var, 1), NULL);
 	l = stringLengthFunc(var1), lenv = strLenPtr(env);
 	for (i = 0; env[i] != 0; i++)
 	{
 		for (check = 0, j = 0; j < l && env[i][j] != 0; j++)
 		{
 			if (var1[j] == '=')
-				return (errorSetStr(3, shellVar, 2), NULL);
+				return (errorSetStr(3, shell_var, 2), NULL);
 			if (env[i][j] == var1[j])
 				check++;
 		}
@@ -1957,10 +1974,10 @@ char **unSetEnviron(char **env, char *var1, shellDType *shellVar)
 			{
 				copy = cpyDoblePtrDel(env, lenv - 1, i);
 				if (copy == 0)
-					return (errorSetStr(7, shellVar, 1), NULL);
+					return (errorSetStr(7, shell_var, 1), NULL);
 			}
 			else
-				shellVar->unsetnull[0] = 1, copy = NULL;
+				shell_var->unsetnull[0] = 1, copy = NULL;
 			freeDobleCharPntrFoluke(env), env = copy;
 			return (env);
 		}
