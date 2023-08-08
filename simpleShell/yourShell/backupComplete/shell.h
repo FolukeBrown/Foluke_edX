@@ -163,8 +163,6 @@ int errorSetStrFolu1(int errn, int cnt, int  z, char *hshname, char *nustr,
 				char *concA, char *concB, char *coluspc, char *err[]);
 int errorSetStrFolu2(int errn, char *concA, char *concB,
 						char *coluspc, char *err[], char *cmd);
-char *errorSub1(char *conc_a, char *conc_b, char *optn);
-char *errorSub2(char *conc_a, char *conc_b, char *optn, char *coluspc);
 void printCmt(int chk);
 
 
