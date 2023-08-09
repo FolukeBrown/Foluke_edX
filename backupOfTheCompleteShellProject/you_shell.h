@@ -84,7 +84,8 @@ int stringLengthFunc(char *s);
 char *stringCopy(char *dest, char *src);
 char *stringTokenizeFunc(char *str, const char *delim);
 char **fetchParam(char *buffer, shellDType *shellVar);
-int excuteCmd(char *program, char *command[], char **env, shellDType *shellVar);
+int excuteCmd(char *program, char *command[], char **env,
+					shellDType *shellVar);
 void sigHandlr(int x);
 void sigHandlr2(int x);
 int fetchLine(char **buffer, size_t *bufsize, int fd);
@@ -94,7 +95,8 @@ char **chckInputFunc(int ac, char **av, size_t *bufsize,
 shellDType *shellStructDef(char *argv0, int *errn, int *exnum, int *relation,
 						int *run_able, char ***env, int *unsetnull);
 int errorSetStr(int errn, shellDType *shellVar, int exnum);
-void addComnd(shellDType *shellVar, char *buffer, char *command, char **parameters);
+void addComnd(shellDType *shellVar, char *buffer, char *command,
+					char **parameters);
 void addPath2Comnd(shellDType *shellVar, char *pathCmd);
 ssize_t chckBuiltIn(shellDType *shellVar);
 ssize_t exitCmdFunc(shellDType *shellVar);
@@ -102,7 +104,8 @@ int stringCompare(char *s1, char *s2);
 long atoiFol(char *s);
 long powerFunc(long base, long pot);
 char **cpyDoblePtr(char **p, int old_size, int new_size);
-char **setEnvironm(char **env, char *variable, char *value, shellDType *shellVar);
+char **setEnvironm(char **env, char *variable, char *value,
+						shellDType *shellVar);
 char **unSetEnviron(char **env, char *variable, shellDType *shellVar);
 int isDigitFunc(int c);
 int isNumba(char *s);

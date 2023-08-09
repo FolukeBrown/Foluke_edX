@@ -27,7 +27,8 @@ int main(int ac, char **av, char **env)
 	signal(SIGINT, sigHandlr);
 	sizeEnv = strLenPtr(env);
 	env = cpyDoblePtr(env, sizeEnv, sizeEnv);
-	shellVar = shellStructDef(av[0], &errn, &exnum, &relation, &run_able, &env, &enul);
+	shellVar = shellStructDef(av[0], &errn, &exnum, &relation,
+						&run_able, &env, &enul);
 	while (1)
 	{
 		command = NULL;
@@ -52,7 +53,6 @@ int main(int ac, char **av, char **env)
 			excuteCmd(pathCmd, command, env, shellVar);
 		free(command);
 		free(pathCmd);
-
 	}
 	freeDobleCharPntrFoluke(*(shellVar->envCpy)), free(shellVar);
 	return (0);
@@ -101,7 +101,8 @@ shellDType *shellStructDef(char *argv0, int *errn, int *exnum,
  *
  * Return: No return
  */
-void addComnd(shellDType *shellVar, char *buffer, char *command, char **parameters)
+void addComnd(shellDType *shellVar, char *buffer, char *command,
+					char **parameters)
 {
 	shellVar->buffer = buffer;
 	shellVar->cmd = command;
