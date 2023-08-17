@@ -75,7 +75,7 @@ shellDType *set_struct(char *argv0, int *errn, int *exnum,
 
 	shellpack = malloc(sizeof(struct shellDType));
 	if (shellpack == 0)
-		return (write(2, "Memory Error", 22), NULL);
+		return (write(2, "Memory Error", 13), NULL);
 	shellpack->hshname = argv0;
 	shellpack->buffer = NULL;
 	shellpack->cmd = NULL;

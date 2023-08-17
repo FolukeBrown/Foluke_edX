@@ -11,13 +11,13 @@ void printCmt(int chk)
 	switch (chk)
 	{
 		case 1:
-			write(2, "Memory Error", 22);
+			write(2, "Memory Error", 13);
 			break;
 		case 2:
 			write(2, "\n", 1);
 			break;
 		case 3:
-			write(2, "Environment is Null\n", 36);
+			write(2, "Environment is Null\n", 21);
 			break;
 		case 4:
 			write(2, "Invalid VALUE\n", 14);
