@@ -5,7 +5,7 @@
 */
 int main(void)
 {
-int passenger;
+int passeng
 double costOfGas;
 double totalCost = 0;
 
